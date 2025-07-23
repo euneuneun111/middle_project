@@ -12,7 +12,7 @@ public class MainController {
 
     @GetMapping("")
     public String mainPage() {
-        return "main"; // 테스트!!
+        return "main"; // 테스트!!55
     }
 }
 
