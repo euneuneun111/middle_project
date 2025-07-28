@@ -29,6 +29,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- common -->
 	<script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
 	
+	
+	
 	<decorator:head />
 </head>
 <body class="hold-transition sidebar-mini">

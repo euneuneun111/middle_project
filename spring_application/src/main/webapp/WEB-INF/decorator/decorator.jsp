@@ -7,4 +7,4 @@
 
 <decorator:body />
 
-<%@ include file="/WEB-INF/views/module/footer.jsp" %>
+ <%@ include file="/WEB-INF/views/module/footer.jsp" %>
