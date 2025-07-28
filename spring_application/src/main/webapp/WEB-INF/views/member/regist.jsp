@@ -6,22 +6,7 @@
 
 <body>
 	<!-- Content Wrapper. Contains page content -->
-	<div class="">
-
-		<section class="content-header">
-			<div class="container-fluid">
-				<div class="row md-2">
-					<div class="col-sm-6">
-						<h1>회원등록</h1>
-					</div>
-
-				</div>
-			</div>
-		</section>
-		<!-- Main content -->
-
-		<!-- /.content -->
-	</div>
+	
 	<!-- /.content-wrapper -->
 
 	<div class="card card-solid"
@@ -211,7 +196,7 @@
 
 							<button type="button" class="btn btn-block"
 									onclick="regist_go();"
-									style="background-color: #fff; color: #222; border: 0.2px solid #222" >취&nbsp;&nbsp;소</button>
+									style="background-color: #fff; color: #9B99FF; border: 1px solid #9B99FF" >취&nbsp;&nbsp;소</button>
 
 							</div>
 
@@ -230,8 +215,8 @@
 					</div>
 				</nav>
 				<div class="tab-content p-3" id="nav-tabContent">
-					<div class="tab-pane fade show active" id="product-desc"
-						role="tabpanel" aria-labelledby="product-desc-tab">내용 입력</div>
+				<textarea class="textarea" name="content" id="content" rows="3"
+                                cols="150" placeholder="문의내용을 작성하세요." style="border:1px solid #9B99FF; border-radius:5px;" ></textarea>
 
 
 

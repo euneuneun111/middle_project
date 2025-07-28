@@ -7,7 +7,7 @@ public class PageMaker {
 	
 	private int page = 1; // 페이지 번호
 	private int perPageNum = 6; // 리스트 개수
-	private int totalCount; // 전체 행의 개수
+	private int totalCount; // 전체 행의 개수 asd
 	private int displayPageNum = 5; // 한 페이지에 보여줄 페이지번호 개수
 	
 	private int startPage = 1; // 시작 페이지 번호
