@@ -46,7 +46,7 @@ public class MemberController {
 	@GetMapping("/list")
 	public void list(@ModelAttribute PageMaker pageMaker, Model model) throws Exception {
 		List<MemberVO> memberList = service.list(pageMaker);
-		model.addAttribute("memberList", memberList);
+		model.addAttribute("memberList", memberList); // asd
 	}
 
 	
