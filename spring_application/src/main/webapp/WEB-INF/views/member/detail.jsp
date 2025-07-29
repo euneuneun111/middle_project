@@ -51,12 +51,14 @@
 							<div class="col-sm-12 d-flex justify-content-end">
 								<button type="button"
 									class="btn btn-outline-secondary btn-sm custom-hover"
-									style="border: none;" onclick="location.href='modify?id=${member.id}">수정</button>
-									
-									 <span class="nav-link px-4" style="color: #ced4da; user-select: none;">/</span>
-									
-									<button type="button" class="btn btn-outline-danger btn-sm" style="border: none;"
-										onclick="deleteProject();">삭제</button>
+									style="border: none;"
+									onclick="location.href='modify?id=${member.id}">수정</button>
+
+								<span class="nav-link px-4"
+									style="color: #ced4da; user-select: none;">/</span>
+
+								<button type="button" class="btn btn-outline-danger btn-sm"
+									style="border: none;" onclick="deleteProject();">삭제</button>
 							</div>
 
 							<div class="form-group row">
@@ -68,9 +70,7 @@
 										onkeyup="this.value=this.value.replace(/[\ㄱ-ㅎㅏ-ㅣ가-힣]/g, &#39;&#39;);"
 										type="text" class="form-control" id="id"
 										placeholder="13글자 영문자,숫자 조합"> <span
-										class="input-group-append-sm">
-										
-									</span>
+										class="input-group-append-sm"> </span>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -241,10 +241,13 @@
 								<!-- 오른쪽: 버튼 -->
 								<div class="col-auto">
 									<button type="button"
-										class="btn btn-outline-primary btn-sm me-2 "
-										onclick="openInquiry();">문의하기</button>
+										class="btn btn-outline-primary btn-sm me-2"
+										onclick="OpenWindow('inquiryForm','문의하기',700,800);">문의하기</button>
+
 									<button type="button" class="btn btn-outline-danger btn-sm"
 										onclick="reportProject();">신고하기</button>
+								
+
 								</div>
 							</div>
 
@@ -290,6 +293,8 @@ function remove_go(){
 }
 
 </script>
+
+
 
 
 </body>

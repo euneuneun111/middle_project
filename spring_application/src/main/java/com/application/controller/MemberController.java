@@ -232,6 +232,14 @@ public class MemberController {
 		return mnv;
 	}
 	
+    @GetMapping("/inquiryForm")
+    public String inquiryForm() {
+    	String url = "/member/inquiryForm";
+    	
+    	return url;
+    }
+	
+    
 	@GetMapping(value = "/remove")
 	public ModelAndView remove(String id,ModelAndView mnv) throws Exception {
 		String url = "/member/remove_success";
