@@ -68,20 +68,21 @@ window.onload = function(){
 <body>
 
 	<section class="content-header"
-		style="padding: 1rem; display: flex; align-items: center; justify-content: space-between; padding: 12px 150px;">
-		<div
-			class="container-fluid d-flex justify-content-start align-items-center">
+		style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
+
+		<!-- 왼쪽 메뉴 -->
+		<div class="d-flex align-items-center">
 			<ul class="navbar-nav flex-row" style="font-weight: bold;">
 				<li class="nav-item"><a href="#" class="nav-link px-4"
 					style="color: #9B99FF;">최신</a></li>
-				<li class="nav-item"><span href="" class="nav-link px-4"
+				<li class="nav-item"><span class="nav-link px-4"
 					style="color: #ced4da; user-select: none;">/</span></li>
 				<li class="nav-item"><a href="#" class="nav-link px-4"
 					style="color: #9B99FF;">인기</a></li>
 			</ul>
-
 		</div>
 
+		<!-- 중앙 검색바 -->
 		<div class="d-flex justify-content-center flex-grow-1"
 			style="margin: 0 30px;">
 			<form class="form-inline w-100" style="max-width: 400px;">
@@ -97,13 +98,14 @@ window.onload = function(){
 				</div>
 			</form>
 		</div>
+
+		<!-- 오른쪽 버튼 -->
 		<div class="col-md-2 mb-2">
-			<a href="regist" class="btn btn-block btn-secondary btn-lg"
-				style="background-color: #9B99FF; border: none; display: inline-block; text-align: center;">
-				Project Add </a>
+			<button type="button" class="btn btn-block btn-secondary btn-lg"
+				onclick="location.href='regist';"
+				style="background-color: #9B99FF; border: none;">Project
+				Add</button>
 		</div>
-
-
 
 	</section>
 
@@ -122,7 +124,7 @@ window.onload = function(){
 
 				<div class="col-md-4 mb-3">
 					<div class="card h-100"
-						onclick="OpenWindow('detail?id=${member.id}','회원정보',700,800)"
+						onclick="location.href='detail?id=${member.id}'"
 						style="cursor: pointer;">
 
 						<c:choose>

@@ -6,9 +6,10 @@
 
 <body>
 	<!-- Content Wrapper. Contains page content -->
-	
+
 	<!-- /.content-wrapper -->
 
+<form id="regist" method="post" action="">
 	<div class="card card-solid"
 		style="padding: 1rem 150px; display: flex; justify-content: space-evenly;">
 		<div class="card-body">
@@ -183,7 +184,7 @@
 
 
 					</div>
-					<div class="card-footer" style="background-color:#fff;">
+					<div class="card-footer" style="background-color: #fff;">
 						<div class="row">
 							<div class="col-sm-6">
 								<button type="button" class="btn btn-block"
@@ -194,9 +195,9 @@
 
 							<div class="col-sm-6">
 
-							<button type="button" class="btn btn-block"
+								<button type="button" class="btn btn-block"
 									onclick="regist_go();"
-									style="background-color: #fff; color: #9B99FF; border: 1px solid #9B99FF" >취&nbsp;&nbsp;소</button>
+									style="background-color: #fff; color: #9B99FF; border: 1px solid #9B99FF">취&nbsp;&nbsp;소</button>
 
 							</div>
 
@@ -215,8 +216,9 @@
 					</div>
 				</nav>
 				<div class="tab-content p-3" id="nav-tabContent">
-				<textarea class="textarea" name="content" id="content" rows="3"
-                                cols="150" placeholder="문의내용을 작성하세요." style="border:1px solid #9B99FF; border-radius:5px;" ></textarea>
+					<textarea class="textarea" name="content" id="content" rows="3"
+						cols="150" placeholder="문의내용을 작성하세요."
+						style="border: 1px solid #9B99FF; border-radius: 5px;"></textarea>
 
 
 
@@ -225,8 +227,11 @@
 			<!-- /.card-body -->
 		</div>
 
+	</div>
+</form>
 
-		<script>
+
+	<script>
 var checkID = "";
 function idCheck_go(){
 	//alert("click idCheck");
@@ -283,35 +288,36 @@ function phone2(){
 }
 </script>
 
-		<script>
+<Script>
+
 function regist_go(){
-	let form = document.forms.regist;
-	for(let element of form ){
-		//alert(element.name);
+	let form = document.getElementById("regist"); // ✅ 여기 수정
+	for (let element of form.elements) {
 		switch(element.name){
-			case "id": case "pwd": case "email": case "phone": case "name":case "picture":
-			if(!element.value){
-				alert(element.name+"은 필수입니다.");					
-				if(element.name=="picture"){
-					element.click();
-				}else{
-					element.focus();
-				}					
-				return;
-			}
-			
-			if(element.name=="id" && element.value!=checkID){
-				alert("아이디 중복확인은 필수입니다.");
-				return;
-			}
+			case "id": case "pwd": case "email": case "phone": case "name": case "picture":
+				if (!element.value) {
+					alert(element.name + "은 필수입니다.");
+					if (element.name == "picture") {
+						element.click();
+					} else {
+						element.focus();
+					}
+					return;
+				}
+
+				if (element.name == "id" && element.value != checkID) {
+					alert("아이디 중복확인은 필수입니다.");
+					return;
+				}
 		}
 	}
-	
-	form.action="regist";
-	form.method="post";
+
+	form.action = "regist";
+	form.method = "post";
 	form.submit();
 }
-</script>
+</Script>
+	
 </body>
 
 
