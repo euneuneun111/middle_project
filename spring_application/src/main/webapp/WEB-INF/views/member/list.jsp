@@ -2,140 +2,168 @@
 <%@ page import="com.application.dto.MemberVO"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-    
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<title>회원 목록</title>
-
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    
+<meta charset="UTF-8" />
+<title>회원 목록</title>
 <style>
-	table th,td{
-		text-align:center;
-		line-height:30px;
-	}
-	table td > span{
-		display:block;
-		width:30px;
-		height:30px;
-		margin:0 auto;
-	}
+.person-info {
+	display: block;
+	width: 100%;
+	height: 200px;
+	background-color: #ccc;
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -0.5rem;
+}
+
+.btn-primary:hover {
+	background-color: #0056b3;
+}
+
+.alert-info {
+	padding: 1rem;
+	background-color: #d1ecf1;
+	color: #0c5460;
+	border-radius: 4px;
+}
 </style>
 
-</head>    
-
-
-<body>
-<!-- Content Wrapper. Contains page content -->    
-
-<!-- Main content -->
-<section class="content-header">
-  	<div class="container-fluid">
-  		<div class="row md-2">
-  			<div class="col-sm-6">
-  				<h1>회원목록</h1>  				
-  			</div>
-  			<div class="col-sm-6">
-  				<ol class="breadcrumb float-sm-right">
-		        <li class="breadcrumb-item">
-		        	<a href="list.do">
-			        	<i class="fa fa-dashboard"></i>회원관리
-			        </a>
-		        </li>
-		        <li class="breadcrumb-item active">
-		        	목록
-		        </li>		        
-    	  </ol>
-  			</div>
-  		</div>
-  	</div>
-</section>
- 
- 
-  	<section class="content">
-  		<div class="card">
-  			<div class="card-header with-border">
-  				<button type="button" class="btn btn-primary" onclick="OpenWindow('regist','회원등록',700,900);" >회원등록</button>   				
-			<div id="keyword" class="card-tools" style="width:550px;">
-				 <div class="input-group row">
-				 	<!-- search bar -->
-				 	<!-- sort num -->
-	  	<select class="form-control col-md-3" name="perPageNum" id="perPageNum" onchange="">					  		  		
-	  			<option value="10" ${pageMaker.perPageNum eq 10 ? 'selected':'' } >정렬개수</option>
-		  		<option value="2"  ${pageMaker.perPageNum eq 2 ? 'selected':'' } >2개씩 정렬</option>
-		  		<option value="3"  ${pageMaker.perPageNum eq 3 ? 'selected':'' } >3개씩 정렬</option>			  		
-	  	</select>
-	  	
-	  	<!-- search bar -->
-	 	<select class="form-control col-md-3" name="searchType" id="searchType">
-	 		<option value=""  >검색구분</option>
- 			<option value="i" ${pageMaker.searchType eq 'i' ? 'selected':'' } >아이디</option>
-			<option value="n" ${pageMaker.searchType eq 'n' ? 'selected':'' }>이 름</option>
-			<option value="p" ${pageMaker.searchType eq 'p' ? 'selected':'' }>전화번호</option>
-			<option value="e" ${pageMaker.searchType eq 'e' ? 'selected':'' }>이메일</option>				 				 									
-		</select>
-		<!-- keyword -->
-				 	<input  class="form-control" type="text" name="keyword" placeholder="검색어를 입력하세요." value="${pageMaker.keyword }"/>
-		<span class="input-group-append">
-			<button class="btn btn-primary" type="button" onclick="search_list(1);" id="searchBtn" data-card-widget="search" >
-				<i class="fa fa-fw fa-search"></i>
-			</button>
-		</span>
-	<!-- end : search bar -->		 
-				 </div>
-			</div>   			
-		</div>
-		<div class="card-body" >    		
-  		<table class="table table-bordered table-striped" id="memberTable">
-  			
-   			<tr>
-	   			<th style="width:10%;">사진</th>
-               	<th style="width:15%;">아이디</th>
-               	<th style="width:15%;">패스워드</th>
-               	<th style="width:15%;">이 름</th>
-               	<th style="width:15%;">이메일</th>
-               	<th style="width:15%;">전화번호</th>
-               	<th>등록날짜</th> <!-- yyyy-MM-dd  -->
- 	       </tr>
-           
-           <c:if test="${empty memberList }">
-	           <tr>
-	           		<th colspan="7" class="text-center">해당 데이터가 존재하지 않습니다.</th>
-	           </tr>	
-           </c:if>		
-       
- 		   <c:if test="${not empty memberList }">
- 		   	<c:forEach var="member" items="${memberList }" >
- 		   		<fmt:formatDate pattern="yyyy-MM-dd" var="regDate" 
- 		   						value="${member.regDate}"/>
-	 		   	<tr onclick="OpenWindow('detail?id=${member.id}','회원정보',700,800)" 
-	 		   		 style="cursor:pointer;">
-	 		   		<td><span class="person-info" data-id="${member.id }" ></span></td>
-	           		<td>${member.id }</td>
-	           		<td>${member.pwd }</td>
-	           		<td>${member.name }</td>
-	           		<td>${member.email }</td>
-	           		<td>${member.phone }</td>
-	           		<td>${regDate } </td>
-	 		   	</tr>
-	 		   	</c:forEach>
- 		   	</c:if>
- 		
-          </table>
-		    
-		</div> <!-- card-body -->
-		<div class="card-footer">
-			<%@ include file="/WEB-INF/views/module/pagination.jsp" %>
-		</div>
-  </div>
-</section>
-
-
 <script>
+function OpenWindow(UrlStr, WinTitle, WinWidth, WinHeight) {
+  let winleft = (screen.width - WinWidth) / 2;
+  let wintop = (screen.height - WinHeight) / 2;
+  var win = window.open(UrlStr , WinTitle , "scrollbars=yes,width="+ WinWidth
+            +",height="+ WinHeight +", top="+ wintop +", left=" 
+            + winleft +", resizable=yes, status=yes"  );
+  win.focus(); 
+}
+
+// 회원 사진 없을 때 백그라운드 이미지 설정용
+function MemberPictureBackground(contextPath){
+  let elements = document.querySelectorAll('.person-info');
+  for(let element of elements){
+    let id = element.getAttribute("data-id");   
+    element.style.backgroundImage = "url('"+contextPath+"/member/getPicture?id="+id+"')";
+    element.style.backgroundPosition = "center";
+    element.style.backgroundRepeat = "no-repeat";
+    element.style.backgroundSize = "cover";
+  }
+}
+
+window.onload = function(){
+  MemberPictureBackground("<%=request.getContextPath()%>");
+};
+</script>
+
+</head>
+<body>
+
+	<section class="content-header"
+		style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
+
+		<!-- 왼쪽 메뉴 -->
+		<div class="d-flex align-items-center">
+			<ul class="navbar-nav flex-row" style="font-weight: bold;">
+				<li class="nav-item"><a href="#" class="nav-link px-4"
+					style="color: #9B99FF;">최신</a></li>
+				<li class="nav-item"><span class="nav-link px-4"
+					style="color: #ced4da; user-select: none;">/</span></li>
+				<li class="nav-item"><a href="#" class="nav-link px-4"
+					style="color: #9B99FF;">인기</a></li>
+			</ul>
+		</div>
+
+		<!-- 중앙 검색바 -->
+		<div class="d-flex justify-content-center flex-grow-1"
+			style="margin: 0 30px;">
+			<form class="form-inline w-100" style="max-width: 400px;">
+				<div class="input-group input-group-sm w-100">
+					<input class="form-control form-control-navbar" type="search"
+						placeholder="Search" aria-label="Search">
+					<div class="input-group-append">
+						<button class="btn btn-navbar" type="submit"
+							style="border: 1px solid #ced4da">
+							<i class="fas fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<!-- 오른쪽 버튼 -->
+		<div class="col-md-2 mb-2">
+			<button type="button" class="btn btn-block btn-secondary btn-lg"
+				onclick="location.href='regist';"
+				style="background-color: #9B99FF; border: none;">Project
+				Add</button>
+		</div>
+
+	</section>
+
+	<section class="content" style="padding: 0 150px;">
+		<div class="row justify-content-center">
+
+			<c:if test="${empty memberList}">
+				<div class="col-12">
+					<div class="alert alert-info text-center">해당 데이터가 존재하지 않습니다.</div>
+				</div>
+			</c:if>
+
+			<c:forEach var="member" items="${memberList}">
+				<fmt:formatDate pattern="yyyy-MM-dd" var="regDate"
+					value="${member.regDate}" />
+
+				<div class="col-md-4 mb-3">
+					<div class="card h-100"
+						onclick="location.href='detail?id=${member.id}'"
+						style="cursor: pointer;">
+
+						<c:choose>
+							<c:when test="${not empty member.picture}">
+								<div class="person-info mb-2" data-id="${member.id}"
+									style="border: 1px solid #fff; object-fit: cover; height: 150px; background-color: #f0f0f0;"></div>
+							</c:when>
+							<c:otherwise>
+								<div class="person-info mb-2 text-center text-muted"
+									style="height: 150px; background-color: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+									No Image</div>
+							</c:otherwise>
+						</c:choose>
+
+						<div class="card-body">
+							<h5 class="card-title">${member.name}
+								<small style="color: #666;">(${member.id})</small>
+							</h5>
+							<p class="card-text" style="font-size: 0.9rem;">
+								<strong>이메일:</strong> ${member.email}<br /> <strong>전화번호:</strong>
+								${member.phone}<br /> <strong>가입일:</strong> ${regDate}
+							</p>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+
+		</div>
+	</section>
+
+	<!-- 페이징 모듈 포함 -->
+	<div style="padding: 1rem;">
+		<%@ include file="/WEB-INF/views/module/pagination.jsp"%>
+	</div>
+
+	<script>
 	MemberPictureBackground("<%=request.getContextPath()%>");
 
 </script>
 
 </body>
+</html>

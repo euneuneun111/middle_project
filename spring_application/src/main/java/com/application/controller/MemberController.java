@@ -66,6 +66,13 @@ public class MemberController {
 	}
 
 	
+	@GetMapping("/inquiryForm")
+    public String inquiryForm() {
+        String url = "/member/inquiryForm";
+
+        return url;
+    }
+	
 	@Resource(name = "picturePath")
 	private String picturePath;
 	
