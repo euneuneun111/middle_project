@@ -3,18 +3,33 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <title>회원 상세</title>
 
+<style>
+.heart-button {
+	border: none;
+	background: none;
+	color: red;
+	font-size: 24px;
+	cursor: pointer;
+}
+</style>
+
 
 
 <body>
 	<div>
 		<section class="content-header"
-			style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
+			style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between; margin-bottom:15px;">
 
 			<!-- 왼쪽 메뉴 -->
+			<button onclick="history.go(-1);"
+				style="position: absolute; top: 10px; left: 10px; background: none; border: none;">
+				<i class="fa-solid fa-arrow-left"
+					style="font-size: 24px; color: #9B99FF; margin-left:200px" ></i>
+			</button>
 
 			<!-- 중앙 검색바 -->
 			<div class="d-flex justify-content-center flex-grow-1"
-				style="margin: 0 30px;">
+				style="margin: auto auto">
 				<form class="form-inline w-100" style="max-width: 400px;">
 					<div class="input-group input-group-sm w-100">
 						<input class="form-control form-control-navbar" type="search"
@@ -33,7 +48,7 @@
 
 		</section>
 		<!-- Main content -->
-		<section class="content register-page">
+		<section class="content register-page" style="background-color:#fff">
 			<div class="card card-solid"
 				style="padding: 0 150px; display: flex; justify-content: space-evenly;">
 				<div class="card-body" style="padding: 0px">
@@ -52,7 +67,7 @@
 								<button type="button"
 									class="btn btn-outline-secondary btn-sm custom-hover"
 									style="border: none;"
-									onclick="location.href='modify?id=${member.id}">수정</button>
+									onclick="location.href='modify?id=${member.id}'">수정</button>
 
 								<span class="nav-link px-4"
 									style="color: #ced4da; user-select: none;">/</span>
@@ -61,162 +76,100 @@
 									style="border: none;" onclick="deleteProject();">삭제</button>
 							</div>
 
-							<div class="form-group row">
-								<label for="id" class="col-sm-3" style="font-size: 0.9em;">
-									<span style="color: red; font-weight: bold;">*</span>아이디
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="id" class="col-sm-12" style="font-size: 0.9em;">
+									<h3 class="input-group-append-sm">제목</h3>
 								</label>
-								<div class="col-sm-9 input-group input-group-sm">
-									<input name="id" onblur="validation(this.name);"
-										onkeyup="this.value=this.value.replace(/[\ㄱ-ㅎㅏ-ㅣ가-힣]/g, &#39;&#39;);"
-										type="text" class="form-control" id="id"
-										placeholder="13글자 영문자,숫자 조합"> <span
-										class="input-group-append-sm"> </span>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="pwd" class="col-sm-3" style="font-size: 0.9em;">
-									<span style="color: red; font-weight: bold;">*</span>패스워드
-								</label>
-								<div class="col-sm-9 input-group-sm">
-									<input class="form-control" name="pwd" type="password"
-										class="form-control" id="pwd"
-										placeholder="20글자 영문자,숫자,특수문자 조합"
-										onblur="validation(this.name);" />
-								</div>
 
 							</div>
-							<div class="form-group row">
-								<label for="name" class="col-sm-3" style="font-size: 0.9em;">
-									<span style="color: red; font-weight: bold;">*</span>이 름
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="pwd" class="col-sm-3" style="font-size: 0.9em;">
+									<span style="color: red; font-weight: bold;">*</span>누적 금액
 								</label>
+							</div>
+							<div class="form-group row" style="margin-bottom: 3px">
 								<div class="col-sm-9 input-group-sm">
 									<input class="form-control" name="name" type="text"
-										class="form-control" id="name" placeholder="이름을 입력하세요"
+										class="form-control" id="name" placeholder="누적금액을 입력하세요"
 										onblur="validation(this.name);" onkeyup="" />
 								</div>
 
 							</div>
-							<div class="form-group row">
-								<label for="authority" class="col-sm-3"
-									style="font-size: 0.9em;">직책권한</label>
-								<div class="col-sm-9 row">
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="role1" name="authorities" value="01"> <label
-												for="role1" class="custom-control-label">사용자</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="role2" name="authorities" value="02"> <label
-												for="role2" class="custom-control-label">운영자</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="role3" name="authorities" value="03"> <label
-												for="role3" class="custom-control-label">관리자</label>
-										</div>
-									</div>
-								</div>
+							</br>
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="name" class="col-sm-3" style="font-size: 0.9em;">
+									<span style="color: red; font-weight: bold;">*</span>펀딩 기간 
 							</div>
-							<div class="form-group row">
-								<label for="authority" class="col-sm-3"
-									style="font-size: 0.9em;">회원관리권한</label>
-								<div class="col-sm-9 row">
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="user1" name="authorities" value="11"> <label
-												for="user1" class="custom-control-label">등록</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="user2" name="authorities" value="13"> <label
-												for="user2" class="custom-control-label">수정</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="user3" name="authorities" value="14"> <label
-												for="user3" class="custom-control-label">삭제</label>
-										</div>
-									</div>
+							<div class="form-group row d-flex align-items-center"
+								style="margin-bottom: 3px;">
+
+								<!-- 시작 날짜 -->
+								<div class="col-sm-5 input-group-sm">
+									<input class="form-control" name="start" type="text" id="start"
+										placeholder="시작" onblur="validation(this.name);" />
 								</div>
-							</div>
-							<div class="form-group row">
-								<label for="authority" class="col-sm-3"
-									style="font-size: 0.9em;">공지관리권한</label>
-								<div class="col-sm-9 row">
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="notice1" name="authorities" value="21"> <label
-												for="notice1" class="custom-control-label">등록</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="notice2" name="authorities" value="23"> <label
-												for="notice2" class="custom-control-label">수정</label>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" type="checkbox"
-												id="notice3" name="authorities" value="24"> <label
-												for="notice3" class="custom-control-label">삭제</label>
-										</div>
-									</div>
+
+								<!-- ~ 기호 -->
+								<div class="text-center"
+									style="width: 50px; font-size: 25px; color: #222; user-select: none;">
+									~</div>
+
+								<!-- 마감 날짜 -->
+								<div class="col-sm-5 input-group-sm">
+									<input class="form-control" name="end" type="text" id="end"
+										placeholder="마감" onblur="validation(this.name);" />
 								</div>
+
 							</div>
-							<div class="form-group row">
-								<label for="email" class="col-sm-3" style="font-size: 0.9em;">이메일</label>
+
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="pwd" class="col-sm-3" style="font-size: 0.9em;">
+									<span style="color: red; font-weight: bold;">*</span>목표 금액
+								</label>
+							</div>
+
+							<div class="form-group row" style="margin-bottom: 3px">
 								<div class="col-sm-9 input-group-sm">
-									<input name="email" type="email" class="form-control"
-										id="email" placeholder="example@naver.com"
-										onblur="validation(this.name);">
+									<input class="form-control" name="name" type="text"
+										class="form-control" id="name" placeholder="목표금액을 입력하세요"
+										onblur="validation(this.name);" onkeyup="" />
 								</div>
 							</div>
+							<br> </br>
 							<div class="form-group row">
-								<label for="phone" class="col-sm-3 control-label">전화번호</label>
-								<div class="col-sm-9">
-									<div class="input-group-sm">
-										<select style="width: 90px;" name="phone" id="phone"
-											class="form-control float-left">
-											<option value="">-선택-</option>
-											<option value="010">010</option>
-											<option value="011">011</option>
-											<option value="017">017</option>
-											<option value="018">018</option>
-										</select> <label class="float-left"
-											style="padding: 0; text-align: center;">&nbsp;-&nbsp;</label>
-										<input style="width: 87px;" data-role="phone1"
-											oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-											maxlength="4" onkeyup="phone1_max(this.value.length);"
-											name="phone" type="text" class="form-control float-left" />
-										<label class="float-left"
-											style="padding: 0; text-align: center;">&nbsp;-&nbsp;</label>
-										<input style="width: 87px;" maxlength="4" data-role="phone2"
-											name="phone" type="text" class="form-control float-left"
-											oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-											onfocus="phone2();" />
-									</div>
+								<div class="col-sm-6">
+									<select class="form-control" id="categorySelect"
+										name="category">
+										<option value="">-- 후원 옵션 --</option>
+									</select>
 								</div>
 
 
 							</div>
+
+
+
 							<div class="card-footer" style="background-color: #fff;">
+								<div
+									class="col-sm-12 d-flex justify-content-between align-items-center">
 
+									<!-- 왼쪽: 하트 + 공유 -->
+									<div>
+										<button class="heart-button"
+											style="border: none; background-color: #fff;" id="heartBtn">
+											<i class="fa-regular fa-heart" style="color: red;"></i>
+										</button>
+										
+										<span class="col-sm-6" style="text-aline:center">0</span>
 
-								<div class="col-sm-12 d-flex justify-content-end">
+										<button class="heart-button"
+											style="border: none; background-color: #fff; margin-left: 30px;"
+											id="shareBtn">
+											<i class="fa-solid fa-share-nodes" style="color: #333;"></i>
+										</button>
+									</div>
+
+									<!-- 오른쪽: 후원하기 버튼 -->
 									<button type="button" class="btn col-sm-6"
 										onclick="regist_go();"
 										style="background-color: #9B99FF; color: #fff; border: none;">
@@ -246,7 +199,7 @@
 
 									<button type="button" class="btn btn-outline-danger btn-sm"
 										onclick="reportProject();">신고하기</button>
-								
+
 
 								</div>
 							</div>
@@ -294,6 +247,22 @@ function remove_go(){
 
 </script>
 
+	<script>
+  const heartBtn = document.getElementById('heartBtn');
+
+  heartBtn.addEventListener('click', () => {
+    const icon = heartBtn.querySelector('i');
+    // 클래스가 빈 하트이면 -> 꽉 찬 하트로
+    if (icon.classList.contains('fa-regular')) {
+      icon.classList.remove('fa-regular');
+      icon.classList.add('fa-solid');
+    } else {
+      // 꽉 찬 하트이면 -> 빈 하트로
+      icon.classList.remove('fa-solid');
+      icon.classList.add('fa-regular');
+    }
+  });
+</script>
 
 
 

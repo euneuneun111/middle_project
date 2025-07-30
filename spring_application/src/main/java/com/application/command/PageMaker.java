@@ -6,7 +6,7 @@ public class PageMaker {
 	private String keyword = "";
 	
 	private int page = 1; // 페이지 번호
-	private int perPageNum = 10; // 리스트 개수
+	private int perPageNum = 4; // 리스트 개수
 	private int totalCount; // 전체 행의 개수
 	private int displayPageNum = 10; // 한 페이지에 보여줄 페이지번호 개수
 	

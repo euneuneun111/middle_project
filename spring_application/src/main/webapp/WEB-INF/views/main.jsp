@@ -11,7 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AdminLTE 3 | Starter</title>
+<title>Linked</title>
 
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet"
@@ -116,7 +116,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 				<!-- 상단 로그인/마이페이지 영역 -->
 				<div class="header-right-top">
-					<div class="login-btn" onclick="location.href='/user/login.jsp'">
+					<div class="login-btn"
+						onclick="location.href='<%=request.getContextPath()%>/commons/logout';">
 						<a><strong><em>Logout</em></strong></a>
 					</div>
 					<a href="/me/mypage.jsp"><strong><em>My Page</em></strong></a>
@@ -133,89 +134,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			</div>
 		</div>
+		<iframe name="ifr" frameborder="0" style="width: 100%; height: 85vh;"></iframe>
+
 	</div>
-	<!-- Navbar -->
-	<aside class="main-sidebar sidebar-dark-primary elevation-4">
-		<!-- Brand Logo -->
-		<a href="index3.html" class="brand-link"> <img
-			src="<%=request.getContextPath() %>/resources/bootstrap/dist/img/AdminLTELogo.png"
-			alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-			style="opacity: .8"> <span class="brand-text font-weight-light">AdminLTE
-				3</span>
-		</a>
-
-		<!-- Sidebar -->
-		<div class="sidebar">
-			<!-- Sidebar user panel (optional) -->
-			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-				<div class="image">
-					<img
-						src="<%=request.getContextPath() %>/resources/bootstrap/dist/img/user2-160x160.jpg"
-						class="img-circle elevation-2" alt="User Image">
-				</div>
-				<div class="info">
-					<a href="#" class="d-block">Alexander Pierce</a>
-				</div>
-			</div>
-
-			<!-- SidebarSearch Form -->
-			<div class="form-inline">
-				<div class="input-group" data-widget="sidebar-search">
-					<input class="form-control form-control-sidebar" type="search"
-						placeholder="Search" aria-label="Search">
-					<div class="input-group-append">
-						<button class="btn btn-sidebar">
-							<i class="fas fa-search fa-fw"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-
-			<!-- Sidebar Menu -->
-			<nav class="mt-2">
-				<ul class="nav nav-pills nav-sidebar flex-column subMenuList"
-					data-widget="treeview" role="menu" data-accordion="false">
-
-				</ul>
-			</nav>
-			<!-- /.sidebar-menu -->
-		</div>
-		<!-- /.sidebar -->
-	</aside>
-
 
 	<!-- content wrapper -->
-	<div class="content-wrapper">
-		<iframe name="ifr" frameborder="0" style="width: 100%; height: 85vh;"></iframe>
-	</div>
-
-
-	<!-- Control Sidebar -->
-	<aside class="control-sidebar control-sidebar-dark">
-		<!-- Control sidebar content goes here -->
-		<div class="p-3">
-			<h5>Title</h5>
-			<p>Sidebar content</p>
+	<footer class="footer"
+		style="background-color: #9B99FF; padding: 20px 0; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #fff; border-top: 1px solid #ddd;">
+		<div class="footer-content" style="max-width: 1200px; margin: 0 auto;">
+			<p style="margin: 5px 0;">© Team : Semicolon;
+				</p>
+			<p style="margin: 5px 0;">
+				<a 
+					style="color: #fff; text-decoration: none; margin-right: 15px;">PL : 이민희</a>
+				<a 
+					style="color: #fff; text-decoration: none; margin-right: 15px;">김재연, 김지훈, 노은광, 손유정, 이진규</a> </br> <a 
+					style="color: #fff; text-decoration: none;">DW ACADEMY</a>
+			</p>
 		</div>
-	</aside>
-
-	<!-- /.navbar -->
-
-	<!-- Main Sidebar Container -->
+	</footer>
 
 
+	<!-- Navbar -->
 
-
-	<!-- Control Sidebar -->
-
-	<!-- /.control-sidebar -->
 
 	<!-- Main Footer -->
-	<footer class="main-footer" style="background-color: #9B99FF">
-		<!-- To the right -->
-		<div class="float-right d-none d-sm-inline"></div>
-		<!-- Default to the left -->
-	</footer>
+
 	<!-- ./wrapper -->
 
 	<!-- jQuery -->
@@ -296,6 +240,3 @@ function go_page(url,mcode){
 </body>
 </html>
 
-
-main.jsp
-8KB

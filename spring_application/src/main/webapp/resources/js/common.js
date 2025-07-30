@@ -22,7 +22,7 @@ function picture_go(){
 	
 	//이미지 확장자 jpg 확인
     var fileFormat = file.name.substr(file.name.lastIndexOf(".")+1).toUpperCase();
-    if(!(fileFormat=="JPG" || fileFormat=="JPEG")){
+    if(!(fileFormat=="JPG" || fileFormat=="JPEG" || fileFormat == "PNG")){
         alert("이미지는 jpg/jpeg 형식만 가능합니다.");
         pictureInput.value="";      
         return;
