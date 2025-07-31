@@ -3,74 +3,86 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.application.dao.FundingDAO">
+<mapper namespace="Funding-Mapper">
 
-    <!-- 1. 전체 목록 조회 -->
-    <select id="getAllFundings" resultType="com.application.dto.FundingVO">
-        SELECT * FROM FUNDING
-        ORDER BY FNO DESC
-    </select>
+	<!-- 1. 전체 목록 조회 -->
+	<select id="getAllFundings"
+		resultType="com.application.dto.FundingVO">
+		SELECT * FROM FUNDING
+		ORDER BY FNO DESC
+	</select>
 
-    <!-- 2. 단건 조회 -->
-    <select id="getFundingById" resultType="com.application.dto.FundingVO" parameterType="int">
-        SELECT * FROM FUNDING
-        WHERE FNO = #{fno}
-    </select>
+	<!-- 2. 단건 조회 -->
+	<select id="getFundingById"
+		resultType="com.application.dto.FundingVO" parameterType="int">
+		SELECT * FROM
+		FUNDING
+		WHERE FNO = #{fno}
+	</select>
 
-    <!-- 3. 등록 -->
-    <insert id="insertFunding" parameterType="com.application.dto.FundingVO" useGeneratedKeys="true" keyProperty="fno">
-        INSERT INTO FUNDING (
-            FNO, TITLE, WRITER, CONTENT,
-            STARTDATE, ENDDATE, POINT, DIST,
-            FUNDING_FICTURE, FUNDING_LIKE, VIEWCNT,
-            REGDATE, UPDATEDATE
-        ) VALUES (
-            FUNDING_SEQ.NEXTVAL,
-            #{title},
-            #{writer},
-            #{content},
-            #{startdate},
-            #{enddate},
-            #{point},
-            #{dist},
-            #{fundingFicture},
-            0,
-            0,
-            SYSDATE,
-            SYSDATE
-        )
-    </insert>
+	<!-- 3. 등록 -->
+	<insert id="insertFunding"
+		parameterType="com.application.dto.FundingVO" useGeneratedKeys="true"
+		keyProperty="fno">
+		INSERT INTO FUNDING (
+		FNO, TITLE, WRITER, CONTENT,
+		STARTDATE, ENDDATE, POINT, DIST,
+		FUNDING_FICTURE, FUNDING_LIKE,
+		VIEWCNT,
+		REGDATE, UPDATEDATE
+		) VALUES (
+		FUNDING_SEQ.NEXTVAL,
+		#{title},
+		#{writer},
+		#{content},
+		#{startdate},
+		#{enddate},
+		#{point},
+		#{dist},
+		#{fundingFicture},
+		0,
+		0,
+		SYSDATE,
+		SYSDATE
+		)
+	</insert>
 
-    <!-- 4. 수정 -->
-    <update id="updateFunding" parameterType="com.application.dto.FundingVO">
-        UPDATE FUNDING
-        SET TITLE = #{title},
-            CONTENT = #{content},
-            POINT = #{point},
-            DIST = #{dist},
-            FUNDING_FICTURE = #{fundingFicture},
-            UPDATEDATE = SYSDATE
-        WHERE FNO = #{fno}
-    </update>
+	<!-- 4. 수정 -->
+	<update id="updateFunding"
+		parameterType="com.application.dto.FundingVO">
+		UPDATE FUNDING
+		SET TITLE = #{title},
+		CONTENT = #{content},
+		POINT = #{point},
+		DIST = #{dist},
+		FUNDING_FICTURE = #{fundingFicture},
+		UPDATEDATE = SYSDATE
+		WHERE FNO = #{fno}
+	</update>
 
-    <!-- 5. 삭제 -->
-    <delete id="deleteFunding" parameterType="int">
-        DELETE FROM FUNDING
-        WHERE FNO = #{fno}
-    </delete>
+	<!-- 5. 삭제 -->
+	<delete id="deleteFunding" parameterType="int">
+		DELETE FROM FUNDING
+		WHERE FNO = #{fno}
+	</delete>
 
-    <!-- 6. 조회수 증가 -->
-    <update id="increaseViewCnt" parameterType="int">
-        UPDATE FUNDING
-        SET VIEWCNT = VIEWCNT + 1
-        WHERE FNO = #{fno}
-    </update>
+	<!-- 6. 조회수 증가 -->
+	<update id="increaseViewCnt" parameterType="int">
+		UPDATE FUNDING
+		SET
+		VIEWCNT = VIEWCNT + 1
+		WHERE FNO = #{fno}
+	</update>
 
-    <!-- 7. 좋아요 증가 -->
-    <update id="increaseLike" parameterType="int">
-        UPDATE FUNDING
-        SET FUNDING_LIKE = NVL(FUNDING_LIKE, 0) + 1
-        WHERE FNO = #{fno}
-    </update>
+	<!-- 7. 좋아요 증가 -->
+	<update id="increaseLike">
+		UPDATE FUNDING SET FUNDING_LIKE = FUNDING_LIKE + 1
+		WHERE FNO = #{fno}
+	</update>
+
+	<update id="decreaseLike">
+		UPDATE FUNDING SET FUNDING_LIKE = FUNDING_LIKE - 1
+		WHERE FNO = #{fno}
+	</update>
 
 </mapper>

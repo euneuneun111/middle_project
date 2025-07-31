@@ -102,6 +102,43 @@ public class MemberController {
 		return mnv;
 	}
 	
+	@GetMapping("/getPicture")
+	@ResponseBody
+	public ResponseEntity<byte[]> getPicture(String id) {
+		ResponseEntity entity = null;
+			
+		MemberVO member = null;
+		
+		try {
+			member = service.getMember(id);
+		} catch (SQLException e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (member == null)
+			return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		
+		String picture = member.getPicture();
+		String imgPath = this.picturePath;
+		
+		InputStream in = null;
+		
+		try {
+			in = new FileInputStream(new File(imgPath, picture));
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), HttpStatus.OK);
+			
+			return entity;
+		}catch(IOException e) {
+			System.out.println("Not Founded ::: "+member.getId()+":"+member.getPicture());
+			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+		}finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 	
 	public String savePicture(String oldPicture, MultipartFile multi) 
 									throws BadRequestPictureException, 
@@ -151,43 +188,7 @@ public class MemberController {
 		return mnv;
 	}
 	
-	@GetMapping("/getPicture")
-	@ResponseBody
-	public ResponseEntity<byte[]> getPicture(String id) {
-		ResponseEntity entity = null;
-			
-		MemberVO member = null;
-		
-		try {
-			member = service.getMember(id);
-		} catch (SQLException e) {
-			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		if (member == null)
-			return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
-		
-		String picture = member.getPicture();
-		String imgPath = this.picturePath;
-		
-		InputStream in = null;
-		
-		try {
-			in = new FileInputStream(new File(imgPath, picture));
-			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), HttpStatus.OK);
-			
-			return entity;
-		}catch(IOException e) {
-			System.out.println("Not Founded ::: "+member.getId()+":"+member.getPicture());
-			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
-		}finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-	}
+	
 	
 	@GetMapping("/authority/modifyForm")
 	public void modifyAuthorityForm(String id,Model model)throws Exception {

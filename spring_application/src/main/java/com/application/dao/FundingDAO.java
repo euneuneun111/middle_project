@@ -1,12 +1,20 @@
 package com.application.dao;
+
 import java.util.List;
 
+import com.application.command.PageMaker;
 import com.application.dto.FundingVO;
 
 public interface FundingDAO {
 
     // 전체 목록 조회
     List<FundingVO> getAllFundings();
+
+    // 페이징 목록 조회
+    List<FundingVO> getFundingsPaging(PageMaker pageMaker); // 🔹 추가
+
+    // 전체 개수 (검색 조건 포함)
+    int getTotalCount(PageMaker pageMaker); // 🔹 추가
 
     // 단건 조회
     FundingVO getFundingById(int fno);
@@ -25,5 +33,7 @@ public interface FundingDAO {
 
     // 좋아요 증가
     void increaseLike(int fno);
-}
+    
+    void decreaseLike(int fno);
 
+}

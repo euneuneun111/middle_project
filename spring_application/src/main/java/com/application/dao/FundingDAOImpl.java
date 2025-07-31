@@ -2,73 +2,70 @@ package com.application.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import com.application.command.PageMaker;
 import com.application.dto.FundingVO;
 
+@Repository
 public class FundingDAOImpl implements FundingDAO {
 
-    private final SqlSessionFactory sqlSessionFactory;
+    private final SqlSession session;
 
-    public FundingDAOImpl(SqlSessionFactory sqlSessionFactory) {
-        this.sqlSessionFactory = sqlSessionFactory;
+    @Autowired
+    public FundingDAOImpl(SqlSession session) {
+        this.session = session;
     }
 
     @Override
     public List<FundingVO> getAllFundings() {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            return session.selectList("funding.getAllFundings");
-        }
+        return session.selectList("Funding-Mapper.getAllFundings");
+    }
+
+    @Override
+    public List<FundingVO> getFundingsPaging(PageMaker pageMaker) {
+        int offset = pageMaker.getStartRow() - 1;
+        int limit = pageMaker.getPerPageNum();
+        RowBounds rowBounds = new RowBounds(offset, limit);
+
+        return session.selectList("Funding-Mapper.getFundingsPaging", pageMaker, rowBounds);
+    }
+
+    @Override
+    public int getTotalCount(PageMaker pageMaker) {
+        return session.selectOne("Funding-Mapper.getTotalCount", pageMaker);
     }
 
     @Override
     public FundingVO getFundingById(int fno) {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            return session.selectOne("funding.getFundingById", fno);
-        }
+        return session.selectOne("Funding-Mapper.getFundingById", fno);
     }
 
     @Override
     public int insertFunding(FundingVO vo) {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            int result = session.insert("funding.insertFunding", vo);
-            session.commit();
-            return result;
-        }
+        return session.insert("Funding-Mapper.insertFunding", vo);
     }
 
     @Override
     public int updateFunding(FundingVO vo) {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            int result = session.update("funding.updateFunding", vo);
-            session.commit();
-            return result;
-        }
+        return session.update("Funding-Mapper.updateFunding", vo);
     }
 
     @Override
     public int deleteFunding(int fno) {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            int result = session.delete("funding.deleteFunding", fno);
-            session.commit();
-            return result;
-        }
+        return session.delete("Funding-Mapper.deleteFunding", fno);
     }
 
     @Override
     public void increaseViewCnt(int fno) {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            session.update("funding.increaseViewCnt", fno);
-            session.commit();
-        }
+        session.update("Funding-Mapper.increaseViewCnt", fno);
     }
 
     @Override
     public void increaseLike(int fno) {
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            session.update("funding.increaseLike", fno);
-            session.commit();
-        }
+        session.update("Funding-Mapper.increaseLike", fno);
     }
 }
