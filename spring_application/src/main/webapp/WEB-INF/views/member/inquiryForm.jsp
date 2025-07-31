@@ -19,8 +19,7 @@
 							alt="로고" class="logo"
 							style="object-fit: contain; width: 120px; height: 75px;">
 						<h1 class="text-center"
-							style="color: #fff; font-size: 25px; margin: auto auto;">1
-							: 1 문의</h1>
+							style="color: #fff; font-size: 25px; margin: auto auto;">1: 1 문의</h1>
 					</div>
 					<div class="register-card-body">
 

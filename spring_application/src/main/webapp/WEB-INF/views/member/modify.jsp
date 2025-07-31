@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<title>회원 수정</title>
+<title>수정 하기</title>
 
 <head></head>
 
@@ -21,94 +21,160 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div>
-	<section class="content-header">
-		<div class="container-fluid">
-			<div class="row md-2">
-				<div class="col-sm-6">
-					<h1>수정페이지</h1>
-				</div>
-				<div class="col-sm-6">
-					<ol class="breadcrumb float-sm-right">
-						<li class="breadcrumb-item"><a href="#"> <i
-								class="fa fa-dashboard">회원관리</i>
-						</a></li>
-						<li class="breadcrumb-item active">수정</li>
-					</ol>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Main content -->
-	<section class="content register-page">
-		<form name="modify" class="form-horizontal" action="modify.do"
-			method="post" enctype="multipart/form-data">
-			<div class="card" style="min-width: 450px;">
-				<div class="register-card-body">
-					<div class="row">
-						<input type="file" id="inputFile" name="picture" style="display: none" onchange="picture_go();" />                        
-						<div class="input-group col-md-12">
-							<div class="col-md-12" style="text-align: center;">
-								<div id="pictureView" class="person-info" data-id="${member.id }" style="border: 1px solid green; height: 200px; width: 140px; margin: 0 auto; margin-bottom: 5px;"></div>
-								<div class="input-group input-group-sm">
-									<label for="inputFile" class=" btn btn-warning btn-sm btn-flat input-group-addon">사진변경</label>
-                                    <input id="inputFileName" class="form-control" type="text" name="tempPicture" disabled value="${member.picture.split('\\$\\$')[1] }" />
 
+	<!-- Main content -->
+	
+	
+
+
+
+	</section>
+		<!-- Main content -->
+		<section class="content register-page" style="background-color:#fff">
+			<div class="card card-solid"
+				style="padding: 0 150px; display: flex; justify-content: space-evenly;">
+				<div class="card-body" style="padding: 0px">
+					<div class="row">
+						<div class="col-12 col-sm-4"
+							style="position: relative; height: 450px; width: 400px; border: 1px solid #9B99FF; margin: auto auto; border-radius: 5px;">
+							<!-- 이미지 뷰어 -->
+							<div id="pictureView"
+								style="height: calc(100% - 50px); width: 100%;"></div>
+
+							<!-- 하단 고정된 파일 선택 영역 -->
+
+						</div>
+						<div class="col-12 col-sm-6">
+							</br>
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="id" class="col-sm-12" style="font-size: 0.9em;">
+									<h3 class="input-group-append-sm">제목</h3>
+								</label>
+
+							</div>
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="pwd" class="col-sm-3" style="font-size: 0.9em;">
+									<span style="color: red; font-weight: bold;">*</span>누적 금액
+								</label>
+							</div>
+							<div class="form-group row" style="margin-bottom: 3px">
+								<div class="col-sm-9 input-group-sm">
+									<span style="color: red; font-weight: bold;">${member.id} </span>
+								</div>
+
+							</div>
+							</br>
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="name" class="col-sm-3" style="font-size: 0.9em;">
+									<span style="color: red; font-weight: bold;">*</span>펀딩 기간 
+							</div>
+							<div class="form-group row d-flex align-items-center"
+								style="margin-bottom: 3px;">
+
+								<!-- 시작 날짜 -->
+								<div class="col-sm-5 input-group-sm">
+									<input class="form-control" name="start" type="text" id="start"
+										placeholder="시작" onblur="validation(this.name);" />
+								</div>
+
+								<!-- ~ 기호 -->
+								<div class="text-center"
+									style="width: 50px; font-size: 25px; color: #222; user-select: none;">
+									~</div>
+
+								<!-- 마감 날짜 -->
+								<div class="col-sm-5 input-group-sm">
+									<input class="form-control" name="end" type="text" id="end"
+										placeholder="마감" onblur="validation(this.name);" />
+								</div>
+
+							</div>
+
+							<div class="form-group row" style="margin-bottom: 3px">
+								<label for="pwd" class="col-sm-3" style="font-size: 0.9em;">
+									<span style="color: red; font-weight: bold;">*</span>목표 금액
+								</label>
+							</div>
+
+							<div class="form-group row" style="margin-bottom: 3px">
+								<div class="col-sm-9 input-group-sm">
+									<input class="form-control" name="name" type="text"
+										class="form-control" id="name" placeholder="목표금액을 입력하세요"
+										onblur="validation(this.name);" onkeyup="" />
 								</div>
 							</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="id" class="col-sm-3 control-label text-center">아이디</label>
-						<div class="col-sm-9">
-							<input readonly name="id" type="text" class="form-control" id="id" value="${member.id }" />
-						</div>
-					</div>
+							<br> </br>
+							<div class="form-group row">
+								<div class="col-sm-6">
+									<select class="form-control" id="categorySelect"
+										name="category">
+										<option value="">-- 후원 옵션 --</option>
+									</select>
+								</div>
+							</div>
 
-					<div class="form-group row">
-						<label for="pwd" class="col-sm-3 control-label text-center">패스워드</label>
 
-						<div class="col-sm-9">
-							<input name="pwd" type="password" class="form-control" id="pwd" value="${member.pwd }" onblur="validation(this.name);"/>
+
+							<div class="card-footer" style="background-color: #fff;">
+								<div
+									class="col-sm-12 d-flex justify-content-between align-items-center">
+
+
+									<!-- 왼쪽: 수정하기 버튼 -->
+									<button type="button" class="btn col-sm-3"
+										onclick="regist_go();"
+										style="background-color: #9B99FF; color: #fff; border: none;">
+										수&nbsp;&nbsp;정&nbsp;&nbsp;하&nbsp;&nbsp;기</button>
+												
+									<!-- 왼쪽: 수정하기 버튼 -->
+									<button type="button" class="btn col-sm-3"
+										onclick="history.go(-1);"
+										style="background-color: #fff; border: 1px solid; color:#9B99FF;">
+										취&nbsp;&nbsp;소&nbsp;&nbsp;하&nbsp;&nbsp;기</button>
+								</div> 
+							</div>
+
 						</div>
 					</div>
-					<div class="form-group row">
-						<label for="name" class="col-sm-3 control-label text-center">이름</label>
+					<div class="row mt-4">
+						<nav class="w-100">
+							<div class="row mt-4 align-items-center justify-content-between">
+								<!-- 왼쪽: 탭 -->
+								<div class="col d-flex">
+									<div class="nav nav-tabs" id="product-tab" role="tablist">
+										<a class="nav-item nav-link active" id="product-desc-tab"
+											data-toggle="tab" href="#product-desc" role="tab"
+											aria-controls="product-desc" aria-selected="true">프로젝트 소개</a>
+									</div>
+								</div>
 
-						<div class="col-sm-9">
-							<input name="name" type="text" class="form-control" id="name" value="${member.name }" onblur="validation(this.name);"/>
+								<!-- 오른쪽: 버튼 -->
+					
+							</div>
+
+						</nav>
+
+
+						<div class="tab-content p-3" id="nav-tabContent">
+							<textarea class="textarea" name="content" id="content" rows="3"
+								cols="150" placeholder="문의내용을 작성하세요."
+								style="border: 1px solid #9B99FF; border-radius: 5px;"></textarea>
+
+
+
 						</div>
 					</div>
-					<div class="form-group row">
-						<label for="email" class="col-sm-3 control-label text-center">이메일</label>
-
-						<div class="col-sm-9">
-							<input name="email" type="email" class="form-control" id="email"
-								placeholder="example@naver.com" value="${member.email }" onblur="validation(this.name);">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="phone" class="col-sm-3 control-label text-center">전화번호</label>
-						<div class="col-sm-9">
-							<input name="phone" type="text" class="form-control"
-								id="inputPassword3" value="${member.phone }">
-						</div>
-					</div>
-
-					<div class="card-footer row"
-						style="margin-top: 0; border-top: none;">
-						<button type="button" id="modifyBtn" onclick="modify_go();"
-							class="btn btn-warning col-sm-4 text-center">수정하기</button>
-						<div class="col-sm-4"></div>
-						<button type="button" id="cancelBtn" onclick="history.go(-1);"
-							class="btn btn-default pull-right col-sm-4 text-center">취
-							소</button>
-					</div>
+					<!-- /.card-body -->
 				</div>
+
 			</div>
-		</form>
-	</section>
-	<!-- /.content -->
-</div>
+
+		</section>
+
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+
 
 
 
