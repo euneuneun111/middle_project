@@ -1,16 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
-<title>문의 하기</title>
+<title>상세 페이지</title>
 
 <style>
-.heart-button {
+/* .heart-button {
 	border: none;
 	background: none;
 	color: red;
 	font-size: 24px;
 	cursor: pointer;
-}
+}  */
+
+    .heart-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .heart-count {
+      margin-left: 10px;
+      font-size: 18px;
+    } 
 </style>
 
 
@@ -159,7 +174,7 @@
 											<i class="fa-regular fa-heart" style="color: red;"></i>
 										</button>
 											
-										<span class="col-sm-6" style="text-aline:center;">20,300</span>
+										<span id="heartCount" class="heart-count">${member.heart}</span>
 
 										<button class="heart-button"
 											style="border: none; background-color: #fff; margin-left: 30px;"
@@ -261,7 +276,18 @@ function remove_go(){
       icon.classList.add('fa-regular');
     }
   });
+  
+  
 </script>
+
+<script>
+    let count = 0;
+
+    function increaseHeart() {
+      count++;
+      document.getElementById('heartCount').innerText = count;
+    }
+  </script>
 
 
 

@@ -15,6 +15,9 @@ public class MemberVO {
 	private String name;
 	private String register;
 	private String address;
+	private int heart;
+	
+
 	
 
 	private List<String> authorities; // 권한
@@ -129,7 +132,15 @@ public class MemberVO {
 		this.authorities = authorities;
 	}
 	
-	
+	public int getHeart() {
+		return heart;
+	}
+
+
+	public void setHeart(int heart) {
+		this.heart = heart;
+	}
+
 }
 
 
