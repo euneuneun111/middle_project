@@ -1,2 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/webapp/WEB-INF/views/member/authority/modifyForm.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/organization/report/detail.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/payment/fail.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/payment/success.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/pds/paymentPopup.jsp=UTF-8

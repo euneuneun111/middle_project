@@ -11,44 +11,42 @@
 	font-size: 24px;
 	cursor: pointer;
 }  */
+.heart-button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #f44336;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+}
 
-    .heart-button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #f44336;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .heart-count {
-      margin-left: 10px;
-      font-size: 18px;
-    } 
+.heart-count {
+	margin-left: 10px;
+	font-size: 18px;
+}
 </style>
 
 
 
 <body>
 	<div>
-		<section class="content-header"
-			style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
+		<section
+			class="content-header d-flex align-items-center justify-content-between"
+			style="padding: 1rem 150px; position: relative;">
 
-			<!-- 왼쪽 메뉴 -->
+			<!-- 왼쪽 뒤로가기 버튼 -->
 			<button onclick="history.go(-1);"
-				style="position: absolute; top: 10px; left: 10px; background: none; border: none;">
+				style="position: absolute; top: 10px; left: 150px; background: none; border: none;">
 				<i class="fa-solid fa-arrow-left"
 					style="font-size: 24px; color: #9B99FF;"></i>
 			</button>
 
 			<!-- 중앙 검색바 -->
-			<div class="d-flex justify-content-center flex-grow-1"
-				style="margin: auto auto">
-				<form class="form-inline w-100" style="max-width: 400px;">
+			<div class="mx-auto">
+				<form class="form-inline" style="max-width: 400px;">
 					<div class="input-group input-group-sm w-100">
-						<input class="form-control form-control-navbar" type="search"
-							placeholder="Search" aria-label="Search">
+						<input class="form-control" type="search" placeholder="Search">
 						<div class="input-group-append">
 							<button class="btn btn-navbar" type="submit"
 								style="border: 1px solid #ced4da">
@@ -58,12 +56,10 @@
 					</div>
 				</form>
 			</div>
-
-
-
 		</section>
+
 		<!-- Main content -->
-		<section class="content register-page" style="background-color:#fff">
+		<section class="content register-page" style="background-color: #fff">
 			<div class="card card-solid"
 				style="padding: 0 150px; display: flex; justify-content: space-evenly;">
 				<div class="card-body" style="padding: 0px">
@@ -83,7 +79,7 @@
 									class="btn btn-outline-secondary btn-sm custom-hover"
 									style="border: none;"
 									onclick="location.href='modify?id=${member.id}'">수정</button>
-									
+
 
 								<span class="nav-link px-4"
 									style="color: #ced4da; user-select: none;">/</span>
@@ -94,7 +90,7 @@
 
 							<div class="form-group row" style="margin-bottom: 3px">
 								<label for="id" class="col-sm-12" style="font-size: 0.9em;">
-									<h3 class="input-group-append-sm">제목</h3>
+									<h3 class="input-group-append-sm">${member.id}</h3>
 								</label>
 
 							</div>
@@ -105,7 +101,8 @@
 							</div>
 							<div class="form-group row" style="margin-bottom: 3px">
 								<div class="col-sm-9 input-group-sm">
-									<span style="color: red; font-weight: bold;">${member.id} </span>
+									<span style="color: red; font-weight: bold;">${member.id}
+									</span>
 								</div>
 
 							</div>
@@ -173,7 +170,7 @@
 											style="border: none; background-color: #fff;" id="heartBtn">
 											<i class="fa-regular fa-heart" style="color: red;"></i>
 										</button>
-											
+
 										<span id="heartCount" class="heart-count">${member.heart}</span>
 
 										<button class="heart-button"
@@ -280,7 +277,7 @@ function remove_go(){
   
 </script>
 
-<script>
+	<script>
     let count = 0;
 
     function increaseHeart() {

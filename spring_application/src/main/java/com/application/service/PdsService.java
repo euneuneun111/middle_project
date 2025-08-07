@@ -11,6 +11,8 @@ public interface PdsService {
 	//목록
 	List<PdsVO> searchList(PageMaker pageMaker) throws SQLException;
 	
+	PdsVO getPno(int pno) throws SQLException;
+	
 	//등록
 	void regist(PdsVO pds)throws SQLException;
 	

@@ -1,132 +1,167 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@ page import="com.application.dto.MemberVO"%>
+<%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<body>
-<div class="wrapper"> 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-    	<div class="container-fluid">
-    		<div class="row mb-2">
-    			<div class="col-sm-6">
-	      			<h1>자료실</h1>
-	      		</div>
-	       		<div class="col-sm-6">
-			      <ol class="breadcrumb float-sm-right">
-			        <li class="breadcrumb-item"><a href="list.do"><i class="fa fa-dashboard"></i>자료실</a></li>
-			        <li class="breadcrumb-item active">리스트</li>		        
-			      </ol>
-		      	</div>
-	     	</div>	     	
-      	</div>
-    </section>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>회원 목록</title>
+<style>
+.pds-info {
+	display: block;
+	width: 100%;
+	height: 200px;
+	background-color: #ccc;
+}
 
-    <!-- Main content -->
-    <section class="content">
-		<div class="card">
-			<div class="card-header with-border">
-				<button type="button" class="btn btn-primary" id="registBtn" onclick="OpenWindow('registForm','글등록',800,700);">자료등록</button>
-				<div id="keyword" class="card-tools" style="width:450px;">	
-					<div class="input-group row">
-						<select class="form-control col-md-3" name="perPageNum" id="perPageNum">
-					  		<option value="10" ${pageMaker.perPageNum==10 ? 'selected':'' } >정렬개수</option>
-					  		<option value="20" ${pageMaker.perPageNum==20 ? 'selected':'' }>20개씩</option>
-					  		<option value="30" ${pageMaker.perPageNum==30 ? 'selected':'' }>30개씩</option>
-					  		<option value="50" ${pageMaker.perPageNum==50 ? 'selected':'' }>50개씩</option>
-					  	</select>		
-						<select class="form-control col-md-3" name="searchType" id="searchType">							
-							<option value="tcw" ${pageMaker.searchType eq 'tcw' ? 'selected':'' }>전 체</option>
-							<option value="t" ${pageMaker.searchType eq 't' ? 'selected':'' }>제 목</option>
-							<option value="w" ${pageMaker.searchType eq 'w' ? 'selected':'' }>작성자</option>
-							<option value="c" ${pageMaker.searchType eq 'c' ? 'selected':'' }>내 용</option>
-							<option value="tc" ${pageMaker.searchType eq 'tc' ? 'selected':'' }>제목+내용</option>
-							<option value="cw" ${pageMaker.searchType eq 'cw' ? 'selected':'' }>작성자+내용</option>	
-						</select>	
-										
-						<input  class="form-control" type="text" name="keyword" 
-								placeholder="검색어를 입력하세요." value="${pageMaker.keyword }"/>
-						<span class="input-group-append">
-							<button class="btn btn-primary" type="button" id="searchBtn" data-card-widget="search" onclick="search_list(1);">
-								<i class="fa fa-fw fa-search"></i>
-							</button>
-						</span>
-					</div>						
-				</div>			
-			</div>
-			<div class="card-body">
-				<table class="table table-bordered text-center" id="pdsTable">
-					<thead>
-						<tr style="font-size:0.95em;">
-							<th style="width:10%;">번 호</th>
-							<th style="width:40%;">제 목</th>
-							<th style="">첨부파일</th>
-							<th style="width:15%;">작성자</th>
-							<th>등록일</th>
-							<th style="width:10%;">조회수</th>
-						</tr>	
-					</thead>
-					<tbody>
-						<c:if test="${empty pdsList}">
-							<td colspan="6">해당내용이 없습니다.</td>
-						</c:if>
-						<c:forEach items="${pdsList }" var="pds">
-							<tr style='font-size:0.85em;cursor:pointer;' onclick="OpenWindow('detail?pno=${pds.pno}','',700,800);">
-								<td>${pds.pno }</td>
-								<td>${pds.title }</td>
-								<td>
-								<c:if test="${!empty pds.attachList }">
-									<i class="nav-icon fas fa-file"></i>
-								</c:if>
-								<c:if test="${empty pds.attachList }">
-									<span>-</span>
-								</c:if>
-								</td>
-								<td>${pds.writer }</td>
-								<td><fmt:formatDate value="${pds.regDate }" pattern="yyyy-MM-dd"/></td>
-								<td><span class="badge bg-red">${pds.viewcnt }</span></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
-			<div class="card-footer">
-				<div style="display:${!empty pdsList ? 'visible':'none' };">
-	    			 <%@ include file="/WEB-INF/views/module/pagination.jsp" %>
-	    		</div>
-			</div>
-		</div>
-	</section>
-</div>    
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -0.5rem;
+}
 
+.btn-primary:hover {
+	background-color: #0056b3;
+}
 
-<%@ include file="/WEB-INF/views/module/dataTable_js.jsp" %>
+.alert-info {
+	padding: 1rem;
+	background-color: #d1ecf1;
+	color: #0c5460;
+	border-radius: 4px;
+}
+</style>
 
 <script>
-$('#pdsTable').DataTable({
-	"paging": false,
-    "searching": false,
-    "ordering": false,
-    "info": false,
-	"responsive": true, 
-	"lengthChange": true, 
-	"autoWidth": false,
-	"buttons": ["copy", {
-		extend: 'csv',
-        charset: 'utf-8',
-        bom: true
-		}, "excel", "pdf", "print"]
-	}).buttons().container().appendTo('#pdsTable_wrapper .col-md-6:eq(0)');
+function OpenWindow(UrlStr, WinTitle, WinWidth, WinHeight) {
+  let winleft = (screen.width - WinWidth) / 2;
+  let wintop = (screen.height - WinHeight) / 2;
+  var win = window.open(UrlStr , WinTitle , "scrollbars=yes,width="+ WinWidth
+            +",height="+ WinHeight +", top="+ wintop +", left=" 
+            + winleft +", resizable=yes, status=yes"  );
+  win.focus(); 
+}
+
+// 회원 사진 없을 때 백그라운드 이미지 설정용
+function pdsPictureBackground(contextPath){
+  let elements = document.querySelectorAll('.pds-info');
+  for(let element of elements){
+    let id = element.getAttribute("data-id");   
+    element.style.backgroundImage = "url('"+contextPath+"/pds/getPicture?id="+id+"')";
+    element.style.backgroundPosition = "center";
+    element.style.backgroundRepeat = "no-repeat";
+    element.style.backgroundSize = "cover";
+  }
+}
+
+window.onload = function(){
+  pdsPictureBackground("<%=request.getContextPath()%>");
+};
 </script>
+
+</head>
+<body>
+
+	<section class="content-header"
+		style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
+
+		<!-- 왼쪽 메뉴 -->
+		<div class="d-flex align-items-center">
+			<ul class="navbar-nav flex-row" style="font-weight: bold;">
+				<li class="nav-item"><a href="#" class="nav-link px-4"
+					style="color: #9B99FF;">최신</a></li>
+				<li class="nav-item"><span class="nav-link px-4"
+					style="color: #ced4da; user-select: none;">/</span></li>
+				<li class="nav-item"><a href="#" class="nav-link px-4"
+					style="color: #9B99FF;">인기</a></li>
+			</ul>
+		</div>
+
+		<!-- 중앙 검색바 -->
+		<div class="d-flex justify-content-center flex-grow-1"
+			style="margin: 0 30px;">
+			<form class="form-inline w-100" style="max-width: 400px;">
+				<div class="input-group input-group-sm w-100">
+					<input class="form-control form-control-navbar" type="search"
+						placeholder="Search" aria-label="Search">
+					<div class="input-group-append">
+						<button class="btn btn-navbar" type="submit"
+							style="border: 1px solid #ced4da">
+							<i class="fas fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<!-- 오른쪽 버튼 -->
+		<div class="col-md-2 mb-2">
+			<button type="button" class="btn btn-block btn-secondary btn-lg"
+				onclick="location.href='regist';"
+				style="background-color: #9B99FF; border: none;">Funding
+				Add</button>
+		</div>
+
+	</section>
+
+	<section class="content" style="padding: 0 150px;">
+		<div class="row justify-content-center">
+
+			<c:if test="${empty pdsList}">
+				<div class="col-12">
+					<div class="alert alert-info text-center">해당 데이터가 존재하지 않습니다.</div>
+				</div>
+			</c:if>
+
+			<c:forEach var="pds" items="${pdsList}">
+				<fmt:formatDate pattern="yyyy-MM-dd" var="regDate"
+					value="${pds.regDate}" />
+
+				<div class="col-md-3 mb-3">
+					<div class="card h-100"
+						onclick="location.href='detail?pno=${pds.pno}'"
+						style="cursor: pointer;">
+
+						<c:choose>
+							<c:when test="${not empty pds.picture}">
+								<div class="pds-info mb-2" data-id="${pds.pno}"
+									style="border: 1px solid #fff; object-fit: cover; height: 200px; background-color: #f0f0f0;"></div>
+							</c:when>
+							<c:otherwise>
+								<div class="pds-info mb-2 text-center text-muted"
+									style="height: 140px; background-color: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+									No Image</div>
+							</c:otherwise>
+						</c:choose>
+
+						<div class="card-body" style="height:70px; overflow: hidden;">
+							<h5 class="card-title">${pds.title}
+								<small style="color: #666;">${pds.pno}</small>
+							</h5>
+							<p class="card-text" style="font-size: 0.9rem; color:#333" > <strong>글 작성자: ${pds.writer } </strong> 
+							</p>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+
+		</div>
+	</section>
+
+	<!-- 페이징 모듈 포함 -->
+	<div style="padding: 1rem;">
+		<%@ include file="/WEB-INF/views/module/pagination.jsp"%>
+	</div>
+
+	<script>
+	pdsPictureBackground("<%=request.getContextPath()%>");
+
+</script>
+
 </body>
-
-
-
-
-
-
-
-
-
-
-
+</html>

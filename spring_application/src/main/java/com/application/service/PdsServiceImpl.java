@@ -7,6 +7,7 @@ import com.application.command.PageMaker;
 import com.application.dao.AttachDAO;
 import com.application.dao.PdsDAO;
 import com.application.dto.AttachVO;
+import com.application.dto.MemberVO;
 import com.application.dto.PdsVO;
 
 public class PdsServiceImpl implements PdsService{
@@ -88,6 +89,15 @@ public class PdsServiceImpl implements PdsService{
 		attachDAO.deletAllAttach(pno);
 		pdsDAO.deletePds(pno);	
 	}
+
+	@Override
+	public PdsVO getPno(int pno) throws SQLException {
+		 PdsVO pds = pdsDAO.selectPdsByPno(pno);
+		
+		return pds;
+	}
+
+
 	
 }
 

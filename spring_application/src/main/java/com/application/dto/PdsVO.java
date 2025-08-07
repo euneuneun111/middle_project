@@ -8,10 +8,21 @@ public class PdsVO {
 	private int pno;
 	private String title;
 	private String content;
+	private String picture;
+
 	private String writer;
 	private int viewcnt;
 	private Date regDate;
 	
+	private Date startDate;
+	private Date endDate;
+	
+	private int tgMoney;
+	
+	private int cmoney;
+	
+	
+
 	private List<AttachVO> attachList;
 
 	public int getPno() {
@@ -70,6 +81,46 @@ public class PdsVO {
 		this.attachList = attachList;
 	}
 	
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	
+	public int getTgMoney() {
+		return tgMoney;
+	}
+
+	public void setTgMoney(int tgMoney) {
+		this.tgMoney = tgMoney;
+	}
+	
+	public int getCmoney() {
+		return cmoney;
+	}
+
+	public void setCmoney(int cmoney) {
+		this.cmoney = cmoney;
+	}
 	
 	
 }

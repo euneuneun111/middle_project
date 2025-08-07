@@ -1,7 +1,11 @@
 package com.application.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,10 +13,12 @@ import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +36,7 @@ import com.application.command.PdsModifyCommand;
 import com.application.command.PdsRegistCommand;
 import com.application.dao.AttachDAO;
 import com.application.dto.AttachVO;
+import com.application.dto.MemberVO;
 import com.application.dto.PdsVO;
 import com.application.service.PdsService;
 import com.josephoconnell.html.HTMLInputFilter;
@@ -44,21 +51,16 @@ public class PdsController {
 	@Autowired
 	private AttachDAO attachDAO;
 	
+	@javax.annotation.Resource(name = "picturePath")
+	private String picturePath;
 	
-//	private PdsService pdsService;
-//	private AttachDAO attachDAO;
-//	
-//	public PdsController(PdsService pdsService,AttachDAO attachDAO) {
-//		this.attachDAO = attachDAO;
-//		this.pdsService = pdsService;
-//	}
 	
 	
 	@GetMapping("/main")
 	public void main() {}
 	
 	@GetMapping("/list")
-	public ModelAndView list(@ModelAttribute PageMaker pageMaker, ModelAndView mnv) throws Exception {
+	public ModelAndView list(@ModelAttribute PageMaker pageMaker, ModelAndView mnv,  Model model) throws Exception {
 		String url="/pds/list";
 		
 		List<PdsVO> pdsList = pdsService.searchList(pageMaker);
@@ -68,7 +70,8 @@ public class PdsController {
 		return mnv;
 	}
 	
-	@GetMapping("/registForm")
+	
+	@GetMapping("/regist")
 	public ModelAndView registForm(ModelAndView mnv) throws Exception {
 		String url="/pds/regist";
 		mnv.setViewName(url);
@@ -124,6 +127,8 @@ public class PdsController {
 		model.addAttribute("pds",pds);
 	}
 	
+	
+
 	@PostMapping("/modify")
 	public ModelAndView modify(PdsModifyCommand modCommand, ModelAndView mnv)throws Exception{
 		String url = "/pds/modify_success";
@@ -182,6 +187,44 @@ public class PdsController {
 	}
 	
 	
+	@GetMapping("/getPicture")
+	@ResponseBody
+	public ResponseEntity<byte[]> getPicture(int pno) {
+		ResponseEntity entity = null;
+			
+		PdsVO pds = null;
+		
+		try {
+			pds = pdsService.getPds(pno);
+		} catch (SQLException e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (pds == null)
+			return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		
+		String picture = pds.getPicture();
+		String imgPath = this.picturePath;
+		
+		InputStream in = null;
+		
+		try {
+			in = new FileInputStream(new File(imgPath, picture));
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), HttpStatus.OK);
+			
+			return entity;
+		}catch(IOException e) {
+			System.out.println("Not Founded ::: "+pds.getPno()+":"+pds.getPicture());
+			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+		}finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
 	@javax.annotation.Resource(name="pdsSavedFilePath")
 	private String fileUploadPath;
 
@@ -227,6 +270,15 @@ public class PdsController {
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + 
 				UriUtils.encode(attach.getFileName().split("\\$\\$")[1], "UTF-8") + "\"")
                 .body(resource);		
+	}
+	
+	
+	
+	@GetMapping("/paymentPopup")
+	public ModelAndView paymentPopup(ModelAndView mnv) throws Exception {
+		String url="/pds/paymentPopup";
+		mnv.setViewName(url);
+		return mnv;
 	}
 }
 

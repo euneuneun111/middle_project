@@ -1,0 +1,100 @@
+
+@charset "UTF-8";
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* 전체 페이지 스크롤 방지, 각 영역에서 스크롤 관리 */
+}
+
+/* 전체 래퍼 (사이드바와 메인 콘텐츠를 포함) */
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+/* 사이드바 스타일 */
+.sidebar-wrapper {
+    width: 250px;
+    background-color: #ffffff;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0; /* 공간이 부족해도 줄어들지 않도록 */
+    padding-top: 72px; /* 상단 여백, 헤더 높이 고려 */
+}
+
+/* 로고 스타일 */
+.sidebar-wrapper .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.sidebar-wrapper .logo-image {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+/* 사이드바 네비게이션 메뉴 */
+.sidebar-nav {
+    width: 100%;
+}
+
+.sidebar-nav .menu-list {
+    list-style: none;
+}
+
+.sidebar-nav .menu-item {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav .menu-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 15px;
+    transition: background-color 0.2s, color 0.2s;
+    border-radius: 8px;
+    margin: 0 10px;
+}
+
+.sidebar-nav .menu-link .icon {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #888;
+}
+
+/* 메뉴 아이템 호버 시 */
+.sidebar-nav .menu-item:not(.active) .menu-link:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* 활성화된 메뉴 아이템 */
+.sidebar-nav .menu-item.active .menu-link {
+    background-color: #6A3CD7;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.sidebar-nav .menu-item.active .menu-link .icon {
+    color: #ffffff;
+}

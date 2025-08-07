@@ -122,7 +122,7 @@ window.onload = function(){
 				<fmt:formatDate pattern="yyyy-MM-dd" var="regDate"
 					value="${member.regDate}" />
 
-				<div class="col-md-4 mb-3">
+				<div class="col-md-3 mb-3">
 					<div class="card h-100"
 						onclick="location.href='detail?id=${member.id}'"
 						style="cursor: pointer;">
@@ -130,16 +130,16 @@ window.onload = function(){
 						<c:choose>
 							<c:when test="${not empty member.picture}">
 								<div class="person-info mb-2" data-id="${member.id}"
-									style="border: 1px solid #fff; object-fit: cover; height: 150px; background-color: #f0f0f0;"></div>
+									style="border: 1px solid #fff; object-fit: cover; height: 200px; background-color: #f0f0f0;"></div>
 							</c:when>
 							<c:otherwise>
 								<div class="person-info mb-2 text-center text-muted"
-									style="height: 150px; background-color: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+									style="height: 140px; background-color: #f9f9f9; display: flex; align-items: center; justify-content: center;">
 									No Image</div>
 							</c:otherwise>
 						</c:choose>
 
-						<div class="card-body">
+						<div class="card-body" style="height:70px; overflow: hidden;">
 							<h5 class="card-title">${member.name}
 								<small style="color: #666;">(${member.id})</small>
 							</h5>

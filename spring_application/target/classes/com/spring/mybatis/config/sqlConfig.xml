@@ -5,18 +5,24 @@
 <configuration>
 
 	<typeAliases>
-		<typeAlias type="java.lang.String" alias="str"/>
-		<typeAlias type="java.lang.Integer" alias="int"/>
-		
-		<typeAlias type="com.application.dto.MemberVO" alias="member"/>
-		<typeAlias type="com.application.dto.MenuVO" alias="menu"/>
-		<typeAlias type="com.application.dto.NoticeVO" alias="notice"/>
-		<typeAlias type="com.application.dto.BoardVO" alias="board"/>
-		<typeAlias type="com.application.dto.ReplyVO" alias="reply"  />
-		<typeAlias type="com.application.dto.AttachVO" alias="attach"/>
-		<typeAlias type="com.application.dto.PdsVO" alias="pds"/>
-		
-		<typeAlias type="com.application.command.PageMaker" alias="pageMaker"/>
+		<typeAlias type="java.lang.String" alias="str" />
+		<typeAlias type="java.lang.Integer" alias="int" />
+
+		<typeAlias type="com.application.dto.MemberVO"
+			alias="member" />
+		<typeAlias type="com.application.dto.MenuVO" alias="menu" />
+	
+		<typeAlias type="com.application.dto.AttachVO"
+			alias="attach" />
+		<typeAlias type="com.application.dto.PdsVO" alias="pds" />
+
+		<typeAlias type="com.application.dto.AttachReportVO"
+			alias="attachreport" />
+		<typeAlias type="com.application.dto.ReportVO" alias="report" />
+
+
+		<typeAlias type="com.application.command.PageMaker"
+			alias="pageMaker" />
 	</typeAliases>
 </configuration>
 
