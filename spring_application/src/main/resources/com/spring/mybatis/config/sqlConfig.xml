@@ -23,6 +23,9 @@
 
 		<typeAlias type="com.application.command.PageMaker"
 			alias="pageMaker" />
+			
+			<typeAlias type="com.application.command.ReportPageMaker"
+			alias="reportpageMaker" />
 	</typeAliases>
 </configuration>
 

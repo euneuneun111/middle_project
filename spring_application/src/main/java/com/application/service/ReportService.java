@@ -3,6 +3,7 @@ package com.application.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.application.command.ReportPageMaker;
 import com.application.dto.ReportVO;
 
 public interface ReportService {
@@ -16,6 +17,7 @@ public interface ReportService {
 	
 	void remove(int rno) throws SQLException;
 	
-	List<ReportVO> reportList() throws SQLException;
+	List<ReportVO> reportList(ReportPageMaker reportpage) throws SQLException;
+	
 	
 }

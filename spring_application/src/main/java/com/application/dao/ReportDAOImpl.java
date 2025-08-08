@@ -3,17 +3,19 @@ package com.application.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
+import com.application.command.ReportPageMaker;
 import com.application.dto.ReportVO;
 
 public class ReportDAOImpl implements ReportDAO {
-	
+
 	private SqlSession session;
-	
+
 	public ReportDAOImpl(SqlSession session) {
 		this.session = session;
-		
+
 	}
 
 	@Override
@@ -39,13 +41,23 @@ public class ReportDAOImpl implements ReportDAO {
 	@Override
 	public void deleteReport(int rno) throws SQLException {
 		session.delete("Report-Mapper.deleteReport", rno);
-		
+
 	}
 
 	@Override
-	public List<ReportVO> selectReportList() throws SQLException {
+	public List<ReportVO> selectReportList(ReportPageMaker reportpage) throws SQLException {
 		
-		return session.selectList("Report-Mapper.selectReportList");
+		int offset = reportpage.getStartRow();
+		int limit = reportpage.getPerPageNum();
+		
+		RowBounds rows = new RowBounds(offset,limit);
+		
+
+		return session.selectList("Report-Mapper.selectReportList", reportpage,rows);
 	}
 
+	@Override
+	public int selectReportCount(ReportPageMaker reportpage) throws SQLException {
+		return session.selectOne("Report-Mapper.selectReportCount", reportpage);
+	}
 }

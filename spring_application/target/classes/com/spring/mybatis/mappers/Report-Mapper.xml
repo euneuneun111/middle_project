@@ -5,9 +5,13 @@
 
 <mapper namespace="Report-Mapper">
 
-	<select id="selectReportList" resultType="report">
-		SELECT *
-		FROM report
+	<select id="selectReportCount" resultType="int">
+		SELECT COUNT(*) FROM REPORT
+	</select>
+
+	<select id="selectReportList" resultType="report"
+		parameterType="reportpageMaker">
+		SELECT * FROM REPORT
 		ORDER BY rno DESC
 	</select>
 
@@ -35,8 +39,7 @@
 	</select>
 
 	<!-- 보고서 등록 -->
-	<insert id="insertReport"
-		parameterType="report">
+	<insert id="insertReport" parameterType="report">
 		INSERT INTO REPORT (
 		RNO,
 		TITLE,
@@ -53,15 +56,16 @@
 	</insert>
 
 	<!-- 보고서 수정 -->
-	<update id="updateReport"
-		parameterType="report">
+	<update id="updateReport" parameterType="report">
 		UPDATE REPORT
 		SET
-		TITLE = #{title},
+		TITLE =
+		#{title},
 		CONTENT = #{content},
 		REPORTDATE = #{reportDate}
 		WHERE
-		RNO = #{rno}
+		RNO =
+		#{rno}
 	</update>
 
 	<!-- 보고서 삭제 -->
