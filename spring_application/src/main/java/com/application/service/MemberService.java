@@ -14,6 +14,12 @@ public interface MemberService {
 	// 회원조회
 	MemberVO getMember(String id) throws SQLException;
 
+	// 좋아요
+	void increaseHeartCount(String id) throws SQLException;
+	
+	void decreaseHeartCount(String id) throws SQLException;
+
+
 	// 회원등록
 	void regist(MemberVO member) throws SQLException;
 

@@ -114,8 +114,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			<div class="header-right">
 
+
+
 				<!-- 상단 로그인/마이페이지 영역 -->
 				<div class="header-right-top">
+
+					<!-- Notifications Dropdown Menu 알림-->
+
+					<li class="nav-item dropdown" style="list-style-type: none;  ">
+						<i class="far fa-bell" style="cursor: pointer;" ></i> 
+						<span class="badge badge-warning navbar-badge" style=" user-select: none; cursor: pointer;">1</span>
+						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+							<span class="dropdown-header">15 Notifications</span>
+							<div class="dropdown-divider"></div>
+							<a href="#" class="dropdown-item"> 
+							<i class="fas fa-envelope mr-2"></i> 4 new messages 
+							<span class="float-right text-muted text-sm">3 mins</span>
+							</a>
+							<div class="dropdown-divider"></div>
+							<a href="#" class="dropdown-item"> 
+							<i class="fas fa-users mr-2"></i> 8 friend requests 
+							<span class="float-right text-muted text-sm">12 hours</span>
+							</a>
+							<div class="dropdown-divider"></div>
+							<a href="#" class="dropdown-item"> 
+							<i class="fas fa-file mr-2"></i> 3 new reports 
+							<span class="float-right text-muted text-sm">2 days</span>
+							</a>
+							<div class="dropdown-divider"></div>
+							<a href="#" class="dropdown-item dropdown-footer">See All
+								Notifications</a>
+						</div>
+					</li>
+			
+					<!-- /.navbar -->
+
+
 					<div class="login-btn"
 						onclick="location.href='<%=request.getContextPath()%>/commons/logout';">
 						<a><strong><em>Logout</em></strong></a>
@@ -142,14 +176,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<footer class="footer"
 		style="background-color: #9B99FF; padding: 20px 0; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #fff; border-top: 1px solid #ddd;">
 		<div class="footer-content" style="max-width: 1200px; margin: 0 auto;">
-			<p style="margin: 5px 0;">© Team : Semicolon;
-				</p>
+			<p style="margin: 5px 0;">© Team : Semicolon;</p>
 			<p style="margin: 5px 0;">
-				<a 
-					style="color: #fff; text-decoration: none; margin-right: 15px;">PL : 이민희</a>
-				<a 
-					style="color: #fff; text-decoration: none; margin-right: 15px;">김재연, 김지훈, 노은광, 손유정, 이진규</a> </br> <a 
-					style="color: #fff; text-decoration: none;">DW ACADEMY</a>
+				<a style="color: #fff; text-decoration: none; margin-right: 15px;">PL
+					: 이민희</a> <a
+					style="color: #fff; text-decoration: none; margin-right: 15px;">김재연,
+					김지훈, 노은광, 손유정, 이진규</a> </br> <a style="color: #fff; text-decoration: none;">DW
+					ACADEMY</a>
 			</p>
 		</div>
 	</footer>

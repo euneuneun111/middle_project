@@ -9,6 +9,7 @@ import com.application.dto.MenuVO;
 public class MenuServiceImpl implements MenuService{
 
 	private MenuDAO menuDAO;
+	
 	public MenuServiceImpl(MenuDAO menuDAO) {
 		this.menuDAO = menuDAO;
 	}

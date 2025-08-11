@@ -181,6 +181,7 @@
 											id="shareBtn">
 											<i class="fa-solid fa-share-nodes" style="color: #333;"></i>
 										</button>
+										
 									</div>
 
 									<!-- 오른쪽: 후원하기 버튼 -->
@@ -212,7 +213,7 @@
 										onclick="OpenWindow('inquiryForm','문의하기',700,800);">문의하기</button>
 
 									<button type="button" class="btn btn-outline-danger btn-sm"
-										onclick="reportProject();">신고하기</button>
+										onclick="OpenWindow('reportForm','신고하기',700,800);">신고하기</button>
 
 
 								</div>
@@ -263,31 +264,47 @@ function remove_go(){
 
 	<script>
   const heartBtn = document.getElementById('heartBtn');
+  const heartCountEl = document.getElementById('heartCount');
+  let heartCount = parseInt(heartCountEl.innerText);  // 초기 좋아요 수
 
   heartBtn.addEventListener('click', () => {
     const icon = heartBtn.querySelector('i');
-    // 클래스가 빈 하트이면 -> 꽉 찬 하트로
+
     if (icon.classList.contains('fa-regular')) {
+      // 빈 하트 → 꽉 찬 하트
       icon.classList.remove('fa-regular');
       icon.classList.add('fa-solid');
+      increaseHeart();
     } else {
-      // 꽉 찬 하트이면 -> 빈 하트로
+      // 꽉 찬 하트 → 빈 하트
       icon.classList.remove('fa-solid');
       icon.classList.add('fa-regular');
+      decreaseHeart();
     }
   });
-  
-  
+
+  function increaseHeart() {
+    heartCount++;
+    heartCountEl.innerText = heartCount;
+
+    fetch('/heart/increase', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: '${member.id}' })  // JSTL or EL 표현식
+    }).catch(err => console.error('increaseHeart error:', err));
+  }
+
+  function decreaseHeart() {
+    heartCount--;  // 감소 누락되었던 부분
+    heartCountEl.innerText = heartCount;
+
+    fetch('/heart/decrease', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: '${member.id}' })
+    }).catch(err => console.error('decreaseHeart error:', err));
+  }
 </script>
-
-<script>
-    let count = 0;
-
-    function increaseHeart() {
-      count++;
-      document.getElementById('heartCount').innerText = count;
-    }
-  </script>
 
 
 

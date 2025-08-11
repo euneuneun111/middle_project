@@ -73,4 +73,15 @@ public class MemberDAOImpl implements MemberDAO{
 		session.delete("Member-Mapper.deleteAllAuthorityById",id);	
 	}
 
+	@Override
+	public void increaseHeartCount(String id) throws SQLException {
+		session.update("Member-Mapper.increaseHeartCount", id);
+	}
+	
+	@Override
+	public void decreaseHeartCount(String id) throws SQLException {
+		session.update("Member-Mapper.decreaseHeartCount", id);
+	}
+
+
 }

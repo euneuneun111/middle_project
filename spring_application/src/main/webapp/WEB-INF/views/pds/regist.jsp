@@ -140,9 +140,3 @@ function regist_go(){
 }
 </script>
 </body>
-
-
-
-
-
-

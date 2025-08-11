@@ -18,61 +18,86 @@
 			where phone like '%'||#{keyword}||'%'
 		</if>
 	</sql>
-	
-	
-	<select id="selectMemberList" parameterType="pageMaker" resultType="member">
+
+
+	<select id="selectMemberList" parameterType="pageMaker"
+		resultType="member">
 		select *
 		from member
 		<include refid="search" />
 		order by regDate desc
 	</select>
-	<select id="selectMemberListCount" parameterType="pageMaker" resultType="int">
+	<select id="selectMemberListCount" parameterType="pageMaker"
+		resultType="int">
 		select count(*)
 		from member
 		<include refid="search" />
 	</select>
-	
-	<select id="selectMemberByID" parameterType="str" resultType="member">
+
+	<select id="selectMemberByID" parameterType="str"
+		resultType="member">
 		select *
 		from member
 		where id=#{id}
 	</select>
-	
+
 	<insert id="insertMember" parameterType="member">
 		insert into
-		member(id, pwd, email, phone,picture,name)
-		values(#{id}, #{pwd}, #{email}, #{phone},#{picture},#{name})
+		member(id,
+		pwd, email, phone,picture,name)
+		values(#{id}, #{pwd}, #{email},
+		#{phone},#{picture},#{name})
 	</insert>
-	
+
 	<update id="updateMember" parameterType="member">
-		update member 
+		update member
 		set pwd=#{pwd},email=#{email},phone=#{phone},name=#{name},
-			picture=#{picture}
+		picture=#{picture}
 		where id=#{id}
 	</update>
-	
+
 	<delete id="deleteMember" parameterType="str">
 		delete
 		from member
-		where id=#{id}
+		where
+		id=#{id}
 	</delete>
-	
-	<insert id="insertAuthorities" >
-		insert into authority(user_id,authority)
+
+	<insert id="insertAuthorities">
+		insert into
+		authority(user_id,authority)
 		values (#{id},#{authority})
 	</insert>
-	
-	<delete id="deleteAllAuthorityById" >
+
+	<delete id="deleteAllAuthorityById">
 		delete
 		from authority
-		where user_id = #{id} and authority!='ROLE_ADMIN'
+		where
+		user_id = #{id} and authority!='ROLE_ADMIN'
 	</delete>
-	
+
 	<select id="selectAuthoritiesById" resultType="str">
 		select role
-		from authority_view
+		from
+		authority_view
 		where id=#{id}
 	</select>
+
+	<update id="increaseHeartCount" parameterType="int">
+		update member
+		set
+		heart=heart+1
+		where id=#{id}
+	</update>
+	
+	<update id="decreaseHeartCount" parameterType="int">
+		update member
+		set
+		heart=heart-1
+		where id=#{id}
+	</update>
+
+
 </mapper>
 
 

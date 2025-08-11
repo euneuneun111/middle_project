@@ -71,6 +71,16 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Override
+	public void increaseHeartCount(String id) throws SQLException {
+		  memberDAO.increaseHeartCount(id);		
+	}
+
+	@Override
+	public void decreaseHeartCount(String id) throws SQLException {
+		  memberDAO.decreaseHeartCount(id);		
+	}
+
 }
 
 

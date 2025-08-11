@@ -17,6 +17,9 @@ public interface MemberDAO {
 	void updateMember(MemberVO member)throws SQLException;
 	void deleteMember(String id)throws SQLException;	
 	
+	void increaseHeartCount(String id) throws SQLException;
+	void decreaseHeartCount(String id) throws SQLException;
+
 
 	List<String> selectAuthoritiesById(String id)throws SQLException;
 	void insertAuthorities(String id, String authority)throws SQLException;

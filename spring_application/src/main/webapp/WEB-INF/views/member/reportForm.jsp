@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
-<title>문의</title>
+<title>신고</title>
 <body>
 	<div>
 
-		<!-- Main content 여기부터 수정 -->
 		<section class="content register-page">
 			<div class="register-box">
 				<form role="form" class="form-horizontal" method="post"
@@ -17,41 +16,33 @@
 							alt="로고" class="logo"
 							style="object-fit: contain; width: 120px; height: 75px;">
 						<h1 class="text-center"
-							style="color: #fff; font-size: 25px; margin: auto auto;">1: 1 문의</h1>
+							style="color: #fff; font-size: 25px; margin: auto auto;">신고하기</h1>
 					</div>
 					<div class="register-card-body">
 
 						<div class="mailbox-attachments clearfix col-md-12"
 							style="text-align: center;"></div>
 
-						<div class="form-group row">
-							<label for="inputEmail3"
-								class="col-sm-3 control-label text-right">사용자</label>
-
-							<div class="col-sm-9">
-								<input name="id" type="text" class="form-control"
-									id="inputEmail3" value="${member.id }" readonly>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 control-label text-right">닉네임</label>
-
-							<div class="col-sm-9">
-								<input name="pwd" type="text" class="form-control"
-									value="${member.name }" readonly>
-							</div>
-						</div>
-
+						<label for="email">이메일</label></br>
+						<h4 id="email">${loginUser.email}</h4> </br>
+						<label for="target">신고 대상</label> </br> 
+						<input type="text" id="target"
+							name="target" value="${member.id}"/> <br></br> 
+							<label for="reason">신고
+							사유</label> <select id="reason" name="reason" required>
+							<option value="">선택하세요</option>
+							<option value="스팸 또는 광고">스팸 또는 광고</option>
+							<option value="저작권 침해">저작권 침해</option>
+							<option value="기타">기타</option>
+						</select>
 
 
 						<div class="form-group col-sm-12">
-
 							<div id="content">${board.content }</div>
 						</div>
+						
 						<div class="form-group">
-							<label for="content">내 용</label>
-
-
+							<label for="content">상세 내용</label>
 
 							<div class="input-group input-group-sm">
 								<label for="inputFile"
@@ -65,17 +56,18 @@
 
 
 							<textarea class="textarea" name="content" id="content" rows="10"
-								cols="40" placeholder="문의내용을 작성하세요."></textarea>
+								cols="40" placeholder="상세내용을 작성하세요."></textarea>
 						</div>
+
 
 
 						<div class="row">
 							<div class="col-sm-9 text-right">
-								<button type="button" class="btn btn-primary"
+								<button type="submit" class="btn btn-primary"
 									style="color: #fff; background-color: #9B99FF; border: none;"
 									id="registBtn" onclick="regist_go();">제 출</button>
-
 							</div>
+
 
 							<div class="col-sm-3 text-center">
 								<button type="button"
@@ -95,26 +87,5 @@
 		<!-- /.content -->
 	</div>
 	<!-- /.content-wrapper  여기까지 수정-->
-
-
-
-	<script>
-	MemberPictureBackground("<%=request.getContextPath()%>
-		");
-	</script>
-
-	<script>
-		function remove_go() {
-			//alert("click remove btn");
-			let answer = prompt("삭제할 회원의 아이디를 입력하세요.");
-			if (answer != '${member.id}') {
-				alert("아이디가 일치하지 않습니다.");
-				return;
-			}
-
-			location.href = "remove?id=${member.id}";
-		}
-	</script>
-
 
 </body>
