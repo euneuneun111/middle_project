@@ -13,6 +13,8 @@ public class MeetingVO {
 	private String overview=""; //회의개요
 	private String content=""; // 회의내용
 	
+	
+	
 	public int getId() {
 		return id;
 	}

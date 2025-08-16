@@ -174,7 +174,7 @@
 											<i class="fa-regular fa-heart" style="color: red;"></i>
 										</button>
 											
-										<span id="heartCount" class="heart-count">${member.heart}</span>
+										<span id="heartCount" class="heart-count" onclick="">${member.heart}</span>
 
 										<button class="heart-button"
 											style="border: none; background-color: #fff; margin-left: 30px;"

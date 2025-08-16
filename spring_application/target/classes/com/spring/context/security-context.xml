@@ -34,6 +34,10 @@
 		<intercept-url pattern="/member/modify*" access="hasAnyRole('ROLE_ADMIN,MEMBER_MODIFY')" />
 		<intercept-url pattern="/member/remove*" access="hasAnyRole('ROLE_ADMIN,MEMBER_REMOVE')" />
 		
+		<intercept-url pattern="/organization/meeting/detail*" access="hasAnyRole('ROLE_ADMIN,meeting_CREATE')" />
+		
+		
+		
 		<intercept-url pattern="/notice/regist*" access="hasAnyRole('ROLE_MANAGER,NOTICE_CREATE')" />
 		<intercept-url pattern="/notice/modify*" access="hasAnyRole('ROLE_MANAGER,NOTICE_MODIFY')" />
 		<intercept-url pattern="/notice/remove*" access="hasAnyRole('ROLE_MANAGER,NOTICE_REMOVE')" />

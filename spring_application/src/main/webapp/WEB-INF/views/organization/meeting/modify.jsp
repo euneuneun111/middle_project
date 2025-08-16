@@ -21,7 +21,7 @@ String today = sdf.format(new java.util.Date());
 						<li class="breadcrumb-item"><a href="list.do"> <i
 								class="fa fa-dashboard"></i>회의록
 						</a></li>
-						<li class="breadcrumb-item active">수정하기</li>
+						
 					</ol>
 				</div>
 			</div>
@@ -31,17 +31,19 @@ String today = sdf.format(new java.util.Date());
 	<section class="content container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="card card-outline card-info">
+				
 					<div class="card-header"></div>
 					<!--end card-header  -->
 					<div class="card-body">
 						<form role="form" method="post" action="modify.do"
 							name="modifyForm">
 							<input type="hidden" name="id" value="${meeting.id }" />
+							
 							<div class="form-group col-md-6">
 								<label>수정일</label> <input type="date" class="form-control"
 									readonly name="meetingDate" value="<%=today%>">
 							</div>
+							
 							<div class="form-group">
 								<label for="title">회의 명</label> <input type="text" id="title"
 									name='title' title="제목" class="form-control"
@@ -57,6 +59,7 @@ String today = sdf.format(new java.util.Date());
 								<label>참석자</label> <input type="text" class="form-control"
 									name="attend" value="${loginUser.name}" >
 							</div>
+							
 							<div class="form-group">
 								<label for="overview">회의개요</label>
 								<textarea class="form-control" name="overview" id="overview"
@@ -86,7 +89,7 @@ String today = sdf.format(new java.util.Date());
 				<!-- end card -->
 			</div>
 			<!-- end col-md-12 -->
-		</div>
+		
 		<!-- end row -->
 	</section>
 	<!-- /.content -->

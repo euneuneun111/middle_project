@@ -41,6 +41,7 @@
 		SET
 		meetingdate = #{meetingDate},
 		organizer = #{organizer},
+	   
 		attend = #{attend},
 		title = #{title},
 		overview = #{overview},
