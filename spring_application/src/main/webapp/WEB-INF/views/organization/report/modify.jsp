@@ -93,6 +93,18 @@ String today = sdf.format(new java.util.Date());
 	<script>
 		function modify_go() {
 			var form = document.forms.registForm;
+			
+			var inputNotNull = document.querySelectorAll(".notNull");
+
+			for (var input of inputNotNull) {
+				if (!input.value) {
+					alert(input.getAttribute("title") + "은(는) 필수입니다.");
+					input.focus();
+					return;
+				}
+			}
+			
+			
 			form.action = "modify";
 			form.method = "post";
 			form.submit();

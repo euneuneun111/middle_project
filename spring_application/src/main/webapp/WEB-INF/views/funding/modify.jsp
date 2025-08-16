@@ -1,8 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<title>수정 하기</title>
+
+<fmt:formatDate var="startDateStr" value="${funding.startDate}"
+	pattern="yyyy-MM-dd" />
+<fmt:formatDate var="endDateStr" value="${funding.endDate}"
+	pattern="yyyy-MM-dd" />
+
+<title>펀딩 수정</title>
 
 <head></head>
 
@@ -10,7 +17,7 @@
 
 
 
-	<c:if test="${empty pds }">
+	<c:if test="${empty funding }">
 		<script>
 	alert("존재하지 않는 게시글입니다.")
 	history.go(-1);
@@ -25,7 +32,7 @@
 		<section class="content-header"
 			style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
 
-
+			<input type="hidden" name="writer" value="${loginUser.id}" />
 			<h2>&nbsp;&nbsp;</h2>
 		</section>
 
@@ -52,10 +59,10 @@
 										<label for="inputFile"
 											class="btn btn-warning btn-sm btn-flat input-group-addon"
 											style="color: #fff; background-color: #9B99FF; border: none;">파일선택</label>
-										<input id="inputFileName" class="form-control" type="text"
-											name="tempPicture" disabled /> <input type="file"
-											id="inputFile" name="picture" style="display: none;"
-											onchange="picture_go();" />
+										<input id="inputFileName" class="form-control notNull"
+											type="text" name="tempPicture" disabled /> <input
+											type="file" title="썸네일" id="inputFile" name="uploadFile"
+											title="썸네일" style="display: none;" onchange="picture_on();" />
 									</div>
 								</div>
 
@@ -64,15 +71,15 @@
 							</div>
 							<div class="col-12 col-sm-6">
 								</br>
-								<div class="form-group row" style="margin-bottom: 3px">
+								<div class="form-group row">
 									<div class="col-sm-9 input-group input-group-sm">
 										<input name="title" onblur="validation(this.name);"
-											type="text" class="form-control" id="title"
-											placeholder="${pds.title}"
+											type="title" class="form-control notNull" id="title"
+											placeholder="${funding.title }" title="제목"
 											style="border: none; font-size: 1.17em;">
 									</div>
-
 								</div>
+
 								<div class="form-group row" style="margin-bottom: 3px">
 									<label for="tgMoney" class="col-sm-3" style="font-size: 0.9em;">
 										<span style="color: red; font-weight: bold;">*</span>목표 금액
@@ -81,9 +88,8 @@
 								<div class="form-group row" style="margin-bottom: 3px">
 									<div class="col-sm-9 input-group-sm">
 										<input class="form-control" name="tgMoney" type="text"
-											class="form-control" id="tgMoney"
-											placeholder="${pds.tgMoney}" onblur="validation(this.name);"
-											onkeyup="" value="${pds.tgMoney}" />
+											id="tgMoney" placeholder="${funding.tgMoney}"
+											onblur="validation(this.name);" onkeyup="" value="" />
 									</div>
 
 								</div>
@@ -96,21 +102,19 @@
 
 									<!-- 시작 날짜 -->
 									<div class="col-sm-5 input-group-sm">
-										<input class="form-control" name="start" type="date"
+										<input class="form-control" name="startDate" type="date"
 											id="start" onblur="validation(this.name);"
 											value="${startDateStr}" />
 									</div>
 
-									<!-- ~ 기호 -->
 									<div class="text-center"
 										style="width: 50px; font-size: 25px; color: #222; user-select: none;">
 										~</div>
 
-									<!-- 마감 날짜 -->
 									<div class="col-sm-5 input-group-sm">
-										<input class="form-control" name="end" type="date" id="end"
-											placeholder="마감" onblur="validation(this.name);"
-											value="${pds.endDate}" />
+										<input class="form-control" name="endDate" type="date"
+											id="end" placeholder="마감" onblur="validation(this.name);"
+											value="${endDateStr}" />
 									</div>
 
 								</div>
@@ -187,7 +191,7 @@
 
 							<div class="tab-content p-3" id="nav-tabContent">
 								<textarea class="textarea" name="content" id="content" rows="3"
-									cols="150" placeholder="${pds.content}"
+									cols="150" placeholder="${funding.content}"
 									style="border: 1px solid #9B99FF; border-radius: 5px;"></textarea>
 
 
@@ -250,23 +254,71 @@ function validation(fieldName) {
 }
 
 
-
-// 수정 버튼 클릭 시 전체 유효성 검사 후 submit
 function modify_go() {
-	const requiredFields = ['picture', 'title', 'tgMoney', 'start', 'end', 'content'];
-  for (let name of requiredFields) {
-    if (!validation(name)) return;
-  }
+    let form = document.forms.modify;
+    
+    var inputNotNull = document.querySelectorAll(".notNull");
 
-  alert("수정 완료되었습니다.");
-
-  const form = document.getElementById('modifyForm'); // form 요소를 가져옴
-  form.submit();
+	for (var input of inputNotNull) {
+		if (!input.value) {
+			alert(input.getAttribute("title") + "은(는) 필수입니다.");
+			input.focus();
+			return;
+		}
+	}
+	
+	
+    form.action = "modify";
+    form.method = "post";
+    form.submit();
 }
-</script>
+	</script>
 
 	<script>
-	MemberPictureBackground("<%=request.getContextPath()%>");
+	function picture_on(){
+		//alert("change file");
+		let pictureInput = document.querySelector("input[name='uploadFile']");
+		let file = pictureInput.files[0];
+		
+		//이미지 확장자 jpg 확인
+	    var fileFormat = file.name.substr(file.name.lastIndexOf(".")+1).toUpperCase();
+	    if(!(fileFormat=="JPG" || fileFormat=="JPEG" || fileFormat=="PNG" )){
+	        alert("이미지는 jpg/jpeg 형식만 가능합니다.");
+	        pictureInput.value="";      
+	        return;
+	    }
+	    
+	    //이미지 파일 용량 체크
+	    if(file.size>1024*1024*1){
+	         alert("사진 용량은 1MB 이하만 가능합니다.");
+	         pictureInput.value="";
+	         return;
+	     };
+	     
+	     //파일명 표시
+	 	 document.querySelector('#inputFileName').value=file.name; 
+	     
+	     let pictureView = document.querySelector("#pictureView");
+	     if(file){
+			var reader = new FileReader();
+			
+			 reader.onload = function (e) {
+				pictureView.style.backgroundImage = "url("+e.target.result+")";
+			 	pictureView.style.backgroundPosition="center";
+			 	pictureView.style.backgroundSize="contain";
+			 	pictureView.style.backgroundRepeat="no-repeat";		
+			 }
+			 
+			 reader.readAsDataURL(file);
+	 	}
+	} 
+	
+	
+	</script>
+
+
+	<script>
+	fundingPictureBackground("<%=request.getContextPath()%>");
 </script>
 
 </body>

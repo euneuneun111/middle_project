@@ -6,7 +6,7 @@ public class AttachVO {
 	private String uploadPath;	 //저장경로
 	private String fileName;  	 //파일명
 	private String fileType; 	 //파일형식
-	private int pno;          	 //자료실 글번호
+	private int fno;          	 //펀딩 글번호
 	private String attacher; 	 //등록자
 	
 	
@@ -34,11 +34,12 @@ public class AttachVO {
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
-	public int getPno() {
-		return pno;
+	
+	public int getFno() {
+		return fno;
 	}
-	public void setPno(int pno) {
-		this.pno = pno;
+	public void setFno(int fno) {
+		this.fno = fno;
 	}
 	public String getAttacher() {
 		return attacher;

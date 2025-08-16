@@ -107,12 +107,12 @@ function MemberPictureBackground(contextPath){
 	}
 }
 
-function pdsPictureBackground(contextPath){
-	let elements = document.querySelectorAll('.pds-info');
+function fundingPictureBackground(contextPath){
+	let elements = document.querySelectorAll('.funding-info');
 	for(let element of elements){
-		let id = element.getAttribute("data-id");		
+		let fno = element.getAttribute("data-id");		
 	
-		element.style.backgroundImage ="url('"+contextPath+"/pds/getPicture?pno="+pno+"')";
+		element.style.backgroundImage ="url('"+contextPath+"/funding/getPicture?fno="+fno+"')";
 		element.style.backgroundPosition="center";
 		element.style.backgroundRepeat="no-repeat";
 		element.style.backgroundSize="cover";
@@ -187,6 +187,12 @@ function Summernote_go(target,context){
        }
        
 	});
+	
+	
+
+	
+
+
 	
 }
 

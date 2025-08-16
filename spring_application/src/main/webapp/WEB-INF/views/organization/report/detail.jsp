@@ -64,7 +64,7 @@ body {
 		<div class="form-row">
 			<div class="form-group col-md-6">
 				<label>업무 보고</label>
-				<p class="form-control-plaintext">${formattedReportDate}</p>
+				<p class="form-control-plaintext"  id="reportDate" >${formattedReportDate}</p>
 			</div>
 			<div class="form-group col-md-6">
 				<label>작성자</label>
@@ -117,6 +117,23 @@ body {
 
 	<script>
 		function modify_go() {
+			
+			 const reportDateInput = document.getElementById('reportDate');
+			    const reportDate = reportDateInput.value; // yyyy-MM-dd 형식
+
+			    // 오늘 날짜 구하기 (yyyy-MM-dd)
+			    const today = new Date();
+			    const yyyy = today.getFullYear();
+			    const mm = String(today.getMonth() + 1).padStart(2, '0');
+			    const dd = String(today.getDate()).padStart(2, '0');
+			    const todayStr = `${yyyy}-${mm}-${dd}`;
+
+			    if (reportDate !== todayStr) {
+			        alert('작성 당일에만 수정이 가능합니다.');
+			        return; // 제출 막기
+			    }
+
+			
 			location.href = "modify?rno=${report.rno}";
 
 		}

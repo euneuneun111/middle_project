@@ -3,6 +3,8 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <title>상세 페이지</title>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <style>
 /* .heart-button {
 	border: none;
@@ -70,14 +72,18 @@
 		<section class="content register-page" style="background-color: #fff">
 			<div class="card card-solid"
 				style="padding: 0 150px; display: flex; justify-content: space-evenly;">
-				<div class="card-body" style="padding: 0px" data-id="${pds.pno} ">
+				<div class="card-body" style="padding: 0px"">
 					<div class="row">
 						<div class="col-12 col-sm-4"
 							style="position: relative; height: 450px; width: 400px; border: 1px solid #9B99FF; margin: auto auto; border-radius: 5px;">
 							<!-- 이미지 뷰어 -->
 							<div id="pictureView"
-								style="height: calc(100% - 50px); width: 100%;"></div>
-
+								style="height: calc(100% - 50px); width: 100%;">
+								<img
+									src="<%=request.getContextPath() %>/funding/getPicture?fno=${funding.fno}"
+									alt="펀딩 이미지"
+									style="width: 100%; height: 100%; object-fit: contain; border-radius: 5px;">
+							</div>
 							<!-- 하단 고정된 파일 선택 영역 -->
 
 						</div>
@@ -86,7 +92,7 @@
 								<button type="button"
 									class="btn btn-outline-secondary btn-sm custom-hover"
 									style="border: none;"
-									onclick="location.href='modify?pno=${pds.pno}'">수정</button>
+									onclick="location.href='modify?fno=${funding.fno}'">수정</button>
 
 
 								<span class="nav-link px-4"
@@ -98,7 +104,7 @@
 
 							<div class="form-group row" style="margin-bottom: 3px">
 								<label for="id" class="col-sm-12" style="font-size: 0.9em;">
-									<h4 class="input-group-append-sm">${pds.title}</h4>
+									<h4 class="input-group-append-sm">${funding.title}</h4>
 								</label>
 
 							</div>
@@ -109,7 +115,7 @@
 							</div>
 							<div class="form-group row" style="margin-bottom: 3px">
 								<div class="col-sm-9 input-group-sm">
-									<span style="color: #333; font-weight: bold;">${pds.pno}
+									<span style="color: #333; font-weight: bold;">${funding.cmoney}
 									</span>
 								</div>
 
@@ -124,8 +130,9 @@
 
 								<!-- 시작 날짜 -->
 								<div class="col-sm-5 input-group-sm">
-									<input class="form-control" name="start" type="text" id="start"
-										placeholder="시작" onblur="validation(this.name);" />
+									<span class="form-control-plaintext"> <fmt:formatDate
+											value="${funding.startDate}" pattern="yyyy-MM-dd" />
+									</span>
 								</div>
 
 								<!-- ~ 기호 -->
@@ -135,8 +142,9 @@
 
 								<!-- 마감 날짜 -->
 								<div class="col-sm-5 input-group-sm">
-									<input class="form-control" name="end" type="text" id="end"
-										placeholder="마감" onblur="validation(this.name);" />
+									<span class="form-control-plaintext"> <fmt:formatDate
+											value="${funding.endDate}" pattern="yyyy-MM-dd" />
+									</span>
 								</div>
 
 							</div>
@@ -149,7 +157,7 @@
 
 							<div class="form-group row" style="margin-bottom: 3px">
 								<div class="col-sm-9 input-group-sm">
-									<span style="color: #333; font-weight: bold;">${pds.tgMoney}
+									<span style="color: #333; font-weight: bold;">${funding.tgMoney}
 									</span>
 								</div>
 							</div>
@@ -172,24 +180,36 @@
 									class="col-sm-12 d-flex justify-content-between align-items-center">
 
 									<!-- 왼쪽: 하트 + 공유 -->
-									<div>
-										<button class="heart-button"
-											style="border: none; background-color: #fff;" id="heartBtn">
-											<i class="fa-regular fa-heart" style="color: red;"></i>
-										</button>
+									<div
+										style="display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
+										<!-- 하트 버튼 -->
+										<form action="<%=request.getContextPath()%>/funding/heart"
+											method="post" style="margin: 0;">
+											<input type="hidden" name="fno" value="${funding.fno}">
+											<input type="hidden" name="id" value="${loginUser.id}">
+											<button type="submit"
+												style="border: none; background-color: #fff; cursor: pointer; padding: 5px; display: inline-flex; align-items: center;">
+												<i class="${hearted ? 'fa-solid' : 'fa-regular'} fa-heart"
+													style="color: red; font-size: 18px;"></i>
+											</button>
+										</form>
 
-										<span id="heartCount" class="heart-count"></span>
+										<span id="heartCount" style="font-size: 14px; color: #333;">
+											${funding.heart} </span>
 
-										<button class="heart-button"
-											style="border: none; background-color: #fff; margin-left: 30px;"
-											id="shareBtn">
-											<i class="fa-solid fa-share-nodes" style="color: #333;"></i>
+										<!-- 공유 버튼 -->
+										<button id="shareBtn"
+											style="border: none; background-color: #fff; cursor: pointer; padding: 5px; display: inline-flex; align-items: center;">
+											<i class="fa-solid fa-share-nodes"
+												style="color: #333; font-size: 18px;"></i>
 										</button>
 									</div>
 
+
+
 									<!-- 오른쪽: 후원하기 버튼 -->
-									<button type="button" class="btn col-sm-6"
-										id="payment-button"   onclick="window.open('paymentPopup','후원하기',700,800);"
+									<button type="button" class="btn col-sm-6" id="payment-button"
+										onclick="window.open('paymentPopup','후원하기',700,800);"
 										style="background-color: #9B99FF; color: #fff; border: none;">
 										후&nbsp;&nbsp;원&nbsp;&nbsp;하&nbsp;&nbsp;기</button>
 								</div>
@@ -207,6 +227,7 @@
 											data-toggle="tab" href="#product-desc" role="tab"
 											aria-controls="product-desc" aria-selected="true">프로젝트 소개</a>
 									</div>
+
 								</div>
 
 								<!-- 오른쪽: 버튼 -->
@@ -228,7 +249,7 @@
 						<div class="tab-content p-3" id="nav-tabContent">
 							<textarea class="textarea" name="content" id="content" rows="3"
 								cols="150"
-								style="border: 1px solid #9B99FF; border-radius: 5px;"></textarea>
+								style="border: 1px solid #9B99FF; border-radius: 5px;" readonly>${funding.content }</textarea>
 
 						</div>
 					</div>
@@ -246,19 +267,19 @@
 
 
 	<script>
-	pdsPictureBackground("<%=request.getContextPath()%>");
+	fundingPictureBackground("<%=request.getContextPath()%>");
 </script>
 
 	<script>
 function remove_go(){
 	//alert("click remove btn");
 	let answer = prompt("게시글을 삭제하시겠습니까?");
-	if(answer!='${pds.writer}' == '${loginUser.id}' ) {
+	if(answer!='${funding.writer}' == '${loginUser.id}' ) {
 		alert("아이디가 일치하지 않습니다.");
 		return;
 	}
 	
-	location.href="remove?id=${pds.pno}";
+	location.href="remove?id=${funding.fno}";
 }
 
 </script>
@@ -298,10 +319,23 @@ function remove(){
 	let answer = confirm("정말 삭제하시겠습니다.");
 	if(!answer) return;
 	
-	location.href="remove?pno=${pds.pno}";
+	location.href="remove?fno=${funding.fno}";
 }
 
 
+</script>
+
+	<script>
+document.getElementById("shareBtn").addEventListener("click", function () {
+    const url = window.location.href; // 현재 페이지 URL 가져오기
+    navigator.clipboard.writeText(url)
+        .then(() => {
+            alert("현재 링크가 클립보드에 복사되었습니다!");
+        })
+        .catch(err => {
+            console.error("클립보드 복사 실패:", err);
+        });
+});
 </script>
 
 

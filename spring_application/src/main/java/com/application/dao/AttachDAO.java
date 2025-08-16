@@ -7,10 +7,10 @@ import com.application.dto.AttachVO;
 
 public interface AttachDAO {
 
-	List<AttachVO> selectAttachByPno(int pno) throws SQLException;
+	List<AttachVO> selectAttachByFno(int fno) throws SQLException;
 	AttachVO selectAttachByAno(int ano)throws SQLException;
 	
 	void insertAttach(AttachVO attach)throws SQLException;
 	void deletAttach(int ano)throws SQLException;
-	void deletAllAttach(int pno)throws SQLException;
+	void deletAllAttach(int fno)throws SQLException;
 }

@@ -1,12 +1,14 @@
 package com.application.command;
 
+import java.text.ParseException;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import com.application.dto.PdsVO;
+import com.application.dto.FundingVO;
 
-public class PdsModifyCommand extends PdsRegistCommand{
+public class FundingModifyCommand extends FundingRegistCommand{
 
-	private int pno;
+	private int fno;
 	private int[] deleteFile;
 	private MultipartFile picture; // 사진파일 경로/파일명
 	
@@ -18,12 +20,12 @@ public class PdsModifyCommand extends PdsRegistCommand{
 		this.picture = picture;
 	}
 
-	public int getPno() {
-		return pno;
+	public int getFno() {
+		return fno;
 	}
 
-	public void setPno(int pno) {
-		this.pno = pno;
+	public void setFno(int fno) {
+		this.fno = fno;
 	}
 
 	public int[] getDeleteFile() {
@@ -35,10 +37,10 @@ public class PdsModifyCommand extends PdsRegistCommand{
 	}
 
 	@Override
-	public PdsVO toPdsVO() {
-		PdsVO pds = super.toPdsVO();
-		pds.setPno(this.pno);
+	public FundingVO toFundingVO() throws ParseException {
+		FundingVO funding = super.toFundingVO();
+		funding.setFno(this.fno);
 
-		return pds;
+		return funding;
 	}
 }

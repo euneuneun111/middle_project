@@ -10,9 +10,9 @@
 	<!-- summernote.image -->
 	<bean id="summernotePath" class="java.lang.String"
 		c:value="${savePath.summernote.image}" />
-	<!-- pds files -->
-	<bean id="pdsSavedFilePath" class="java.lang.String"
-		c:value="${savePath.pds.files}" />
+	<!-- funding files -->
+	<bean id="fundingSavedFilePath" class="java.lang.String"
+		c:value="${savePath.funding.files}" />
 
 	<bean id="reportSavedFilePath" class="java.lang.String"
 		c:value="${savePath.report.files}" />
@@ -27,7 +27,7 @@
 	<bean id="menuDAO" class="com.application.dao.MenuDAOImpl"
 		c:session-ref="sqlSession" />
 
-	<bean id="pdsDAO" class="com.application.dao.PdsDAOImpl"
+	<bean id="fundingDAO" class="com.application.dao.FundingDAOImpl"
 		c:session-ref="sqlSession" />
 	<bean id="attachDAO" class="com.application.dao.AttachDAOImpl"
 		c:session-ref="sqlSession" />
@@ -38,12 +38,15 @@
 
 	<bean id="reportDAO" class="com.application.dao.ReportDAOImpl"
 		c:session-ref="sqlSession" />
+		
+		<bean id="heartDAO" class="com.application.dao.HeartDAOImpl" c:session-ref="sqlSession" />
 
-	<!-- Service -->
-	<bean id="pdsService"
-		class="com.application.service.PdsServiceImpl" c:pdsDAO-ref="pdsDAO"
-		c:attachDAO-ref="attachDAO" />
 
+	<bean id="fundingService"
+		class="com.application.service.FundingServiceImpl"
+		c:fundingDAO-ref="fundingDAO" c:attachDAO-ref="attachDAO" c:heartDAO-ref="heartDAO">
+		<!-- HeartDAO는 property로 주입 -->
+	</bean>
 	<bean id="menuService"
 		class="com.application.service.MenuServiceImpl"
 		c:menuDAO-ref="menuDAO" />

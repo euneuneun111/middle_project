@@ -2,6 +2,7 @@ package com.application.controller;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -103,6 +104,7 @@ public class ReportController {
 		List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
 		report.setAttaches(attaches);
 
+		
 		reportService.regist(report);
 
 		return url;

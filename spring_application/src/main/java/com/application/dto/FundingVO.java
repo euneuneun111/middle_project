@@ -3,34 +3,41 @@ package com.application.dto;
 import java.util.Date;
 import java.util.List;
 
-public class PdsVO {
+public class FundingVO {
 
-	private int pno;
+	private int fno;
 	private String title;
 	private String content;
-	private String picture;
 
 	private String writer;
 	private int viewcnt;
-	private Date regDate;
-	
-	private Date startDate;
-	private Date endDate;
-	
-	private int tgMoney;
-	
-	private int cmoney;
-	
-	
+	private Date regDate = new Date();
 
+	private Date startDate = new Date();
+	private Date endDate = new Date();
+
+	private int tgMoney;
+
+	private int cmoney;
+
+	private int heart;
+	
 	private List<AttachVO> attachList;
 
-	public int getPno() {
-		return pno;
+	public List<AttachVO> getAttachList() {
+		return attachList;
 	}
 
-	public void setPno(int pno) {
-		this.pno = pno;
+	public void setAttachList(List<AttachVO> attachList) {
+		this.attachList = attachList;
+	}
+
+	public int getFno() {
+		return fno;
+	}
+
+	public void setFno(int fno) {
+		this.fno = fno;
 	}
 
 	public String getTitle() {
@@ -48,6 +55,7 @@ public class PdsVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 
 	public String getWriter() {
 		return writer;
@@ -73,22 +81,6 @@ public class PdsVO {
 		this.regDate = regDate;
 	}
 
-	public List<AttachVO> getAttachList() {
-		return attachList;
-	}
-
-	public void setAttachList(List<AttachVO> attachList) {
-		this.attachList = attachList;
-	}
-	
-	public String getPicture() {
-		return picture;
-	}
-
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
-	
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -105,7 +97,6 @@ public class PdsVO {
 		this.endDate = endDate;
 	}
 
-	
 	public int getTgMoney() {
 		return tgMoney;
 	}
@@ -113,7 +104,7 @@ public class PdsVO {
 	public void setTgMoney(int tgMoney) {
 		this.tgMoney = tgMoney;
 	}
-	
+
 	public int getCmoney() {
 		return cmoney;
 	}
@@ -121,6 +112,13 @@ public class PdsVO {
 	public void setCmoney(int cmoney) {
 		this.cmoney = cmoney;
 	}
+
 	
-	
+	public int getHeart() {
+		return heart;
+	}
+
+	public void setHeart(int heart) {
+		this.heart = heart;
+	}
 }

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <%
 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 String today = sdf.format(new java.util.Date());
@@ -20,13 +23,13 @@ String today = sdf.format(new java.util.Date());
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label>일일 업무 보고</label> <input type="date" class="form-control"
-						name="reportDate" value="<%=today%>">
+						name="reportDate" value="<%=today%>" readonly>
 				</div>
 				<div class="form-group col-md-6">
 					<label>작성자</label> <input type="text" class="form-control"
-						 value="${loginUser.name}" readonly />
-					 <input type="hidden" class="form-control" name="writer"
-						 value="${loginUser.id}" readonly /> 
+						value="${loginUser.name}" readonly /> <input type="hidden"
+						class="form-control" name="writer" value="${loginUser.id}"
+						readonly />
 				</div>
 			</div>
 
@@ -43,8 +46,8 @@ String today = sdf.format(new java.util.Date());
 
 			<div class="form-group">
 				<label>파일 선택</label> <input type="file" class="form-control-file"
-					name="uploadFile" >
-					
+					name="uploadFile">
+
 			</div>
 
 			<div class="d-flex justify-content-end">

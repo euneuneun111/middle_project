@@ -27,8 +27,7 @@
 		INSERT INTO attachreport (
 		arno, uploadpath, filename, filetype, rno, attacher
 		) VALUES (
-		attachreport_seq.nextval,
-		#{uploadPath}, #{fileName}, #{fileType}, #{rno}, #{attacher}
+		attachreport_seq.nextval, #{uploadPath}, #{fileName}, #{fileType}, #{rno}, #{attacher}
 		)
 	</insert>
 

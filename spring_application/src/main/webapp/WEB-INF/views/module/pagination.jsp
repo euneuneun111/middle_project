@@ -55,29 +55,16 @@
 </nav>
 
 
-<!-- 
+
 <form id="jobForm" style="display:none;">	
 	<input type='text' name="page" value="1" />
-	<input type='text' name="perPageNum" value=""/>
-	<input type='text' name="searchType" value="" />
-	<input type='text' name="keyword" value="" />
+	
 </form>
 <script>
 function search_list(page){
-	let perPageNum = document.querySelector('select[name="perPageNum"]').value;
-	let searchType = document.querySelector('select[name="searchType"]').value;
-	let keyword = document.querySelector('input[name="keyword"]').value;
-	let startDate = document.querySelector('input[name="startDate"]').value;
-	let endDate = document.querySelector('input[name="endDate"]').value;
-	let tgMoney = document.querySelector('input[name="tgMoney"]').value;
-
+	
 	let form = document.querySelector("#jobForm");
-	form.perPageNum.value = perPageNum;
-	form.searchType.value = searchType;
-	form.keyword.value = keyword;
-	form.startDate.value = startDate;
-	form.endDate.value = endDate;
-	form.tgMoney.value = tgMoney;
+	
 	form.page.value = page;
 
 	form.submit();
@@ -86,6 +73,5 @@ function search_list(page){
 </script>
 
  -->
-
 
 

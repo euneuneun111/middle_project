@@ -2,6 +2,5 @@
     pageEncoding="UTF-8"%>
 <script>
 	alert("수정되었습니다.");
-	location.href="detail?pno=${param.pno}";
-	window.opener.location.reload();
+	location.replace("detail?fno=${fno}");
 </script>

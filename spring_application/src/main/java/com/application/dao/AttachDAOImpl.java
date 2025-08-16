@@ -15,8 +15,8 @@ public class AttachDAOImpl implements AttachDAO{
 	}
 	
 	@Override
-	public List<AttachVO> selectAttachByPno(int pno) throws SQLException {
-		return session.selectList("Attach-Mapper.selectAttachByPno",pno);
+	public List<AttachVO> selectAttachByFno(int fno) throws SQLException {
+		return session.selectList("Attach-Mapper.selectAttachByFno",fno);
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public class AttachDAOImpl implements AttachDAO{
 	}
 
 	@Override
-	public void deletAllAttach(int pno) throws SQLException {
-		session.delete("Attach-Mapper.deleteAllAttach",pno);
+	public void deletAllAttach(int fno) throws SQLException {
+		session.delete("Attach-Mapper.deleteAllAttach",fno);
 		
 	}
 }

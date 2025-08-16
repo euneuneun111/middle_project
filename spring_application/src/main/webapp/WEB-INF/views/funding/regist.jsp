@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<title>회원 등록</title>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+
+<title>펀딩 등록</title>
 
 
 <body>
@@ -9,9 +12,10 @@
 
 	<!-- /.content-wrapper -->
 
-	<form id="regist" method="post" action="regist"
+	<form id="regist" method="post" action="regist" name="regist"
 		enctype="multipart/form-data">
 		<input type="hidden" name="writer" value="${loginUser.id}" />
+
 		<div class="card card-solid"
 			style="padding: 1rem 150px; display: flex; justify-content: space-evenly;">
 			<div class="card-body">
@@ -29,10 +33,9 @@
 								<label for="inputFile"
 									class="btn btn-warning btn-sm btn-flat input-group-addon"
 									style="color: #fff; background-color: #9B99FF; border: none;">파일선택</label>
-								<input id="inputFileName" class="form-control" type="text"
-									name="tempPicture" disabled /> <input type="file"
-									id="inputFile" name="picture" style="display: none;"
-									onchange="picture_go();" />
+								<input id="inputFileName" class="form-control notNull"
+									type="text" name="tempPicture" disabled /> <input type="file"
+									title="썸네일" id="inputFile" name="uploadFile" style="display: none;" onchange="picture_on();" />
 							</div>
 						</div>
 					</div>
@@ -45,49 +48,46 @@
 						<div class="form-group row">
 							<div class="col-sm-9 input-group input-group-sm">
 								<input name="title" onblur="validation(this.name);" type="title"
-									class="form-control" id="title" placeholder="제목 입력"
-									style="border: none; font-size: 1.17em;">
+									class="form-control notNull" id="title" placeholder="제목 입력"
+									title="제목" style="border: none; font-size: 1.17em;">
 							</div>
 						</div>
 
 						<div class="form-group row" style="margin-bottom: 3px">
-							<label for="pwd" class="col-sm-3" style="font-size: 0.9em;">
+							<label for="pwd" class="col-sm-3 " style="font-size: 0.9em;">
 								<span style="color: red; font-weight: bold;">*</span>목표 금액
 							</label>
 						</div>
 						<div class="form-group row" style="margin-bottom: 3px">
 							<div class="col-sm-9 input-group-sm">
-								<input class="form-control" name="tgmoney" type="text"
-									class="form-control" id="name" placeholder="금액을 입력하세요"
-									onblur="validation(this.name);" onkeyup="" />
+								<input class="form-control notNull" name="tgMoney" type="text"
+									title="목표 금액" class="form-control" id="tgMoney"
+									placeholder="금액을 입력하세요" onblur="validation(this.name);"
+									onkeyup="" />
 							</div>
 
 						</div>
 						<div class="form-group row" style="margin-bottom: 3px">
-							<label for="name" class="col-sm-3" style="font-size: 0.9em;">
-								<span style="color: red; font-weight: bold;">*</span>펀딩 기간 
+							<label for="start" class="col-sm-3" style="font-size: 0.9em;">
+								<span style="color: red; font-weight: bold;">*</span>펀딩 기간
+							</label>
 						</div>
 						<div class="form-group row d-flex align-items-center"
 							style="margin-bottom: 3px;">
-
-							<!-- 시작 날짜 -->
 							<div class="col-sm-5 input-group-sm">
-								<input class="form-control" name="startDate" type="date"
-									id="start" placeholder="시작" onblur="validation(this.name);" />
+								<input class="form-control notNull" name="startDate" type="date" style="cursor:pointer"
+									title="시작일" id="start" placeholder="시작"
+									onblur="validation(this.name);" />
 							</div>
-
-							<!-- ~ 기호 -->
 							<div class="text-center"
-								style="width: 50px; font-size: 25px; color: #222; user-select: none;">
-								~</div>
-
-							<!-- 마감 날짜 -->
+								style="width: 50px; font-size: 25px; color: #222; user-select: none;">~</div>
 							<div class="col-sm-5 input-group-sm">
-								<input class="form-control" name="endDate" type="date" id="end"
-									placeholder="마감" onblur="validation(this.name);" />
+								<input class="form-control notNull" name="endDate" type="date" style="cursor:pointer"
+									id="end" title="마감일" placeholder="마감"
+									onblur="validation(this.name);" />
 							</div>
-
 						</div>
+
 
 						<div class="form-group row">
 							<div class="col-sm-12">&nbsp;</div>
@@ -144,9 +144,9 @@
 						</div>
 					</nav>
 					<div class="tab-content p-3" id="nav-tabContent">
-						<textarea class="textarea" name="content" id="content" rows="3"
-							cols="150" placeholder="내용을 작성하세요."
-							style="border: 1px solid #9B99FF; border-radius: 5px;">${pds.content}</textarea>
+						<textarea class="textarea notNull" name="content" id="content"
+							rows="3" cols="150" placeholder="내용을 작성하세요." title="소개글"
+							style="border: 1px solid #9B99FF; border-radius: 5px;"></textarea>
 
 					</div>
 				</div>
@@ -186,7 +186,7 @@
   }
 
   // 숫자 필드일 경우 숫자 검증 (예: 금액)
-  if (fieldName === 'tgmoney' && isNaN(value)) {
+  if (fieldName === 'tgMoney' && isNaN(value)) {
     alert("금액은 숫자로 입력해주세요.");
     field.focus();
     return false;
@@ -199,33 +199,70 @@
 	function regist_go() {
     let form = document.forms.regist;
     
-    for (let element of form.elements) {
-        switch (element.name) {
-            case "title":
-            case "tgmoney":
-            case "writer":
-            case "startDate":
-            case "endDate":
-                if (!element.value) {
-                    alert(element.name + "은 필수입니다.");
-                    element.focus();
-                    return;
-                }
-                break;
-            case "picture":
-                if (!element.files || element.files.length === 0) {
-                    alert("파일을 선택해주세요.");
-                    element.click();
-                    return;
-                }
-                break;
-        }
-    }
+    var inputNotNull = document.querySelectorAll(".notNull");
 
+	for (var input of inputNotNull) {
+		if (!input.value) {
+			alert(input.getAttribute("title") + "은(는) 필수입니다.");
+			input.focus();
+			return;
+		}
+	}
+	
+	
     form.action = "regist";
     form.method = "post";
     form.submit();
 }
 	</script>
+	
+	<script>
+	function picture_on(){
+		//alert("change file");
+		let pictureInput = document.querySelector("input[name='uploadFile']");
+		let file = pictureInput.files[0];
+		
+		//이미지 확장자 jpg 확인
+	    var fileFormat = file.name.substr(file.name.lastIndexOf(".")+1).toUpperCase();
+	    if(!(fileFormat=="JPG" || fileFormat=="JPEG" || fileFormat=="PNG" )){
+	        alert("이미지는 jpg/jpeg 형식만 가능합니다.");
+	        pictureInput.value="";      
+	        return;
+	    }
+	    
+	    //이미지 파일 용량 체크
+	    if(file.size>1024*1024*1){
+	         alert("사진 용량은 1MB 이하만 가능합니다.");
+	         pictureInput.value="";
+	         return;
+	     };
+	     
+	     //파일명 표시
+	 	 document.querySelector('#inputFileName').value=file.name; 
+	     
+	     let pictureView = document.querySelector("#pictureView");
+	     if(file){
+			var reader = new FileReader();
+			
+			 reader.onload = function (e) {
+				pictureView.style.backgroundImage = "url("+e.target.result+")";
+			 	pictureView.style.backgroundPosition="center";
+			 	pictureView.style.backgroundSize="contain";
+			 	pictureView.style.backgroundRepeat="no-repeat";		
+			 }
+			 
+			 reader.readAsDataURL(file);
+	 	}
+	} 
+	
+	
+	</script>
+	
+	
+	
+	
+
+	
+	
 
 </body>
