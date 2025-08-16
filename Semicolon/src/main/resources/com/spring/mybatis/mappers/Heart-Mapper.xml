@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Heart-Mapper">
+	 <select id="existsHeart" resultType="int" parameterType="heart">
+        SELECT COUNT(*) FROM heart WHERE fno = #{fno} AND id = #{id}
+    </select>
+
+    <insert id="insertHeart" parameterType="heart">
+        INSERT INTO heart(fno, id) VALUES(#{fno}, #{id})
+    </insert>
+
+    <delete id="deleteHeart" parameterType="heart">
+        DELETE FROM heart WHERE fno=#{fno} AND id=#{id}
+    </delete>
+
+    <select id="countHeartByFno" resultType="int" parameterType="int">
+        SELECT COUNT(*) FROM heart WHERE fno=#{fno}
+    </select>
+</mapper>
+
+
+
+
+

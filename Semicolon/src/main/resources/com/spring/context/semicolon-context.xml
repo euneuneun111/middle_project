@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- member.picture -->
+	<bean id="picturePath" class="java.lang.String"
+		c:value="${savePath.member.picture}" />
+	<!-- summernote.image -->
+	<bean id="summernotePath" class="java.lang.String"
+		c:value="${savePath.summernote.image}" />
+	<!-- funding files -->
+	<bean id="fundingSavedFilePath" class="java.lang.String"
+		c:value="${savePath.funding.files}" />
+
+	<bean id="reportSavedFilePath" class="java.lang.String"
+		c:value="${savePath.report.files}" />
+
+	<!-- log saved path -->
+	<bean id="logSavedPath" class="java.lang.String"
+		c:value="${savePath.log.files}" />
+
+	<!-- Repository -->
+	<bean id="memberDAO" class="com.semicolon.dao.MemberDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="menuDAO" class="com.semicolon.dao.MenuDAOImpl"
+		c:session-ref="sqlSession" />
+
+	<bean id="fundingDAO" class="com.semicolon.dao.FundingDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="attachDAO" class="com.semicolon.dao.AttachDAOImpl"
+		c:session-ref="sqlSession" />
+
+	<bean id="attachreportDAO"
+		class="com.semicolon.dao.AttachReportDAOImpl"
+		c:session-ref="sqlSession" />
+
+	<bean id="reportDAO" class="com.semicolon.dao.ReportDAOImpl"
+		c:session-ref="sqlSession" />
+		
+		<bean id="heartDAO" class="com.semicolon.dao.HeartDAOImpl" c:session-ref="sqlSession" />
+
+
+	<bean id="fundingService"
+		class="com.semicolon.service.FundingServiceImpl"
+		c:fundingDAO-ref="fundingDAO" c:attachDAO-ref="attachDAO" c:heartDAO-ref="heartDAO">
+		<!-- HeartDAO는 property로 주입 -->
+	</bean>
+	<bean id="menuService"
+		class="com.semicolon.service.MenuServiceImpl"
+		c:menuDAO-ref="menuDAO" />
+	<bean id="memberService"
+		class="com.semicolon.service.MemberServiceImpl"
+		c:memberDAO-ref="memberDAO" />
+
+	<bean id="reportService"
+		class="com.semicolon.service.ReportServiceImpl"
+		c:reportDAO-ref="reportDAO" c:attachreportDAO-ref="attachreportDAO" />
+</beans>

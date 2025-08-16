@@ -22,7 +22,7 @@ function picture_go(){
 	
 	//이미지 확장자 jpg 확인
     var fileFormat = file.name.substr(file.name.lastIndexOf(".")+1).toUpperCase();
-    if(!(fileFormat=="JPG" || fileFormat=="JPEG")){
+    if(!(fileFormat=="JPG" || fileFormat=="JPEG" || fileFormat=="PNG" )){
         alert("이미지는 jpg/jpeg 형식만 가능합니다.");
         pictureInput.value="";      
         return;
@@ -107,6 +107,18 @@ function MemberPictureBackground(contextPath){
 	}
 }
 
+function fundingPictureBackground(contextPath){
+	let elements = document.querySelectorAll('.funding-info');
+	for(let element of elements){
+		let fno = element.getAttribute("data-id");		
+	
+		element.style.backgroundImage ="url('"+contextPath+"/funding/getPicture?fno="+fno+"')";
+		element.style.backgroundPosition="center";
+		element.style.backgroundRepeat="no-repeat";
+		element.style.backgroundSize="cover";
+	}
+}
+
 
 
 function sendFile(file,el,context){
@@ -175,6 +187,12 @@ function Summernote_go(target,context){
        }
        
 	});
+	
+	
+
+	
+
+
 	
 }
 

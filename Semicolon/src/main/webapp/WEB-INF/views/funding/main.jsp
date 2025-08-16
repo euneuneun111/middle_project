@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>펀딩</title>
-</head>
-<body>
 
+<head></head>
+
+<title>자료실 메인</title>
+
+<body>
+	<h1>PDS Main Page</h1>
 </body>
-</html>
