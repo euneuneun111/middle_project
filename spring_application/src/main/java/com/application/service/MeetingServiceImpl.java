@@ -17,9 +17,9 @@ public class MeetingServiceImpl implements MeetingService {
 
 	@Override
 	public List<MeetingVO> getMeetingList(PageMaker pageMaker) throws SQLException {
+		List<MeetingVO> meetingList = meetingDAO.selectMeetingList(pageMaker);
 		int totalCount = meetingDAO.selectMeetingListCount(pageMaker);
 		pageMaker.setTotalCount(totalCount);
-		List<MeetingVO> meetingList = meetingDAO.selectMeetingList(pageMaker);
 
 		return meetingList;
 	}

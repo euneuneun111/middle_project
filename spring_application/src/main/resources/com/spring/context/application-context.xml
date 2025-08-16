@@ -37,11 +37,22 @@
 	<bean id="meetingDAO" class="com.application.dao.MeetingDAOImpl"
 		c:session-ref="sqlSession" />
 
+	<bean id="adminDAO" class="com.application.dao.AdminDAOImpl"
+		c:session-ref="sqlSession" />
+
+
+	<bean id="adminService"
+		class="com.application.service.AdminServiceImpl"
+		c:adminDAO-ref="adminDAO" />
+
+
+
+	<!-- Service -->
 	<bean id="meetingService"
 		class="com.application.service.MeetingServiceImpl"
 		c:meetingDAO-ref="meetingDAO" />
 
-	<!-- Service -->
+
 	<bean id="pdsService"
 		class="com.application.service.PdsServiceImpl" c:pdsDAO-ref="pdsDAO"
 		c:attachDAO-ref="attachDAO" />

@@ -16,6 +16,7 @@
 		<typeAlias type="com.application.dto.AttachVO" alias="attach"/>
 		<typeAlias type="com.application.dto.PdsVO" alias="pds"/>
 		<typeAlias type="com.application.dto.MeetingVO" alias="meeting"/>
+		<typeAlias type="com.application.dto.AdminVO" alias="admin"/>
 		
 		<typeAlias type="com.application.command.PageMaker" alias="pageMaker"/>
 	</typeAliases>
