@@ -1,62 +1,61 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 
+    
 <style>
 .pagination .page-item.active .page-link {
-	background-color: #9B99FF; /* 원하는 배경색 */
-	color: #fff; /* 글자색 */
-	border-color: #9B99FF; /* 테두리 색 */
+    background-color: #9B99FF;
+    color: #fff;
+    border-color: #9B99FF;
 }
 
 .pagination .page-link {
-	color: #9B99FF; /* 기본 글자색 */
+    color: #9B99FF;
 }
 
 .pagination .page-link:hover {
-	background-color: #e9ecef; /* 호버 시 배경색 */
-	color: #0056b3;
+    background-color: #e9ecef;
+    color: #0056b3;
 }
 </style>
 
-
-<!-- pagination -->
+<!-- 페이지네이션 네비게이션 -->
 <nav aria-label="Navigation">
-	<ul class="pagination justify-content-center m-0">
-		<li class="page-item"><a class="page-link"
-			href="javascript:search_list(1);"
-			style="border-radius: 50px; margin: 5px"> <i
-				class="fas fa-angle-double-left"></i>
-		</a></li>
-		<li class="page-item"><a class="page-link"
-			href="javascript:search_list(${pageMaker.prev ? pageMaker.startPage-1 : pageMaker.page});"
-			style="border-radius: 50px; margin: 5px"> <i
-				class="fas fa-angle-left"></i>
-		</a></li>
+    <ul class="pagination justify-content-center m-0">
+        <li class="page-item">
+            <a class="page-link" href="javascript:search_list(1);" style="border-radius: 50px; margin: 5px;">
+                <i class="fas fa-angle-double-left"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="javascript:search_list(${pageMaker.prev ? pageMaker.startPage - 1 : pageMaker.page});" style="border-radius: 50px; margin: 5px;">
+                <i class="fas fa-angle-left"></i>
+            </a>
+        </li>
 
-		<c:forEach var="pageNum" begin="${pageMaker.startPage }"
-			end="${pageMaker.endPage }">
-			<li class="page-item ${pageMaker.page == pageNum?'active':''}">
-				<a class="page-link" href="javascript:search_list(${pageNum });"
-				style="border-radius: 50px; margin: 5px"> ${pageNum } </a>
-			</li>
-		</c:forEach>
+        <c:forEach var="pageNum" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+            <li class="page-item ${pageMaker.page == pageNum ? 'active' : ''}">
+                <a class="page-link" href="javascript:search_list(${pageNum});" style="border-radius: 50px; margin: 5px;">
+                    ${pageNum}
+                </a>
+            </li>
+        </c:forEach>
 
-		<li class="page-item"><a class="page-link"
-			href="javascript:search_list(${pageMaker.next ? pageMaker.endPage+1 : pageMaker.page});"
-			style="border-radius: 50px; margin: 5px"> <i
-				class="fas fa-angle-right"></i>
-		</a></li>
-		<li class="page-item"><a class="page-link"
-			href="javascript:search_list(${pageMaker.realEndPage });"
-			style="border-radius: 50px; margin: 5px"> <i
-				class="fas fa-angle-double-right"></i>
-		</a></li>
-	</ul>
+        <li class="page-item">
+            <a class="page-link" href="javascript:search_list(${pageMaker.next ? pageMaker.endPage + 1 : pageMaker.page});" style="border-radius: 50px; margin: 5px; ">
+                <i class="fas fa-angle-right"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="javascript:search_list(${pageMaker.realEndPage});" style="border-radius: 50px; margin: 5px;">
+                <i class="fas fa-angle-double-right"></i>
+            </a>
+        </li>
+    </ul>
 </nav>
 
 
-
-<form id="jobForm" style="display:none;">	
+<form id="jobForm"  style="display:none;">	
 	<input type='text' name="page" value="1" />
 	
 </form>
@@ -66,12 +65,14 @@ function search_list(page){
 	let form = document.querySelector("#jobForm");
 	
 	form.page.value = page;
-
+	
+	//console.log($(form).serialize());
 	form.submit();
+	
 }
 
 </script>
 
- -->
+
 
 

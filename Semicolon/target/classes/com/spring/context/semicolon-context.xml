@@ -40,6 +40,14 @@
 		c:session-ref="sqlSession" />
 		
 		<bean id="heartDAO" class="com.semicolon.dao.HeartDAOImpl" c:session-ref="sqlSession" />
+		
+		<bean id="meetingDAO" class="com.semicolon.dao.MeetingDAOImpl"
+		c:session-ref="sqlSession" />
+
+	<bean id="meetingService"
+		class="com.semicolon.service.MeetingServiceImpl"
+		c:meetingDAO-ref="meetingDAO" />
+		
 
 
 	<bean id="fundingService"
