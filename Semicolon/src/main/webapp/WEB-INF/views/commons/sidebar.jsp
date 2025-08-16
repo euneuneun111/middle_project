@@ -1,50 +1,52 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<div class="sidebar-wrapper">
-	
-	<nav class="sidebar-nav">
-        <ul class="menu-list">
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-tasks icon"></i> TASK
-                </a>
-            </li>
-            <li class="menu-item active"> <%-- 현재 페이지(이슈) 활성화 --%>
-                <a href="${pageContext.request.contextPath}/main/issuelist" class="menu-link">
-                    <i class="fas fa-clipboard-list icon"></i> ISSUE
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-project-diagram icon"></i> GANTT
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-calendar-alt icon"></i> CALENDAR
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-users icon"></i> MEETING
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-chart-line icon"></i> BUDGET & PROGRESS
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-file-alt icon"></i> REPORT
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <i class="fas fa-share-alt icon"></i> SHARE
-                </a>
-            </li>
+<div class="sidebar-container">
+    <ul class="sidebar-menu">
+        <li><a href="#"><i class="fas fa-tasks"></i> TASK</a></li>
+        <li>
+            <a href="${pageContext.request.contextPath}/main/issuelist">
+                <i class="fas fa-bug"></i> ISSUE
+            </a>
+        </li>
+        <li><a href="#"><i class="fas fa-chart-bar"></i> GANTT</a></li>
+        <li>
+            <a href="${pageContext.request.contextPath}/main/calendar">
+                <i class="fas fa-calendar-alt"></i> CALENDAR
+            </a>
+        </li>
+        <li><a href="${pageContext.request.contextPath}/organization/meeting/list.do">
+        <i class="fas fa-handshake"></i> MEETING</a></li>
+        
+        <li><a href="${pageContext.request.contextPath}/main/budget">
+        		<i class="fas fa-chart-line"></i> BUDGET & PROGRESS</a></li>
+        		
+        <li><a href="${pageContext.request.contextPath}/organization/report/list.do">
+        <i class="fas fa-file-alt"></i> REPORT</a></li>
         </ul>
-    </nav>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var currentPath = window.location.pathname;
+        var sidebarLinks = document.querySelectorAll('.sidebar-menu li');
+
+        var calendarPath = '${pageContext.request.contextPath}/main/calendar';
+        var issuePath = '${pageContext.request.contextPath}/main/issuelist';
+        var meetingPath ='${pageContext.request.contextPath}/organization/meeting';
+        var reportPath ='${pageContext.request.contextPath}/organization/report';
+
+        sidebarLinks.forEach(function(li) {
+            var link = li.querySelector('a');
+            if (link) {
+                var href = link.getAttribute('href');
+                if (href) {
+                	if (currentPath.endsWith(href)) {
+                        li.classList.add('active');
+                    } else {
+                        li.classList.remove('active');
+                    }
+                }
+            }
+        });
+    });
+</script>

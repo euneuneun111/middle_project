@@ -8,25 +8,26 @@
 		<typeAlias type="java.lang.String" alias="str" />
 		<typeAlias type="java.lang.Integer" alias="int" />
 
-		<typeAlias type="com.semicolon.dto.MemberVO"
-			alias="member" />
+		<typeAlias type="com.semicolon.dto.MemberVO" alias="member" />
 		<typeAlias type="com.semicolon.dto.MenuVO" alias="menu" />
-	
-		<typeAlias type="com.semicolon.dto.AttachVO"
-			alias="attach" />
-		<typeAlias type="com.semicolon.dto.FundingVO" alias="funding" />
+
+		<typeAlias type="com.semicolon.dto.AttachVO" alias="attach" />
+		<typeAlias type="com.semicolon.dto.FundingVO"
+			alias="funding" />
 
 		<typeAlias type="com.semicolon.dto.AttachReportVO"
 			alias="attachreport" />
 		<typeAlias type="com.semicolon.dto.ReportVO" alias="report" />
-		
+
 		<typeAlias type="com.semicolon.dto.HeartVO" alias="heart" />
+
+		<typeAlias type="com.semicolon.dto.MeetingVO" alias="meeting" />
 
 
 		<typeAlias type="com.semicolon.command.PageMaker"
 			alias="pageMaker" />
-			
-			<typeAlias type="com.semicolon.command.ReportPageMaker"
+
+		<typeAlias type="com.semicolon.command.ReportPageMaker"
 			alias="reportpageMaker" />
 	</typeAliases>
 </configuration>

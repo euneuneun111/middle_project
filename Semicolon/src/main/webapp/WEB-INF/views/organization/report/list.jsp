@@ -15,6 +15,8 @@ String today = sdf.format(new java.util.Date());
 <%-- 공통 CSS 파일 연결 --%>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/sidebar.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
+	
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
