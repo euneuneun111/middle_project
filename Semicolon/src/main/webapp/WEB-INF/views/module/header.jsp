@@ -1,9 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
+
+	<!-- jQuery -->
+	<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
+	<!-- common -->
+	<script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
+	
 <style>
 * {
   margin: 0;
@@ -80,15 +99,16 @@
 
   <div class="header-right">
   <div class="header-right-top">
-   <div class="login-btn" onclick="location.href='/user/login.jsp'">
+  <a>${loginUser.name }</a>
+   <div class="login-btn" onclick="location.href='<%=request.getContextPath()%>/commons/logout';">
      <a><strong><em>Logout</em></strong></a>
     </div>
       <a href="/me/mypage.jsp"><strong><em>My Page</em></strong></a>
   </div>
   
     <div class="menu">
-      <a href="/organization/main.jsp"><strong><em>COMMUNITY</em></strong></a>
-      <a href="/community/main.jsp"><strong><em>ORGANIZATION</em></strong></a>
+      <a href="/project/community/main"><strong><em>COMMUNITY</em></strong></a>
+      <a href="/organization/main.jsp"><strong><em>ORGANIZATION</em></strong></a>
       <a href="/funding/main.jsp"><strong><em>CROWD FUNDING</em></strong></a>
     </div>
   </div>

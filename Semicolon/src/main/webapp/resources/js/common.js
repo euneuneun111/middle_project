@@ -64,11 +64,11 @@ var valid_data = {
 			pattern:/^[가-힣]{2,6}$/g,
 			message:"이름은 한글 2~6글자 입니다."
 		},
-		id:{
+		user_id:{
 			pattern:/^[a-z]+[a-zA-Z0-9]{3,12}$/g,
 			message:"아이디 형식이 올바르지 않습니다."
 		},
-		pwd:{
+		user_pwd:{
 			pattern:/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/g,
 			message:"패스워드 형식이 올바르지 않습니다.\n영문자 숫자 특수문자 조합으로 8~20글자로 하세요."
 		}
@@ -177,8 +177,3 @@ function Summernote_go(target,context){
 	});
 	
 }
-
-
-
-
-
