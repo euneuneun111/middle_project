@@ -19,8 +19,4 @@ public class CreateOrgDAOImpl implements CreateOrgDAO {
         sqlSession.insert("com.Semicolon.org.dao.CreateOrgDAO.createOrganization", organization);
     }
 
-    @Override
-    public void insertInvitedMember(Map<String, Object> params) {
-        sqlSession.insert("com.Semicolon.org.dao.CreateOrgDAO.insertInvitedMember", params);
-    }
 }

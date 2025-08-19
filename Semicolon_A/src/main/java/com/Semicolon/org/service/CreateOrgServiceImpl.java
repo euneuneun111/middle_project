@@ -19,15 +19,6 @@ public class CreateOrgServiceImpl implements CreateOrgService {
     @Override
     public void createOrganization(CreateOrgDTO organization) {
         createOrgDAO.createOrganization(organization);
-
-        List<String> invitedMembers = organization.getInvitedMembers();
-        if (invitedMembers != null && !invitedMembers.isEmpty()) {
-            for (String memberId : invitedMembers) {
-                Map<String, Object> params = new HashMap<>();
-                params.put("orId", organization.getOrId());
-                params.put("memberId", memberId);
-                createOrgDAO.insertInvitedMember(params);
-            }
-        }
+    
     }
 }

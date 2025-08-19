@@ -24,7 +24,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public CalendarDto getCalendarById(int calendarId) throws SQLException {
+    public CalendarDto getCalendarById(String calendarId) throws SQLException {
         return calendarDAO.getCalendarById(calendarId);
     }
 
@@ -34,7 +34,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public void deleteCalendar(int calendarId) throws SQLException {
+    public void deleteCalendar(String calendarId) throws SQLException {
         calendarDAO.deleteCalendar(calendarId);
     }
 }

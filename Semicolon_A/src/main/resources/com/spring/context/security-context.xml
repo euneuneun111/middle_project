@@ -7,38 +7,37 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<beans:bean id="customAuthenticationProvider" 
-	            class="com.Semicolon.security.CustomAuthenticationProvider"
-	            c:memberService-ref="memberService"
-	            />
+	<beans:bean id="customAuthenticationProvider"	
+	 			class="com.Semicolon.security.CustomAuthenticationProvider"
+	 			c:memberService-ref="memberService"
+	 			/>
 	<beans:bean id="loginSuccessHandler"
-		 	    class="com.Semicolon.security.LoginSuccessHandler"
-		 	    p:defaultTargetUrl="/main"
-		 	    c:logSavedPath-ref="logSavedPath"
-		 	    c:logFileName="login_user_log.csv"
-		 	    />
+		 	 	class="com.Semicolon.security.LoginSuccessHandler"
+		 	 	p:defaultTargetUrl="/main"
+		 	 	c:logSavedPath-ref="logSavedPath"
+		 	 	c:logFileName="login_user_log.csv"
+		 	 	/>
 	<beans:bean id="loginFailureHandler"
-	            class="com.Semicolon.security.LoginFailureHandler"
-			    />	 	
+	 			class="com.Semicolon.security.LoginFailureHandler"
+				/>	 	
 	
-	 <!-- 인증 -->
-	<authentication-manager id="auth_manager">
+	 <authentication-manager id="auth_manager">
 		<authentication-provider ref="customAuthenticationProvider" />
 	</authentication-manager>
 	
-	<!-- 인허가 -->
 	<http pattern="/resources/**" security="none" />
 	<http use-expressions="true" pattern="/**"  authentication-manager-ref="auth_manager">
+		
+		
 		<access-denied-handler error-page="/commons/accessDenied" />
 		
 		<intercept-url pattern="/community/*" access="isAuthenticated()" />		
-		
 		<intercept-url pattern="/main/*" access="isAuthenticated()" />		
 		
-		<intercept-url pattern="/board/*" access="isAuthenticated()" />
-				
-		<intercept-url pattern="/reply/*" access="isAuthenticated()" />
+		<intercept-url pattern="/org/**" access="isAuthenticated()" />
 		
+		<intercept-url pattern="/board/*" access="isAuthenticated()" />
+		<intercept-url pattern="/reply/*" access="isAuthenticated()" />
 		<intercept-url pattern="/**" access="permitAll"/>
 		
 		<form-login
@@ -63,14 +62,10 @@
 				max-sessions="1"
 				session-registry-ref="sessionRegistry"
 			/>		
-		</session-management>	        
+		</session-management>	 		
 	</http>
 	
-		<!-- 세션동기화 -->
-	<beans:bean id="sessionRegistry" 
- 		        class="org.springframework.security.core.session.SessionRegistryImpl"
-            	/> 
+		<beans:bean id="sessionRegistry"	
+ 				class="org.springframework.security.core.session.SessionRegistryImpl"
+ 				/>	
 </beans:beans>
-
-
-

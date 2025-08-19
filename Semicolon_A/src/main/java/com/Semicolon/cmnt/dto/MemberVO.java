@@ -12,7 +12,7 @@ public class MemberVO {
 	private Date regDate;
 	private String name;
 	
-
+	
 	private List<String> authorities; // 권한
 
 

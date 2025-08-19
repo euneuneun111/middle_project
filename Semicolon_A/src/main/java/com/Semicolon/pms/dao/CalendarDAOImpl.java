@@ -26,7 +26,7 @@ public class CalendarDAOImpl implements CalendarDAO {
     }
 
     @Override
-    public CalendarDto getCalendarById(int calendarId) throws SQLException {
+    public CalendarDto getCalendarById(String calendarId) throws SQLException {
         return sqlSession.selectOne("com.Semicolon.pms.dao.CalendarDAO.getCalendarById", calendarId);
     }
 
@@ -36,7 +36,7 @@ public class CalendarDAOImpl implements CalendarDAO {
     }
 
     @Override
-    public void deleteCalendar(int calendarId) throws SQLException {
+    public void deleteCalendar(String calendarId) throws SQLException {
         sqlSession.delete("com.Semicolon.pms.dao.CalendarDAO.deleteCalendar", calendarId);
     }
 }

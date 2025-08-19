@@ -12,7 +12,7 @@
     <typeAlias type="com.Semicolon.pms.dto.CalendarDto" alias="Calendar"/>
     <typeAlias type="com.Semicolon.org.dto.CreateOrgDTO" alias="CreateOrg"/>
     <typeAlias type="com.Semicolon.org.dto.OrgDetailDTO" alias="OrgDetail"/>
-    <typeAlias type="com.Semicolon.org.dto.MemberDTO" alias="Member"/>
+    <typeAlias type="com.Semicolon.org.dto.Member1DTO" alias="Member1"/>
 
     <typeAlias type="com.Semicolon.cmnt.dto.MemberVO" alias="member"/>
     <typeAlias type="com.Semicolon.cmnt.dto.BoardVO" alias="board"/>
