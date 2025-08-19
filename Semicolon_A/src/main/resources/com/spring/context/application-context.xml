@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="picturePath" class="java.lang.String"
+		c:value="${savePath.member.picture}" />
+	<bean id="summernotePath" class="java.lang.String"
+		c:value="${savePath.summernote.image}" />
+	<bean id="logSavedPath" class="java.lang.String"
+		c:value="${savePath.log.files}" />
+	<bean id="memberDAO" class="com.Semicolon.cmnt.dao.MemberDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="boardDAO" class="com.Semicolon.cmnt.dao.BoardDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="replyDAO" class="com.Semicolon.cmnt.dao.ReplyDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="engineerDAO" class="com.Semicolon.cmnt.dao.EngineerDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="recruit_boardDAO" class="com.Semicolon.cmnt.dao.Recruit_BoardDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="recruit_boardService" class="com.Semicolon.cmnt.service.Recruit_BoardServiceImpl"
+		c:recruit_boardDAO-ref="recruit_boardDAO"
+		c:summernotePath="some/path/here"
+		c:replyDAO-ref="replyDAO" />
+	<bean id="engineerService"
+		class="com.Semicolon.cmnt.service.EngineerServiceImpl"
+		c:engineerDAO-ref="engineerDAO" />
+	<bean id="replyService"
+		class="com.Semicolon.cmnt.service.ReplyServiceImpl"
+		c:replyDAO-ref="replyDAO" />
+	<bean id="boardService"
+		class="com.Semicolon.cmnt.service.BoardServiceImpl"
+		c:boardDAO-ref="boardDAO" c:summernotePath-ref="summernotePath"
+		c:replyDAO-ref="replyDAO" />
+	<bean id="memberService"
+		class="com.Semicolon.cmnt.service.MemberServiceImpl"
+		c:memberDAO-ref="memberDAO" />
+
+	<bean id="createOrgDAO" class="com.Semicolon.org.dao.CreateOrgDAOImpl"
+		c:session-ref="sqlSession" />
+	<bean id="createOrgService" class="com.Semicolon.org.service.CreateOrgServiceImpl"
+		c:createOrgDAO-ref="createOrgDAO" />
+	<bean id="orgDetailDAO" class="com.Semicolon.org.dao.OrgDetailDAOImpl"
+		c:sqlSession-ref="sqlSession" />
+	<bean id="orgDetailService" class="com.Semicolon.org.service.OrgDetailServiceImpl"
+		c:orgDetailDAO-ref="orgDetailDAO" />
+	<bean id="issueDAO" class="com.Semicolon.pms.dao.IssueDAOImpl"
+		c:sqlSession-ref="sqlSession" />
+	<bean id="issueService" class="com.Semicolon.pms.service.IssueServiceImpl"
+		c:issueDAO-ref="issueDAO"
+		c:replyDAO-ref="replyDAO" />
+	<bean id="calendarDAO" class="com.Semicolon.pms.dao.CalendarDAOImpl"
+		c:sqlSession-ref="sqlSession" />
+	<bean id="calendarService" class="com.Semicolon.pms.service.CalendarServiceImpl"
+		c:calendarDAO-ref="calendarDAO" />
+	<bean id="budgetDAO" class="com.Semicolon.pms.dao.BudgetDAOImpl"
+		c:sqlSession-ref="sqlSession" />
+	<bean id="budgetService" class="com.Semicolon.pms.service.BudgetServiceImpl"
+		c:budgetDAO-ref="budgetDAO" />
+
+</beans>
