@@ -3,7 +3,6 @@ package com.semicolon.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.semicolon.command.PageMaker;
 import com.semicolon.dao.MemberDAO;
 import com.semicolon.dto.MemberVO;
 
@@ -19,24 +18,10 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> list(PageMaker pageMaker) throws SQLException {
-		List<MemberVO> memberList = memberDAO.selectMemberList(pageMaker);
-
-		if (memberList != null)
-			for (MemberVO member : memberList) {
-				List<String> authorities = memberDAO.selectAuthoritiesById(member.getId());
-				member.setAuthorities(authorities);
-			}
-		pageMaker.setTotalCount(memberDAO.selectMemberListCount(pageMaker));
-		
-		return memberList;
-	}
-
-	@Override
-	public MemberVO getMember(String id) throws SQLException {
-		MemberVO member = memberDAO.selectMemberById(id);
+	public MemberVO getMember(String user_id) throws SQLException {
+		MemberVO member = memberDAO.selectMemberById(user_id);
 		if (member != null)
-			member.setAuthorities(memberDAO.selectAuthoritiesById(id));
+			member.setAuthorities(memberDAO.selectAuthoritiesById(user_id));
 		return member;
 	}
 
@@ -45,9 +30,9 @@ public class MemberServiceImpl implements MemberService {
 		
 		memberDAO.insertMember(member);
 		
-		if (member.getAuthorities().size() > 0) {
+		if (member.getAuthorities()!=null && member.getAuthorities().size() > 0) {
 			for (String authority : member.getAuthorities()) {
-				memberDAO.insertAuthorities(member.getId(),authority);
+				memberDAO.insertAuthorities(member.getUser_id(),authority);
 			}
 		}
 

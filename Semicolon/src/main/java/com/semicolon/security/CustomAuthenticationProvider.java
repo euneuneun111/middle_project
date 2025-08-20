@@ -31,14 +31,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			MemberVO member = memberService.getMember(login_id);
 			
 			if(member==null) throw new UsernameNotFoundException("존재하지 않는 아이디입니다.");
-			if(!member.getPwd().equals(login_pwd)) 
+			if(!member.getUser_pwd().equals(login_pwd)) 
 							throw new BadCredentialsException("패스워드가 일치하지 않습니다.");
 			
 			UserDetails authUser = new User(member);
 			
 			boolean invalidCheck = authUser.isAccountNonExpired() 
 					&& authUser.isAccountNonLocked()
-					&& authUser.isCredentialsNonExpired() 
+					&& authUser.isCredentialsNonExpired()
 					&& authUser.isEnabled();
 			
 			if (!invalidCheck) 
@@ -58,15 +58,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new AuthenticationServiceException("서버 장애로 서비스가 불가합니다.");
-	
-		}
-		
+		}	
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
-
+	
 }
-

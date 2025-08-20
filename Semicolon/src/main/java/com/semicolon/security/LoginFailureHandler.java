@@ -22,7 +22,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 		PrintWriter out = response.getWriter();
 
 		out.println("<script>");
-		out.println("alert('" + msg + ".');");
+		out.println("alert('" + msg + "');");
 		out.println("history.go(-1)");
 		out.println("</script>");
 

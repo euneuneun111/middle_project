@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.semicolon.command.PageMaker;
+import com.semicolon.dto.EngineerVO;
 import com.semicolon.dto.MemberVO;
 
 public interface MemberDAO {
@@ -14,6 +15,7 @@ public interface MemberDAO {
 	
 	MemberVO selectMemberById(String id)throws SQLException;
 	void insertMember(MemberVO member)throws SQLException;
+	void isnertEngineer(EngineerVO engineer)throws SQLException;
 	void updateMember(MemberVO member)throws SQLException;
 	void deleteMember(String id)throws SQLException;	
 	

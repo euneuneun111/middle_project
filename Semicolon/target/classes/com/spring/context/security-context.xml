@@ -11,10 +11,12 @@
 	            class="com.semicolon.security.CustomAuthenticationProvider"
 	            c:memberService-ref="memberService"
 	            />
+	            
 	<beans:bean id="loginSuccessHandler"
 		 	    class="com.semicolon.security.LoginSuccessHandler"
 		 	    p:defaultTargetUrl="/index"
 		 	    />
+		 	    
 	<beans:bean id="loginFailureHandler"
 	            class="com.semicolon.security.LoginFailureHandler"
 			    />	 	

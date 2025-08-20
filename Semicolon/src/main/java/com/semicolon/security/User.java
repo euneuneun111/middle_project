@@ -33,12 +33,12 @@ public class User implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return member.getPwd();
+		return member.getUser_pwd();
 	}
 
 	@Override
 	public String getUsername() {
-		return member.getId();
+		return member.getUser_id();
 	}
 
 	@Override
@@ -65,9 +65,3 @@ public class User implements UserDetails {
 		return this.member;
 	}
 }
-
-
-
-
-
-

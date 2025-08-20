@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.semicolon.command.PageMaker;
+import com.semicolon.dto.EngineerVO;
 import com.semicolon.dto.MemberVO;
 
 public class MemberDAOImpl implements MemberDAO{
@@ -32,10 +33,9 @@ public class MemberDAOImpl implements MemberDAO{
 		return session.selectOne("Member-Mapper.selectMemberListCount",pageMaker);
 	}
 
-
 	@Override
-	public MemberVO selectMemberById(String id) throws SQLException {
-		return session.selectOne("Member-Mapper.selectMemberByID",id);
+	public MemberVO selectMemberById(String user_id) throws SQLException {
+		return session.selectOne("Member-Mapper.selectMemberByID",user_id);
 	}
 
 	@Override
@@ -71,6 +71,11 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void deleteAllAuthorityById(String id) throws SQLException {
 		session.delete("Member-Mapper.deleteAllAuthorityById",id);	
+	}
+
+	@Override
+	public void isnertEngineer(EngineerVO engineer) throws SQLException {
+		session.insert("Engineer-Mapper.insertEngineer",engineer);		
 	}
 
 }

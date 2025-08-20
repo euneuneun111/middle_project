@@ -3,13 +3,10 @@ package com.semicolon.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.semicolon.command.PageMaker;
 import com.semicolon.dto.MemberVO;
 
 public interface MemberService {
 
-	// 회원목록
-	List<MemberVO> list(PageMaker pageMaker) throws SQLException;
 
 	// 회원조회
 	MemberVO getMember(String id) throws SQLException;

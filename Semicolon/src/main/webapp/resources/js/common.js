@@ -22,7 +22,7 @@ function picture_go(){
 	
 	//이미지 확장자 jpg 확인
     var fileFormat = file.name.substr(file.name.lastIndexOf(".")+1).toUpperCase();
-    if(!(fileFormat=="JPG" || fileFormat=="JPEG" || fileFormat=="PNG" )){
+    if(!(fileFormat=="JPG" || fileFormat=="JPEG")){
         alert("이미지는 jpg/jpeg 형식만 가능합니다.");
         pictureInput.value="";      
         return;
@@ -64,11 +64,11 @@ var valid_data = {
 			pattern:/^[가-힣]{2,6}$/g,
 			message:"이름은 한글 2~6글자 입니다."
 		},
-		id:{
+		user_id:{
 			pattern:/^[a-z]+[a-zA-Z0-9]{3,12}$/g,
 			message:"아이디 형식이 올바르지 않습니다."
 		},
-		pwd:{
+		user_pwd:{
 			pattern:/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/g,
 			message:"패스워드 형식이 올바르지 않습니다.\n영문자 숫자 특수문자 조합으로 8~20글자로 하세요."
 		}
@@ -101,18 +101,6 @@ function MemberPictureBackground(contextPath){
 		let id = element.getAttribute("data-id");		
 	
 		element.style.backgroundImage ="url('"+contextPath+"/member/getPicture?id="+id+"')";
-		element.style.backgroundPosition="center";
-		element.style.backgroundRepeat="no-repeat";
-		element.style.backgroundSize="cover";
-	}
-}
-
-function fundingPictureBackground(contextPath){
-	let elements = document.querySelectorAll('.funding-info');
-	for(let element of elements){
-		let fno = element.getAttribute("data-id");		
-	
-		element.style.backgroundImage ="url('"+contextPath+"/funding/getPicture?fno="+fno+"')";
 		element.style.backgroundPosition="center";
 		element.style.backgroundRepeat="no-repeat";
 		element.style.backgroundSize="cover";
@@ -188,15 +176,4 @@ function Summernote_go(target,context){
        
 	});
 	
-	
-
-	
-
-
-	
 }
-
-
-
-
-

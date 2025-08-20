@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+  <typeAliases>
+    <typeAlias type="java.lang.String" alias="str"/>
+    <typeAlias type="java.lang.Integer" alias="int"/>
+
+    <typeAlias type="com.semicolon.dto.IssueDto" alias="issue"/>
+    <typeAlias type="com.semicolon.dto.CalendarDto" alias="Calendar"/>
+    <typeAlias type="com.semicolon.dto.CreateOrgDTO" alias="CreateOrg"/>
+    <typeAlias type="com.semicolon.dto.OrgDetailDTO" alias="OrgDetail"/>
+    <typeAlias type="com.semicolon.dto.Member1DTO" alias="Member1"/>
+
+    <typeAlias type="com.semicolon.dto.MemberVO" alias="member"/>
+    <typeAlias type="com.semicolon.dto.BoardVO" alias="board"/>
+    <typeAlias type="com.semicolon.dto.ReplyVO" alias="reply" />
+    <typeAlias type="com.semicolon.dto.EngineerVO" alias="engineer" />
+    <typeAlias type="com.semicolon.dto.Recruit_BoardVO" alias="recruit_board"/>
+    <typeAlias type="com.semicolon.command.PageMaker" alias="pageMaker"/>
+
+  </typeAliases>
+</configuration>
