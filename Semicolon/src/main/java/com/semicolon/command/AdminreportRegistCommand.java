@@ -15,7 +15,7 @@ public class AdminreportRegistCommand {
 	private String content; // 상세 내용
 	private String reportDate;
 	private MultipartFile pictureFile; // 업로드 객체
-	private String picture; // DB에 저장할 파일명
+	private String picture; // DB에 저장할 파일명 복구 성공
 	
 	private String writer;
 
