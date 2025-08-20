@@ -3,6 +3,9 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <title>상세 페이지</title>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <style>
@@ -35,30 +38,7 @@
 	<div>
 		<section
 			class="content-header d-flex align-items-center justify-content-between"
-			style="padding: 1rem 150px; position: relative;">
-
-			<!-- 왼쪽 뒤로가기 버튼 -->
-			<button onclick="history.go(-1);"
-				style="position: absolute; top: 10px; left: 150px; background: none; border: none;">
-				<i class="fa-solid fa-arrow-left"
-					style="font-size: 24px; color: #9B99FF;"></i>
-			</button>
-
-			<!-- 중앙 검색바 -->
-			<div class="mx-auto">
-				<form class="form-inline" style="max-width: 400px;">
-					<div class="input-group input-group-sm w-100">
-						<input class="form-control" type="search" placeholder="Search">
-						<div class="input-group-append">
-							<button class="btn btn-navbar" type="submit"
-								style="border: 1px solid #ced4da">
-								<i class="fas fa-search"></i>
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</section>
+			style="padding: 1rem 150px; position: relative;"></section>
 		<section class="content-header"
 			style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
 
@@ -89,17 +69,30 @@
 						</div>
 						<div class="col-12 col-sm-6">
 							<div class="col-sm-12 d-flex justify-content-end">
+
 								<button type="button"
 									class="btn btn-outline-secondary btn-sm custom-hover"
-									style="border: none;"
-									onclick="location.href='modify?fno=${funding.fno}'">수정</button>
+									style="border: none;" onclick="history.go(-1)">목록</button>
 
+								<c:if test="${loginUser != null}">
+									<!-- 글 작성자인 경우 -->
+									<c:if test="${loginUser.id == funding.writer}">
+										<span class="nav-link px-2"
+											style="color: #ced4da; user-select: none;">/</span>
+										<button type="button"
+											class="btn btn-outline-secondary btn-sm custom-hover"
+											style="border: none;"
+											onclick="location.href='modify?fno=${funding.fno}'">수정</button>
+									</c:if>
 
-								<span class="nav-link px-4"
-									style="color: #ced4da; user-select: none;">/</span>
-
-								<button type="button" class="btn btn-outline-danger btn-sm"
-									style="border: none;" onclick="remove();">삭제</button>
+									<!-- 글 작성자 또는 관리자만 삭제 가능 -->
+									<sec:authorize access="hasRole('ROLE_ADMIN')">
+										<span class="nav-link px-2"
+											style="color: #ced4da; user-select: none;">/</span>
+										<button type="button" class="btn btn-outline-danger btn-sm"
+											style="border: none;" onclick="remove();">삭제</button>
+									</sec:authorize>
+								</c:if>
 							</div>
 
 							<div class="form-group row" style="margin-bottom: 3px">
@@ -163,12 +156,7 @@
 							</div>
 							<br> </br>
 							<div class="form-group row">
-								<div class="col-sm-6">
-									<select class="form-control" id="categorySelect"
-										name="category">
-										<option value="">-- 후원 옵션 --</option>
-									</select>
-								</div>
+								<div class="col-sm-6"></div>
 
 
 							</div>
@@ -237,8 +225,7 @@
 										onclick="OpenWindow('inquiryForm','문의하기',700,800);">문의하기</button>
 
 									<button type="button" class="btn btn-outline-danger btn-sm"
-										onclick="reportProject();">신고하기</button>
-
+										onclick="OpenWindow('reportForm?fno=${funding.fno}','신고하기',700,800);">신고하기</button>
 
 								</div>
 							</div>

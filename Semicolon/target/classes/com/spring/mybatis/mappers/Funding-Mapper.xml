@@ -109,9 +109,8 @@
 	</update>
 
 	<delete id="deleteFunding" parameterType="int">
-		delete
-		from FUNDING
-		where fno=#{fno}
+		DELETE FROM FUNDING
+		WHERE fno = #{fno}
 	</delete>
 
 	<select id="selectListOrderBy" parameterType="map"
@@ -119,30 +118,32 @@
 		select *
 		from FUNDING
 		where fno is not null
-		order by ${orderBy}
+		order by
+		${orderBy}
 	</select>
-	
-	
-	 <!-- 좋아요 여부 확인 -->
-    <select id="countHeart" parameterType="heart" resultType="int">
-        SELECT COUNT(*) FROM heart
-        WHERE fno = #{fno} AND id = #{id}
-    </select>
 
-    <!-- 좋아요 등록 -->
-    <insert id="insertHeart" parameterType="heart">
-        INSERT INTO heart (fno, id) VALUES (#{fno}, #{id})
-    </insert>
 
-    <!-- 좋아요 취소 -->
-    <delete id="deleteHeart" parameterType="heart">
-        DELETE FROM heart WHERE fno = #{fno} AND id = #{id}
-    </delete>
+	<!-- 좋아요 여부 확인 -->
+	<select id="countHeart" parameterType="heart" resultType="int">
+		SELECT COUNT(*) FROM heart
+		WHERE fno = #{fno} AND id = #{id}
+	</select>
 
-    <!-- 펀딩별 좋아요 개수 조회 -->
-    <select id="selectHeartCountByFunding" parameterType="int" resultType="int">
-        SELECT COUNT(*) FROM heart WHERE fno = #{fno}
-    </select>
+	<!-- 좋아요 등록 -->
+	<insert id="insertHeart" parameterType="heart">
+		INSERT INTO heart (fno, id) VALUES (#{fno}, #{id})
+	</insert>
+
+	<!-- 좋아요 취소 -->
+	<delete id="deleteHeart" parameterType="heart">
+		DELETE FROM heart WHERE fno = #{fno} AND id = #{id}
+	</delete>
+
+	<!-- 펀딩별 좋아요 개수 조회 -->
+	<select id="selectHeartCountByFunding" parameterType="int"
+		resultType="int">
+		SELECT COUNT(*) FROM heart WHERE fno = #{fno}
+	</select>
 </mapper>
 
 

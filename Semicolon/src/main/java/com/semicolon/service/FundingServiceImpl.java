@@ -108,65 +108,71 @@ public class FundingServiceImpl implements FundingService {
 
 		return funding;
 	}
+
 	@Override
 	public List<FundingVO> listByLatest(PageMaker pageMaker) throws Exception {
-	    List<FundingVO> fundingList = fundingDAO.selectSearchFundingList(pageMaker);
+		List<FundingVO> fundingList = fundingDAO.selectSearchFundingList(pageMaker);
 
-	    if(fundingList != null) {
-	        for(FundingVO funding : fundingList) {
-	            int fno = funding.getFno();
-	            // AttachList 세팅
-	            List<AttachVO> attachList = attachDAO.selectAttachByFno(fno);
-	            funding.setAttachList(attachList);
-	        }
-	    }
+		if (fundingList != null) {
+			for (FundingVO funding : fundingList) {
+				int fno = funding.getFno();
+				// AttachList 세팅
+				List<AttachVO> attachList = attachDAO.selectAttachByFno(fno);
+				funding.setAttachList(attachList);
+			}
+		}
 
-	    int listTotalCount = fundingDAO.selectSearchFundingListCount(pageMaker);
-	    pageMaker.setTotalCount(listTotalCount);
+		int listTotalCount = fundingDAO.selectSearchFundingListCount(pageMaker);
+		pageMaker.setTotalCount(listTotalCount);
 
-	    return fundingList;
+		return fundingList;
 	}
-	
+
 	@Override
 	public List<FundingVO> listByPopular(PageMaker pageMaker) throws Exception {
-	    List<FundingVO> fundingList = fundingDAO.selectListOrderBy("viewcnt DESC", pageMaker);
+		List<FundingVO> fundingList = fundingDAO.selectListOrderBy("viewcnt DESC", pageMaker);
 
-	    if(fundingList != null) {
-	        for(FundingVO funding : fundingList) {
-	            int fno = funding.getFno();
-	            List<AttachVO> attachList = attachDAO.selectAttachByFno(fno);
-	            funding.setAttachList(attachList);
-	        }
-	    }
+		if (fundingList != null) {
+			for (FundingVO funding : fundingList) {
+				int fno = funding.getFno();
+				List<AttachVO> attachList = attachDAO.selectAttachByFno(fno);
+				funding.setAttachList(attachList);
+			}
+		}
 
-	    int listTotalCount = fundingDAO.selectSearchFundingListCount(pageMaker);
-	    pageMaker.setTotalCount(listTotalCount);
+		int listTotalCount = fundingDAO.selectSearchFundingListCount(pageMaker);
+		pageMaker.setTotalCount(listTotalCount);
 
-	    return fundingList;
+		return fundingList;
 	}
-	
-	 @Override
-	    public boolean toggleHeart(HeartVO heartVO) {
-	        boolean liked = heartDAO.existsHeart(heartVO);
-	        if (liked) {
-	            heartDAO.deleteHeart(heartVO);
-	            return false;
-	        } else {
-	            heartDAO.insertHeart(heartVO);
-	            return true;
-	        }
-	    }
 
-	    @Override
-	    public int getHeartCount(int fno) {
-	        return heartDAO.countHeartByFno(fno);
-	    }
+	@Override
+	public boolean toggleHeart(HeartVO heartVO) {
+		boolean liked = heartDAO.existsHeart(heartVO);
+		if (liked) {
+			heartDAO.deleteHeart(heartVO);
+			return false;
+		} else {
+			heartDAO.insertHeart(heartVO);
+			return true;
+		}
+	}
 
-	    @Override
-	    public boolean isHeartedByUser(int fno, String id) {
-	        HeartVO heartVO = new HeartVO();
-	        heartVO.setFno(fno);
-	        heartVO.setId(id);
-	        return heartDAO.existsHeart(heartVO);
-	    }
+	@Override
+	public int getHeartCount(int fno) {
+		return heartDAO.countHeartByFno(fno);
+	}
+
+	@Override
+	public boolean isHeartedByUser(int fno, String id) {
+		HeartVO heartVO = new HeartVO();
+		heartVO.setFno(fno);
+		heartVO.setId(id);
+		return heartDAO.existsHeart(heartVO);
+	}
+
+	@Override
+	public int getHeartCountByFunding(int fno) throws SQLException {
+		return fundingDAO.selectHeartCountByFunding(fno);
+	}
 }

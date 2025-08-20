@@ -20,5 +20,7 @@ public interface FundingDAO {
 	void deleteFunding(int fno)throws SQLException;
 	
     List<FundingVO> selectListOrderBy(String orderBy, PageMaker pageMaker) throws Exception;
+    
+    int selectHeartCountByFunding(int fno) throws SQLException;
 
 }

@@ -100,18 +100,7 @@
 						</div>
 						<div class="form-group row">
 							<div class="col-sm-6">
-								<select class="form-control" id="categorySelect" name="category">
-									<option value="">-- 후원 옵션 추가 --</option>
-								</select>
-							</div>
-
-							<div class="col-sm-6 d-flex gap-2">
-								<input type="text" id="newCategory" class="form-control me-2"
-									placeholder="내용 입력">
-								<button type="button" class="btn btn-secondary"
-									onclick="addCategory()"
-									style="background-color: #9B99FF; color: #fff; white-space: nowrap; border: none;">
-									추&nbsp;&nbsp;가</button>
+							
 							</div>
 						</div>
 						<div class="card-footer" style="background-color: #fff;">

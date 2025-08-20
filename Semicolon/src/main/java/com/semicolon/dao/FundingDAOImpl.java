@@ -69,5 +69,9 @@ public class FundingDAOImpl implements FundingDAO{
 	    }
 	
 	
+	 @Override
+	    public int selectHeartCountByFunding(int fno) throws SQLException {
+	        return session.selectOne("Funding-Mapper.selectHeartCountByFunding", fno);
+	    }
 	
 }

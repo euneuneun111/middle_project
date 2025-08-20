@@ -17,6 +17,9 @@
 	<bean id="reportSavedFilePath" class="java.lang.String"
 		c:value="${savePath.report.files}" />
 
+	<bean id="adminreportSavedFilePath" class="java.lang.String"
+		c:value="${savePath.adminreport.files}" />
+
 	<!-- log saved path -->
 	<bean id="logSavedPath" class="java.lang.String"
 		c:value="${savePath.log.files}" />
@@ -38,26 +41,37 @@
 
 	<bean id="reportDAO" class="com.semicolon.dao.ReportDAOImpl"
 		c:session-ref="sqlSession" />
-		
-		<bean id="heartDAO" class="com.semicolon.dao.HeartDAOImpl" c:session-ref="sqlSession" />
-		
-		<bean id="meetingDAO" class="com.semicolon.dao.MeetingDAOImpl"
+
+	<bean id="heartDAO" class="com.semicolon.dao.HeartDAOImpl"
 		c:session-ref="sqlSession" />
+
+	<bean id="meetingDAO" class="com.semicolon.dao.MeetingDAOImpl"
+		c:session-ref="sqlSession" />
+
+	<bean id="adminreportDAO"
+		class="com.semicolon.dao.AdminReportDAOImpl"
+		c:session-ref="sqlSession" />
+
 
 	<bean id="meetingService"
 		class="com.semicolon.service.MeetingServiceImpl"
 		c:meetingDAO-ref="meetingDAO" />
-		
+
+
+	<bean id="adminreportService"
+		class="com.semicolon.service.AdminReportServiceImpl"
+		c:adminreportDAO-ref="adminreportDAO">
+	</bean>
 
 
 	<bean id="fundingService"
 		class="com.semicolon.service.FundingServiceImpl"
-		c:fundingDAO-ref="fundingDAO" c:attachDAO-ref="attachDAO" c:heartDAO-ref="heartDAO">
+		c:fundingDAO-ref="fundingDAO" c:attachDAO-ref="attachDAO"
+		c:heartDAO-ref="heartDAO">
 		<!-- HeartDAO는 property로 주입 -->
 	</bean>
 	<bean id="menuService"
-		class="com.semicolon.service.MenuServiceImpl"
-		c:menuDAO-ref="menuDAO" />
+		class="com.semicolon.service.MenuServiceImpl" c:menuDAO-ref="menuDAO" />
 	<bean id="memberService"
 		class="com.semicolon.service.MemberServiceImpl"
 		c:memberDAO-ref="memberDAO" />

@@ -32,14 +32,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriUtils;
 
 import com.josephoconnell.html.HTMLInputFilter;
+import com.semicolon.command.AdminreportRegistCommand;
 import com.semicolon.command.FundingModifyCommand;
 import com.semicolon.command.FundingRegistCommand;
 import com.semicolon.command.PageMaker;
 import com.semicolon.dao.AttachDAO;
+import com.semicolon.dto.AdminReportVO;
 import com.semicolon.dto.AttachVO;
 import com.semicolon.dto.FundingVO;
 import com.semicolon.dto.HeartVO;
 import com.semicolon.dto.MemberVO;
+import com.semicolon.service.AdminReportService;
 import com.semicolon.service.FundingService;
 
 @Controller
@@ -51,6 +54,9 @@ public class FundingController {
 
 	@Autowired
 	private AttachDAO attachDAO;
+	
+	@Autowired
+	private AdminReportService adminreportService;
 
 	@GetMapping("/list")
 	public ModelAndView list(@ModelAttribute PageMaker pageMaker, ModelAndView mnv) throws Exception {
@@ -172,6 +178,9 @@ public class FundingController {
         // 사용자가 좋아요 했는지 확인
         boolean hearted = fundingService.isHeartedByUser(fno, loginId);
         
+        int heartCount = fundingService.getHeartCountByFunding(fno);
+        funding.setHeart(heartCount);
+        
         mnv.addObject("hearted", hearted);
 
 		mnv.addObject("funding", funding);
@@ -184,6 +193,8 @@ public class FundingController {
     public String toggleHeart(HeartVO heartVO) {
         fundingService.toggleHeart(heartVO);
         return "redirect:/funding/detail?fno=" + heartVO.getFno();
+        
+        
     }
 
 	@GetMapping("/modify")
@@ -307,4 +318,54 @@ public class FundingController {
 		mnv.setViewName(url);
 		return mnv;
 	}
+	
+	@GetMapping("/inquiryForm")
+    public String inquiryForm() {
+        String url = "/funding/inquiryForm";
+
+        return url;
+    }
+	
+	@GetMapping("/reportForm")
+    public void reportForm(int fno, Model model) throws SQLException {
+		FundingVO funding = fundingService.getFunding(fno);
+		model.addAttribute("funding", funding);
+    }
+	
+	@javax.annotation.Resource(name = "adminreportSavedFilePath")
+	private String reportfileUploadPath;
+	
+	
+	@PostMapping("/report")
+	public ModelAndView fundingreport(AdminreportRegistCommand modCommand, ModelAndView mnv) throws Exception {
+	    String url = "/funding/report_success";
+
+	    // 1. Command -> VO 변환
+	    AdminReportVO report = modCommand.toAdminReportVO();
+
+	    // 2. 파일 업로드 처리
+	    MultipartFile pictureFile = modCommand.getPictureFile();
+	    if (pictureFile != null && !pictureFile.isEmpty()) {
+	        // 파일명 가져오기
+	        String fileName = pictureFile.getOriginalFilename();
+
+	        // 파일 저장 경로 (spring XML에서 정의한 Bean 사용 가능)
+	        File saveFile = new File(reportfileUploadPath, fileName);
+	        pictureFile.transferTo(saveFile); // 서버에 저장
+
+	        // VO에 DB 저장용 파일명 세팅
+	        report.setPicture(fileName);
+	    }
+
+	    // 3. Service 호출해서 DB에 저장
+	    adminreportService.registAdminReport(report);
+
+	    // 4. 성공 페이지로 이동
+	    mnv.setViewName(url);
+	    return mnv;
+	}
+
+
+
+
 }

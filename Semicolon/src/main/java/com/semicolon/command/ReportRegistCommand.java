@@ -14,7 +14,6 @@ public class ReportRegistCommand {
 	private String title;
 	private String content;
 	private String writer;
-
 	private String reportDate;
 	
 	private List<MultipartFile> uploadFile;

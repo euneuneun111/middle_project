@@ -21,7 +21,12 @@
 
 		<typeAlias type="com.semicolon.dto.HeartVO" alias="heart" />
 
-		<typeAlias type="com.semicolon.dto.MeetingVO" alias="meeting" />
+		<typeAlias type="com.semicolon.dto.MeetingVO"
+			alias="meeting" />
+
+		<typeAlias type="com.semicolon.dto.AdminReportVO"
+			alias="adminreport" />
+
 
 
 		<typeAlias type="com.semicolon.command.PageMaker"

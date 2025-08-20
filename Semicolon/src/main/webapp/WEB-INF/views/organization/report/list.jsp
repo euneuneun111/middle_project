@@ -70,10 +70,8 @@ String today = sdf.format(new java.util.Date());
 						<c:forEach items="${managerList}" var="manager">
 							<option value="${manager.id}">${manager.name}</option>
 						</c:forEach>
-					</select> <i class="fas fa-calendar-alt mr-1" style="margin-right: 6px;"></i>
-					<input type="date" id="reportDate" name="reportDate"
-						class="form-control form-control-sm" style="width: 160px;"
-						value="<%=today%>">
+					</select> 
+					
 				</div>
 
 				<!-- 오른쪽: 추가 버튼 -->
