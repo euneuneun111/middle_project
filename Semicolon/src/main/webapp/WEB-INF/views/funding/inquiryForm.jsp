@@ -32,7 +32,7 @@
 
 							<div class="col-sm-9">
 								<input name="id" type="text" class="form-control"
-									id="inputEmail3" value="${member.id }" readonly>
+									id="inputEmail3" value="${loginUser.id }" readonly>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -40,7 +40,7 @@
 
 							<div class="col-sm-9">
 								<input name="pwd" type="text" class="form-control"
-									value="${member.name }" readonly>
+									value="${loginUser.email }" readonly>
 							</div>
 						</div>
 

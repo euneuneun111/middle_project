@@ -45,7 +45,7 @@
 				<tr>
 					<th style="background: #e0e0e0; text-align: center; padding: 20px 16px;">참석자</th>
 					<td colspan="3">
-						<input type="text" class="form-control" name="attend" placeholder="참석자 명단" value="${loginUser.name}" readonly>
+						<input type="text" class="form-control" name="attend" placeholder="참석자 명단" value="${meeting.attend}" >
 					</td>
 				</tr>
 				<tr>

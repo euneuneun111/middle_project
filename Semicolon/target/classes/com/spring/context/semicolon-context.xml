@@ -38,26 +38,34 @@
 
 	<bean id="reportDAO" class="com.semicolon.dao.ReportDAOImpl"
 		c:session-ref="sqlSession" />
+
+	<bean id="heartDAO" class="com.semicolon.dao.HeartDAOImpl"
+		c:session-ref="sqlSession" />
+
+	<bean id="meetingDAO" class="com.semicolon.dao.MeetingDAOImpl"
+		c:session-ref="sqlSession" />
 		
-		<bean id="heartDAO" class="com.semicolon.dao.HeartDAOImpl" c:session-ref="sqlSession" />
 		
-		<bean id="meetingDAO" class="com.semicolon.dao.MeetingDAOImpl"
+	<bean id="adminDAO" class="com.semicolon.dao.AdminDAOImpl"
 		c:session-ref="sqlSession" />
 
 	<bean id="meetingService"
 		class="com.semicolon.service.MeetingServiceImpl"
 		c:meetingDAO-ref="meetingDAO" />
-		
+
 
 
 	<bean id="fundingService"
 		class="com.semicolon.service.FundingServiceImpl"
-		c:fundingDAO-ref="fundingDAO" c:attachDAO-ref="attachDAO" c:heartDAO-ref="heartDAO">
-		<!-- HeartDAO는 property로 주입 -->
+		c:fundingDAO-ref="fundingDAO" c:attachDAO-ref="attachDAO"
+		c:heartDAO-ref="heartDAO">	
 	</bean>
+	
+	<bean id="adminService"
+		class="com.semicolon.service.AdminServiceImpl" c:adminDAO-ref="adminDAO" />
+	
 	<bean id="menuService"
-		class="com.semicolon.service.MenuServiceImpl"
-		c:menuDAO-ref="menuDAO" />
+		class="com.semicolon.service.MenuServiceImpl" c:menuDAO-ref="menuDAO" />
 	<bean id="memberService"
 		class="com.semicolon.service.MemberServiceImpl"
 		c:memberDAO-ref="memberDAO" />

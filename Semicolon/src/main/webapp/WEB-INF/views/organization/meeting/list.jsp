@@ -44,7 +44,7 @@
 
 		<div class="card col-sm-9" style="padding: 0 30px; margin: 30px auto;">
 			<div class="card-header border-0">
-				<h1 class="card-title">Meeting</h1>
+				<h1 class="card-title">회의록</h1>
 				<div
 					class="card-tools d-flex justify-content-center align-items-center"
 					onclick="OpenWindow('regist','회의록 등록', 1000,800);"

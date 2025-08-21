@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Admin-Mapper">
+
+	<!-- 결과 매핑 -->
+	<resultMap id="adminResultMap" type="admin">
+		<id property="id" column="id" />
+		<result property="applicant" column="applicant" />
+		<result property="title" column="title" />
+		<result property="reason" column="reason" />
+		<result property="regDate" column="regDate" />
+	</resultMap>
+
+	<!-- 목록 조회 (페이징) -->
+	<select id="selectAdminList" resultMap="adminResultMap"
+		parameterType="pageMaker">
+		
+		SELECT *
+		FROM admin
+		ORDER BY ID DESC
+	</select>
+
+	<!-- 총 개수 -->
+	<select id="selectAdminListCount" resultType="int"
+		parameterType="pageMaker">
+		SELECT COUNT(*) FROM admin
+	</select>
+
+	<!-- 상세 조회 -->
+	<select id="selectAdminById" resultMap="adminResultMap"
+		parameterType="int">
+		SELECT *
+		FROM admin
+		WHERE id = #{id}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insertAdmin" parameterType="admin">
+		INSERT INTO admin(id,applicant, title, reason, regDate, content)
+		VALUES(admin_seq.NEXTVAL,#{applicant}, #{title}, #{reason}, #{regDate} , #{content})
+	</insert>
+
+
+	<!-- 삭제 -->
+	<delete id="deleteAdmin" parameterType="int">
+		DELETE FROM admin WHERE id = #{id}
+	</delete>
+
+</mapper>
+

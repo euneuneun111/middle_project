@@ -234,10 +234,10 @@
 								<div class="col-auto">
 									<button type="button"
 										class="btn btn-outline-primary btn-sm me-2"
-										onclick="OpenWindow('inquiryForm','문의하기',700,800);">문의하기</button>
+										onclick="OpenWindow('inquiryForm?fno=${funding.fno}')">문의하기</button>
 
 									<button type="button" class="btn btn-outline-danger btn-sm"
-										onclick="reportProject();">신고하기</button>
+										onclick="OpenWindow('reportForm?fno=${funding.fno}')">신고하기</button>
 
 
 								</div>

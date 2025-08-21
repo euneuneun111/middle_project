@@ -32,14 +32,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriUtils;
 
 import com.josephoconnell.html.HTMLInputFilter;
+import com.semicolon.command.AdminRegistCommand;
 import com.semicolon.command.FundingModifyCommand;
 import com.semicolon.command.FundingRegistCommand;
 import com.semicolon.command.PageMaker;
 import com.semicolon.dao.AttachDAO;
+import com.semicolon.dto.AdminVO;
 import com.semicolon.dto.AttachVO;
 import com.semicolon.dto.FundingVO;
 import com.semicolon.dto.HeartVO;
 import com.semicolon.dto.MemberVO;
+import com.semicolon.service.AdminService;
 import com.semicolon.service.FundingService;
 
 @Controller
@@ -51,6 +54,9 @@ public class FundingController {
 
 	@Autowired
 	private AttachDAO attachDAO;
+
+	@Autowired
+	private AdminService adminService;
 
 	@GetMapping("/list")
 	public ModelAndView list(@ModelAttribute PageMaker pageMaker, ModelAndView mnv) throws Exception {
@@ -165,26 +171,26 @@ public class FundingController {
 			funding = fundingService.detail(fno);
 			ctx.setAttribute(key, key);
 		}
-		
-		 // 로그인 사용자
-        String loginId = ((MemberVO)session.getAttribute("loginUser")).getId();
 
-        // 사용자가 좋아요 했는지 확인
-        boolean hearted = fundingService.isHeartedByUser(fno, loginId);
-        
-        mnv.addObject("hearted", hearted);
+		// 로그인 사용자
+		String loginId = ((MemberVO) session.getAttribute("loginUser")).getId();
+
+		// 사용자가 좋아요 했는지 확인
+		boolean hearted = fundingService.isHeartedByUser(fno, loginId);
+
+		mnv.addObject("hearted", hearted);
 
 		mnv.addObject("funding", funding);
 		mnv.setViewName(url);
 
 		return mnv;
 	}
-	
+
 	@PostMapping("/heart")
-    public String toggleHeart(HeartVO heartVO) {
-        fundingService.toggleHeart(heartVO);
-        return "redirect:/funding/detail?fno=" + heartVO.getFno();
-    }
+	public String toggleHeart(HeartVO heartVO) {
+		fundingService.toggleHeart(heartVO);
+		return "redirect:/funding/detail?fno=" + heartVO.getFno();
+	}
 
 	@GetMapping("/modify")
 	public void modifyForm(int fno, Model model) throws Exception {
@@ -307,4 +313,31 @@ public class FundingController {
 		mnv.setViewName(url);
 		return mnv;
 	}
+
+	@GetMapping("/reportForm")
+	public void reportForm(int fno, Model model) throws SQLException {
+		FundingVO funding = fundingService.getFunding(fno);
+		model.addAttribute("funding", funding);
+	}
+
+	@PostMapping("/report")
+	public ModelAndView regist(AdminRegistCommand regcommand, ModelAndView mnv) throws Exception {
+		String url = "/funding/report_success";
+
+		AdminVO admin = regcommand.toAdminVO();
+		adminService.regist(admin);
+
+		mnv.setViewName(url);
+		mnv.addObject("admin", admin);
+
+		return mnv;
+
+	}
+
+	@GetMapping("/inquiryForm")
+	public void inquiryForm(int fno, Model model) throws SQLException {
+		FundingVO funding = fundingService.getFunding(fno);
+		model.addAttribute("funding", funding);
+	}
+
 }
