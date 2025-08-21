@@ -2,7 +2,7 @@ package com.Semicolon.dto;
 
 public class HeartVO {
 	private int fno; // 펀딩 번호
-	private String id; // 사용자 ID
+	private String user_id; // 사용자 ID
 
 	public int getFno() {
 		return fno;
@@ -12,11 +12,13 @@ public class HeartVO {
 		this.fno = fno;
 	}
 
-	public String getId() {
-		return id;
+	public String getUser_id() {
+		return user_id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
 	}
+
+
 }

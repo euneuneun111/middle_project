@@ -126,17 +126,17 @@
 	<!-- 좋아요 여부 확인 -->
 	<select id="countHeart" parameterType="heart" resultType="int">
 		SELECT COUNT(*) FROM heart
-		WHERE fno = #{fno} AND id = #{id}
+		WHERE fno = #{fno} AND user_id = #{user_id}
 	</select>
 
 	<!-- 좋아요 등록 -->
 	<insert id="insertHeart" parameterType="heart">
-		INSERT INTO heart (fno, id) VALUES (#{fno}, #{id})
+		INSERT INTO heart (fno, user_id) VALUES (#{fno}, #{user_id})
 	</insert>
 
 	<!-- 좋아요 취소 -->
 	<delete id="deleteHeart" parameterType="heart">
-		DELETE FROM heart WHERE fno = #{fno} AND id = #{id}
+		DELETE FROM heart WHERE fno = #{fno} AND user_id = #{user_id}
 	</delete>
 
 	<!-- 펀딩별 좋아요 개수 조회 -->

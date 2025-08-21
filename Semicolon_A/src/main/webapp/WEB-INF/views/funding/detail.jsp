@@ -54,7 +54,7 @@
 		<section class="content register-page" style="background-color: #fff">
 			<div class="card card-solid"
 				style="padding: 0 150px; display: flex; justify-content: space-evenly;">
-				<div class="card-body" style="padding: 0px"">
+				<div class="card-body" style="padding: 0px">
 					<div class="row">
 						<div class="col-12 col-sm-4"
 							style="position: relative; height: 450px; width: 400px; border: 1px solid #9B99FF; margin: auto auto; border-radius: 5px;">
@@ -78,7 +78,7 @@
 
 								<c:if test="${loginUser != null}">
 									<!-- 글 작성자인 경우 -->
-									<c:if test="${loginUser.id == funding.writer}">
+									<c:if test="${loginUser.user_id == funding.writer}">
 										<span class="nav-link px-2"
 											style="color: #ced4da; user-select: none;">/</span>
 										<button type="button"
@@ -176,7 +176,7 @@
 										<form action="<%=request.getContextPath()%>/funding/heart"
 											method="post" style="margin: 0;">
 											<input type="hidden" name="fno" value="${funding.fno}">
-											<input type="hidden" name="id" value="${loginUser.id}">
+											<input type="hidden" name="id" value="${loginUser.user_id}">
 											<button type="submit"
 												style="border: none; background-color: #fff; cursor: pointer; padding: 5px; display: inline-flex; align-items: center;">
 												<i class="${hearted ? 'fa-solid' : 'fa-regular'} fa-heart"

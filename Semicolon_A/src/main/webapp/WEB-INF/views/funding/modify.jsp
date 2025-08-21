@@ -15,6 +15,8 @@
 
 <body>
 
+	<%@ include file="/WEB-INF/views/module/header.jsp"%>
+
 
 
 	<c:if test="${empty funding }">
@@ -32,7 +34,7 @@
 		<section class="content-header"
 			style="padding: 1rem 150px; display: flex; align-items: center; justify-content: space-between;">
 
-			<input type="hidden" name="writer" value="${loginUser.id}" />
+			<input type="hidden" name="writer" value="${loginUser.user_id}" />
 			<h2>&nbsp;&nbsp;</h2>
 		</section>
 
@@ -59,7 +61,7 @@
 										<label for="inputFile"
 											class="btn btn-warning btn-sm btn-flat input-group-addon"
 											style="color: #fff; background-color: #9B99FF; border: none;">파일선택</label>
-										<input id="inputFileName" class="form-control notNull"
+										<input id="inputFileName" class="form-control"
 											type="text" name="tempPicture" disabled /> <input
 											type="file" title="썸네일" id="inputFile" name="uploadFile"
 											title="썸네일" style="display: none;" onchange="picture_on();" />
@@ -128,24 +130,7 @@
 								<div class="form-group row">
 									<div class="col-sm-12">&nbsp;</div>
 								</div>
-								<div class="form-group row">
-									<div class="col-sm-6">
-										<select class="form-control" id="categorySelect"
-											name="category">
-											<option value="">-- 후원 옵션 추가 --</option>
-										</select>
-									</div>
-
-									<div class="col-sm-6 d-flex gap-2">
-										<input type="text" id="newCategory" class="form-control me-2"
-											placeholder="내용 입력">
-										<button type="button" class="btn btn-secondary"
-											onclick="addCategory()"
-											style="background-color: #9B99FF; color: #fff; white-space: nowrap; border: none;">
-											추&nbsp;&nbsp;가</button>
-									</div>
-								</div>
-
+							
 
 
 								<div class="card-footer" style="background-color: #fff;">

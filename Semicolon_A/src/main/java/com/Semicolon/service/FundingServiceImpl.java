@@ -165,7 +165,7 @@ public class FundingServiceImpl implements FundingService {
 	public boolean isHeartedByUser(int fno, String id) {
 		HeartVO heartVO = new HeartVO();
 		heartVO.setFno(fno);
-		heartVO.setId(id);
+		heartVO.setUser_id(id);
 		return heartDAO.existsHeart(heartVO);
 	}
 
