@@ -19,7 +19,7 @@ import com.Semicolon.pms.service.IssueReplyService; // IssueReplyService import
 import com.Semicolon.pms.service.IssueService;
 import com.Semicolon.pms.service.TaskService;
 import com.Semicolon.command.PageMaker;
-
+import java.util.ArrayList;
 @Controller
 @RequestMapping("/main/project") // 기본 경로를 /main으로 변경하여 URL 일관성 확보
 public class IssueController {
@@ -36,24 +36,40 @@ public class IssueController {
 
     // 이슈 목록 페이지
     @GetMapping("/{projectId}/issuelist")
-    public String getIssueList(@PathVariable("projectId") String projectId,
+    public String getIssueList(
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "perPageNum", defaultValue = "10") int perPageNum,
-                               @RequestParam(value = "searchQuery", required = false) String searchQuery,
+                               @RequestParam(value = "keyword", required = false) String keyword,
                                Model model) throws SQLException {
-        
+    	String projectId = "PJ-001";
+    	
         PageMaker pageMaker = new PageMaker();
         pageMaker.setProjectId(projectId);
         pageMaker.setPage(page);
         pageMaker.setPerPageNum(perPageNum);
-        pageMaker.setSearchQuery(searchQuery);
+        pageMaker.setKeyword(keyword);
 
         pageMaker.setTotalCount(issueService.getTotalCount(pageMaker));
         
         List<IssueDto> issueList = issueService.getIssueList(pageMaker);
         
         // 3. 이제 this.taskService로 정상적으로 접근 가능
-        List<TaskDto> taskList = this.taskService.getTaskListByProjectId(projectId);
+        List<TaskDto> taskList = new ArrayList<>();
+        
+        TaskDto task1 = new TaskDto();
+        task1.setTaskId("TSK-001");
+        task1.setTaskTitle("TSK-001");
+        taskList.add(task1);
+
+        TaskDto task2 = new TaskDto();
+        task2.setTaskId("TSK-002");
+        task2.setTaskTitle("TSK-002");
+        taskList.add(task2);
+        
+        TaskDto task3 = new TaskDto();
+        task3.setTaskId("TSK-003");
+        task3.setTaskTitle("TSK-003");
+        taskList.add(task3);
 
         model.addAttribute("issueList", issueList);
         model.addAttribute("pageMaker", pageMaker);
@@ -63,6 +79,23 @@ public class IssueController {
         return "organization/pms/issue/issuelist";
     }
 
+    @PostMapping("/{projectId}/issuelist")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> createIssue(@PathVariable("projectId") String projectId,
+                                                           @RequestBody IssueDto issue) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            issue.setProjectId("PJ-001");
+            issueService.createNewIssue(issue);
+            response.put("message", "이슈가 성공적으로 등록되었습니다.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.put("message", "이슈 등록 중 오류가 발생했습니다.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     // 이슈 상세 페이지
     @GetMapping("/{projectId}/issuelist/{issueId}")
     public String getIssueDetail(@PathVariable String projectId, @PathVariable String issueId, Model model) throws SQLException {

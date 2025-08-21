@@ -3,17 +3,19 @@
 package com.Semicolon.pms.dao;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.ibatis.session.SqlSession;
+
+import org.mybatis.spring.SqlSessionTemplate;
+
 import com.Semicolon.pms.dto.IssueReplyDTO;
 
 public class IssueReplyDAOImpl implements IssueReplyDAO {
 
-    private SqlSession sqlSession;
-    public void setSqlSession(SqlSession sqlSession) {
+	private final SqlSessionTemplate sqlSession;
+    public IssueReplyDAOImpl(SqlSessionTemplate sqlSession) {
         this.sqlSession = sqlSession;
     }
 
-    private static final String NAMESPACE = "com.Semicolon.pms.mappers.IssueReply-Mapper";
+    private static final String NAMESPACE = "com.Semicolon.pms.dao.IssueReplyDAO";
 
     @Override
     public List<IssueReplyDTO> selectReplyList(String issueId) throws SQLException {

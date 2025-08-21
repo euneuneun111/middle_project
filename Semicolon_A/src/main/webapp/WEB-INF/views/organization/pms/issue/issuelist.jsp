@@ -24,21 +24,20 @@
                 <!-- 검색 및 페이지네이션을 위한 폼 추가 -->
                 <!-- action URL을 issuelist로 변경 -->
                 <form id="jobForm" action="${pageContext.request.contextPath}/main/project/${projectId}/issuelist" method="GET">
-                    <input type='hidden' name="page" value="${pageMaker.page}" />
-                    <input type='hidden' name="perPageNum" value="${pageMaker.perPageNum}" />
-                    <input type='hidden' name="searchType" value="${pageMaker.searchType}" />
-                    <input type='hidden' name="searchQuery" value="${pageMaker.searchQuery}" />
-
-                    <div class="issue-controls">
-                        <div class="search-bar">
-                            <i class="fas fa-search search-icon" onclick="search_list(1);"></i>
-                            <input type="text" name="searchQuery" id="searchInput" placeholder="이슈 검색" value="${pageMaker.searchQuery}">
-                        </div>
-                        <button type="button" class="create-issue-btn" onclick="openCreateIssueModal()">
-                            <i class="fas fa-plus-circle"></i> 새 이슈
-                        </button>
-                    </div>
-                </form>
+    
+    <input type='hidden' name="page" value="${pageMaker.page}" />
+    <input type='hidden' name="perPageNum" value="${pageMaker.perPageNum}" />
+    
+    <div class="issue-controls">
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" name="keyword" id="searchInput" placeholder="이슈 검색" value="${pageMaker.searchQuery}">
+        </div>
+        <button type="button" class="create-issue-btn" onclick="openCreateIssueModal()">
+            <i class="fas fa-plus-circle"></i> 새 이슈
+        </button>
+    </div>
+</form>
 
                 <div class="issue-list-container">
                     <table class="issue-table">
@@ -115,11 +114,12 @@
 		<div class="custom-modal-form-group">
             <label for="taskNameSelect">일감이름</label>
             <select id="taskNameSelect">
-                <option value="">선택</option>
-                <c:forEach var="task" items="${taskList}">
-                    <option value="${task.taskId}">${task.taskName}</option>
-                </c:forEach>
-            </select>
+    <option value="">선택</option>
+    <c:forEach var="task" items="${taskList}">
+        <%-- taskName -> taskTitle --%>
+        <option value="${task.taskId}">${task.taskTitle}</option>
+    </c:forEach>
+</select>
             </div>
         </div>
         <div class="custom-modal-buttons">
@@ -132,115 +132,137 @@
 
     <%@ include file="/WEB-INF/views/module/footer.jsp" %>
     
-    <script>
-    const currentProjectId = "${projectId}"; 
-
-    function openCreateIssueModal() {
-        document.getElementById('createIssueModal').style.display = 'block';
-        document.getElementById('modalOverlay').style.display = 'block';
-        document.body.classList.add('modal-active');
-    }
-
-    function closeCreateIssueModal() {
-        document.getElementById('createIssueModal').style.display = 'none';
-        document.getElementById('modalOverlay').style.display = 'none';
-        document.body.classList.remove('modal-active');
-    }
-
-    document.getElementById('modalOverlay').addEventListener('click', closeCreateIssueModal);
-
-    const jobForm = document.getElementById('jobForm');
-    const searchInput = document.getElementById('searchInput');
-
-    searchInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            search_list(1);
-        }
-    });
-    
-    document.querySelector('.search-bar .search-icon').addEventListener('click', function() {
-        search_list(1);
-    });
-    
-    function search_list(page){
-        jobForm.searchQuery.value = searchInput.value;
-        jobForm.page.value = page;
-        jobForm.submit();
-    }
-
+<script>
     document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- 1. 필요한 모든 변수를 먼저 선언합니다. ---
+        const contextPath = "${pageContext.request.contextPath}";
+        const currentProjectId = "PJ-001";
+        const loggedInUserId = "${sessionScope.loginUser.user_id}";
+
+        const modal = document.getElementById('createIssueModal');
+        const overlay = document.getElementById('modalOverlay');
+        const openModalBtn = document.getElementById('openCreateIssueModal');
+        const closeButtons = modal.querySelectorAll('.custom-cancel-btn'); // CSS 클래스에 맞게 수정
+        
+        const jobForm = document.getElementById('jobForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchIcon = document.querySelector('.search-bar .search-icon');
+        
+        // --- 2. 모든 함수를 이곳에 정의합니다. ---
+
+        function openCreateIssueModal() {
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.classList.add('modal-active');
+        }
+
+        function closeCreateIssueModal() {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            document.body.classList.remove('modal-active');
+        }
+
+        // 검색 및 페이지 이동을 처리하는 함수
+        function search_list(page) {
+            if (jobForm) {
+                // jobForm 안에 page input이 없다면 동적으로 생성
+                let pageInput = jobForm.querySelector('input[name="page"]');
+                if (!pageInput) {
+                    pageInput = document.createElement('input');
+                    pageInput.type = 'hidden';
+                    pageInput.name = 'page';
+                    jobForm.appendChild(pageInput);
+                }
+                pageInput.value = page;
+                jobForm.submit();
+            }
+        }
+        
+        function addNewIssue() {
+            const taskSelectElement = document.getElementById('taskNameSelect');
+            const issueTitle = document.getElementById('newIssueTitle').value;
+            const issueContent = document.getElementById('newIssueContent').value;
+            const issueStatus = document.getElementById('statusSelect').value;
+            const issueUrgency = document.getElementById('urgencySelect').value;
+            const taskId = taskSelectElement.value;
+            const taskTitle = taskId ? taskSelectElement.options[taskSelectElement.selectedIndex].text : "";
+
+            if (!issueTitle || !issueStatus || !issueUrgency || !taskId) {
+                alert('일감을 포함한 모든 필수 필드를 입력해주세요.');
+                return;
+            }
+
+            const newIssue = {
+                issueTitle: issueTitle,
+                issueContent: issueContent,
+                issueStatus: issueStatus,
+                issueUrgency: issueUrgency,
+                taskId: taskId,
+                taskTitle: taskTitle,
+                issueManagerId: "mimi",
+                projectId: currentProjectId,
+                issueCreatorId: "user-001"
+            };
+            
+            const postUrl = contextPath + '/main/project/' + currentProjectId + '/issuelist';
+            
+            fetch(postUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newIssue)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`서버 응답 오류: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message || '이슈가 성공적으로 저장되었습니다.');
+                closeCreateIssueModal();
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('이슈 등록 중 오류 발생:', error);
+                alert(`이슈 등록 중 오류가 발생했습니다: ${error.message}`);
+            });
+        }
+        
+        // --- 3. 이벤트 리스너를 할당합니다. ---
+
+        if (openModalBtn) openModalBtn.addEventListener('click', openCreateIssueModal);
+        if (overlay) overlay.addEventListener('click', closeCreateIssueModal);
+        closeButtons.forEach(btn => btn.addEventListener('click', closeCreateIssueModal));
+        
+        // 함수를 HTML onclick에서 호출할 수 있도록 window 객체에 할당
+        window.openCreateIssueModal = openCreateIssueModal;
+        window.addNewIssue = addNewIssue;
+        window.search_list = search_list; // pagination.jsp에서 호출할 수 있도록 전역 함수로 지정
+        
+        if (searchIcon) {
+            searchIcon.addEventListener('click', () => search_list(1));
+        }
+        
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    search_list(1);
+                }
+            });
+        }
+        
+        // 사이드바 활성화 로직
         const currentPath = window.location.pathname;
         const sidebarLinks = document.querySelectorAll('.sidebar-menu li a');
-
         sidebarLinks.forEach(function(link) {
             const linkPath = link.getAttribute('href');
-            if (linkPath && currentPath.includes('/main/project')) {
-                if (linkPath.includes('issuelist')) {
+            if (linkPath && currentPath.includes('issuelist')) {
+                if (link.textContent.trim() === 'ISSUE') {
                     link.parentElement.classList.add('active');
                 }
             }
         });
     });
-
-    function addNewIssue() {
-        const taskSelectElement = document.getElementById('taskNameSelect');
-        const issueTitle = document.getElementById('newIssueTitle').value;
-        const issueContent = document.getElementById('newIssueContent').value;
-        const issueStatus = document.getElementById('statusSelect').value;
-        const issueUrgency = document.getElementById('urgencySelect').value;
-        const taskName = taskSelectElement.options[taskSelectElement.selectedIndex].text;
-        const taskId = taskSelectElement.value;
-        const issueManagerId = "mimi";
-
-        const projectId = currentProjectId;
-        
-        if (!issueTitle || !issueContent || !issueStatus || !issueUrgency || !taskName || !projectId) {
-            alert('모든 필드를 입력하고 프로젝트 ID가 유효한지 확인해주세요.');
-            return;
-        }
-
-        const newIssue = {
-            issueTitle: issueTitle,
-            issueContent: issueContent,
-            issueStatus: issueStatus,
-            issueUrgency: issueUrgency,
-            taskId: taskId,
-            taskName: taskName,
-            issueManagerId: "mimi",
-            projectId: projectId,
-            issueCreatorId: "user-001"
-        };
-        
-        const postUrl = `/main/project/${projectId}/issuelist`;
-
-        fetch(postUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newIssue)
-        })
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error('404 (Not Found): 요청된 URL을 찾을 수 없습니다. URL 경로를 확인해주세요.');
-                }
-                throw new Error(`서버 응답이 실패했습니다. 상태 코드: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('이슈가 성공적으로 저장되었습니다:', data);
-            alert(data.message);
-            closeCreateIssueModal();
-            location.reload();
-        })
-        .catch(error => {
-            console.error('이슈 등록 중 오류 발생:', error);
-            alert(`이슈 등록 중 오류가 발생했습니다: ${error.message}`);
-            closeCreateIssueModal();
-        });
-    }
-    </script>
+</script>
 </body>
 </html>

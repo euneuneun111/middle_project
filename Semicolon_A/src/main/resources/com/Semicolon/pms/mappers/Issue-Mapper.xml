@@ -20,7 +20,6 @@
         <result property="taskTitle" column="TASK_TITLE" />
     </resultMap>
 
-    <!-- 페이징, 검색, 그리고 projectId를 기준으로 이슈 목록을 조회하는 쿼리 -->
     <select id="getIssueListByProjectId" parameterType="com.Semicolon.command.PageMaker" resultMap="issueMap">
         SELECT *
         FROM (
@@ -33,15 +32,23 @@
             LEFT JOIN
                 TASK t ON i.TASK_ID = t.TASK_ID
             WHERE
-                i.PROJECT_ID = #{projectId, jdbcType=VARCHAR} <if test="searchQuery != null and searchQuery != ''"> AND i.ISSUE_TITLE LIKE '%' || #{searchQuery, jdbcType=VARCHAR} || '%' </if>
+                i.PROJECT_ID = #{projectId}
+                AND i.ISSUE_DELETE_DATE IS NULL
+                <if test="keyword != null and keyword != ''">
+                AND i.ISSUE_TITLE LIKE '%' || #{keyword} || '%'
+            </if>
         )
         WHERE rnum BETWEEN #{startRow} AND #{endRow} </select>
-    
+
     <select id="getTotalCountByProjectId" parameterType="com.Semicolon.command.PageMaker" resultType="int">
-        SELECT COUNT(*)
-        FROM ISSUE
-        WHERE PROJECT_ID = #{projectId, jdbcType=VARCHAR} <if test="searchQuery != null and searchQuery != ''"> AND ISSUE_TITLE LIKE '%' || #{searchQuery, jdbcType=VARCHAR} || '%' </if>
-    </select>
+    SELECT COUNT(*)
+    FROM ISSUE i
+    WHERE i.PROJECT_ID = #{projectId}
+    AND i.ISSUE_DELETE_DATE IS NULL
+        <if test="keyword != null and keyword != ''">
+            AND i.ISSUE_TITLE LIKE '%' || #{keyword} || '%'
+        </if>
+</select>
 
     <!-- 새로운 이슈 등록 -->
     <insert id="insertNewIssue" parameterType="com.Semicolon.pms.dto.IssueDto">

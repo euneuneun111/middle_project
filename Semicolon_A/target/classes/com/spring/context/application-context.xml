@@ -108,9 +108,8 @@
 		<property name="taskReplyDAO" ref="taskReplyDAO" />
 	</bean>
 
-	<bean id="issueReplyDAO"
-		class="com.Semicolon.pms.dao.IssueReplyDAOImpl">
-		<property name="sqlSession" ref="sqlSession" />
+	<bean id="issueReplyDAO" class="com.Semicolon.pms.dao.IssueReplyDAOImpl">
+    	<constructor-arg ref="sqlSession" />
 	</bean>
 
 	<bean id="issueReplyService"

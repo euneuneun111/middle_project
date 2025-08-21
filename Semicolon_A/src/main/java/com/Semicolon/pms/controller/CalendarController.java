@@ -50,6 +50,8 @@ public class CalendarController {
                 event.put("title", c.getCalendarTitle());
                 event.put("start", c.getCalendarStartDate());
                 event.put("end", c.getCalendarEndDate());
+                event.put("allDay", true);
+                
                 events.add(event);
             }
             return events;
@@ -63,7 +65,7 @@ public class CalendarController {
     public ResponseEntity<Map<String, String>> addCalendar(@RequestBody CalendarDto calendarDto) {
         try {
             // 프로젝트 ID를 임시로 하드코딩
-            calendarDto.setProjectId("P123");
+            calendarDto.setProjectId("PJ-001");
             calendarService.addCalendar(calendarDto);
             return ResponseEntity.ok(Collections.singletonMap("message", "일정이 성공적으로 추가되었습니다."));
         } catch (SQLException e) {
@@ -91,7 +93,7 @@ public class CalendarController {
     public ResponseEntity<Map<String, String>> updateCalendar(@RequestBody CalendarDto calendarDto) {
         try {
             // 프로젝트 ID를 임시로 하드코딩
-            calendarDto.setProjectId("P123");
+            calendarDto.setProjectId("PJ-001");
             calendarService.updateCalendar(calendarDto);
             return ResponseEntity.ok(Collections.singletonMap("message", "일정이 성공적으로 수정되었습니다."));
         } catch (SQLException e) {

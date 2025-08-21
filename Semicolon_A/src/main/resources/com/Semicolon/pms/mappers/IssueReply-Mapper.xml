@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.Semicolon.pms.mapper.IssueReply-Mapper">
+<mapper namespace="com.Semicolon.pms.dao.IssueReplyDAO">
 
     <select id="selectReplyList" resultType="com.Semicolon.pms.dto.IssueReplyDTO">
         SELECT
@@ -14,19 +14,30 @@
             eng_id          AS engId,
             group_id        AS groupId
         FROM
-            recruit_reply2 WHERE
+            recruit_reply2
+        WHERE
             issue_id = #{issueId}
         ORDER BY
             reg_date ASC
     </select>
 
-    <insert id="insertReply" parameterType="com.Semicolon.pms.dto.IssueReplyDTO">
-        INSERT INTO recruit_reply2 (
-            reply_number, issue_id, userid, reply_content, reg_date, update_date, eng_id, group_id
-        ) VALUES (
-            'REPLY-' || RECRUIT_REPLY2_SEQ.NEXTVAL, #{issueId}, #{userId}, #{replyContent}, SYSDATE, SYSDATE, #{engId}, #{groupId}
+<insert id="insertReply" parameterType="com.Semicolon.pms.dto.IssueReplyDTO">
+    INSERT INTO recruit_reply2 (
+        reply_number,
+        issue_id,
+        userid,
+        reply_content,
+        reg_date,
+        update_date
+    ) VALUES (
+        'REPLY-' || RECRUIT_REPLY2_SEQ.NEXTVAL,
+        #{issueId},
+        #{userId},
+        #{replyContent},
+        SYSDATE,
+        SYSDATE
         )
-    </insert>
+</insert>
 
     <update id="updateReply" parameterType="com.Semicolon.pms.dto.IssueReplyDTO">
         UPDATE

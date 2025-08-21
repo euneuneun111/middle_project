@@ -38,16 +38,7 @@
 					<label for="issueName">이슈이름</label> <input type="text"
 						id="issueName" value="${issue.issueTitle}" readonly>
 				</div>
-				<div class="detail-section">
-					<label for="taskName">일감이름</label>
-					<div class="task-link-wrapper">
-						<a
-							href="${pageContext.request.contextPath}/main/task/${issue.taskId}"
-							id="taskNameLink" class="task-name-link"> ${issue.taskName} <span
-							class="click-hint">(클릭하면 해당일감으로 이동합니다.)</span>
-						</a>
-					</div>
-				</div>
+
 				<div class="detail-section">
 					<label for="issueContent">이슈내용</label>
 					<textarea id="issueContent" rows="5" readonly>${issue.issueContent}</textarea>
@@ -69,26 +60,31 @@
 						<textarea id="replyContentInput" placeholder="댓글을 입력하세요" rows="2"></textarea>
 						<button id="addReplyBtn" class="btn btn-secondary">추가하기</button>
 					</div>
-					<div class="comment-list">
-						<c:choose>
-							<c:when test="${not empty issue.comments}">
-								<c:forEach var="reply" items="${issue.comments}">
-									<div class="comment-item">
-										<span class="comment-author">${reply.userId}</span> <span
-											class="comment-time">${reply.regDate}</span>
-										<button class="comment-options-btn" onclick="deleteReply('${reply.replyNumber}')">
-											<i class="fas fa-ellipsis-h"></i>
-										</button>
-										<p class="comment-text">${reply.replyContent}</p>
-									</div>
-								</c:forEach>
-							</c:when>
-							<c:otherwise>
-								<div style="text-align: center; color: #888; padding: 15px;">아직
-									댓글이 없습니다.</div>
-							</c:otherwise>
-						</c:choose>
-					</div>
+<div class="comment-list">
+    <c:choose>
+        <c:when test="${not empty issue.comments}">
+            <c:forEach var="reply" items="${issue.comments}">
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-author">${reply.userId}</span>
+                        <span class="comment-time">${reply.regDate}</span>
+                    </div>
+                    <p class="comment-text">${reply.replyContent}</p>
+                    
+                    <%-- [수정] 점 세 개 버튼을 '삭제' 텍스트 버튼으로 변경 --%>
+                    <button class="comment-delete-btn" onclick="deleteReply('${reply.replyNumber}')">
+                        삭제
+                    </button>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <div style="text-align: center; color: #888; padding: 15px;">
+                아직 댓글이 없습니다.
+            </div>
+        </c:otherwise>
+    </c:choose>
+</div>
 				</div>
 
 				<div class="form-actions">
@@ -105,7 +101,7 @@
 	<div id="editIssueModal" class="custom-modal">
 		<div class="custom-modal-content">
 			<h2>이슈 수정</h2>
-			<form id="editIssueForm">
+			<div class="custom-modal-form-group">
 				<input type="hidden" id="editIssueId" value="${issue.issueId}">
 
 				<label for="editIssueTitle">이슈 이름</label> <input type="text"
@@ -126,7 +122,9 @@
 					<option value="대기 중"
 						<c:if test="${issue.issueStatus eq '대기 중'}">selected</c:if>>대기
 						중</option>
-				</select> <label for="editUrgencySelect">우선순위</label> <select
+				</select> 
+				
+				<label for="editUrgencySelect">우선순위</label> <select
 					id="editUrgencySelect">
 					<option value="Critical"
 						<c:if test="${issue.issueUrgency eq 'Critical'}">selected</c:if>>Critical</option>
@@ -137,10 +135,10 @@
 					<option value="Minor"
 						<c:if test="${issue.issueUrgency eq 'Minor'}">selected</c:if>>Minor</option>
 				</select>
-			</form>
+			</div>
 			<div class="custom-modal-buttons">
-				<button class="confirm-btn" onclick="submitEditIssue()">확인</button>
-				<button class="cancel-btn" onclick="closeEditIssueModal()">취소</button>
+				<button class="custom-confirm-btn" onclick="submitEditIssue()">확인</button>
+				<button class="custom-cancel-btn" onclick="closeEditIssueModal()">취소</button>
 			</div>
 		</div>
 	</div>
@@ -156,11 +154,11 @@
 
 			sidebarLinks.forEach(function(link) {
 				var linkPath = link.getAttribute('href');
-				if (linkPath && currentPath.includes('/main/issue')) {
-					if (linkPath.includes('ISSUE')) {
-						link.parentElement.classList.add('active');
-					}
-				}
+				if (linkPath && currentPath.includes('/main/project/issue')) { // 경로를 더 정확하게 수정
+	                if (link.textContent.trim() === 'ISSUE') { // 텍스트 기반으로 'ISSUE' 메뉴 활성화
+	                    link.parentElement.classList.add('active');
+	                }
+	            }
 			});
 			
 			// 댓글 추가 기능 이벤트 리스너
@@ -179,61 +177,55 @@
                     }
                     
                     const newReplyData = {
-                    	    bno: issueId,
+                    	    issueId: issueId,
                     	    userId: userId,
                     	    replyContent: replyContent,
                     	    engId: "", // 또는 실제 값
                     	    groupId: "" // 또는 실제 값
                     	};
 
-                    fetch('${pageContext.request.contextPath}/main/reply', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(newReplyData)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            alert(data.message);
-                            replyContentInput.value = ''; // 입력창 비우기
-                            window.location.reload(); // 댓글 목록 갱신을 위해 페이지 새로고침
-                        } else {
-                            alert(data.error || "댓글 추가 중 오류가 발생했습니다.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert("댓글 추가 중 오류가 발생했습니다.");
-                    });
-                });
-            }
-		});
-
-		// 댓글 삭제 함수 추가
-		function deleteReply(replyNumber) {
-			if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
-				fetch('${pageContext.request.contextPath}/main/issue/reply/' + replyNumber, {
-					method: 'DELETE'
-				})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('댓글 삭제 실패');
-					}
-					return response.json();
-				})
-				.then(data => {
-					alert(data.message);
-					window.location.reload(); // 댓글 삭제 후 페이지 새로고침
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert('댓글 삭제 중 오류가 발생했습니다.');
-				});
-			}
-		}
-
+fetch('${pageContext.request.contextPath}/main/project/reply', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newReplyData)
+})
+.then(response => response.json())
+.then(data => {
+    if (data.message) {
+        alert(data.message);
+        window.location.reload();
+    } else {
+        alert(data.error || "댓글 추가 중 오류가 발생했습니다.");
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert("댓글 추가 중 오류가 발생했습니다.");
+});
+});
+}
+});
+	    // 댓글 삭제 함수 추가
+	    function deleteReply(replyNumber) {
+	        if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+	            // [수정] URL에 '/project' 추가
+	            fetch('${pageContext.request.contextPath}/main/project/issue/reply/' + replyNumber, {
+	                method: 'DELETE'
+	            })
+	            .then(response => {
+	                if (!response.ok) throw new Error('댓글 삭제 실패');
+	                return response.json();
+	            })
+	            .then(data => {
+	                alert(data.message);
+	                window.location.reload();
+	            })
+	            .catch(error => {
+	                console.error('Error:', error);
+	                alert('댓글 삭제 중 오류가 발생했습니다.');
+	            });
+	        }
+	    }
 		function openEditIssueModal() {
 			document.getElementById('editIssueModal').style.display = 'block';
 			document.getElementById('modalOverlayEdit').style.display = 'block';
@@ -249,43 +241,42 @@
 		document.getElementById('modalOverlayEdit').addEventListener('click',
 				closeEditIssueModal);
 
-		function submitEditIssue() {
-			const issueId = document.getElementById('editIssueId').value;
-		    const issueTitle = document.getElementById('editIssueTitle').value;
-		    const issueContent = document.getElementById('editIssueContent').value;
-		    const issueStatus = document.getElementById('editStatusSelect').value;
-		    const issueUrgency = document.getElementById('editUrgencySelect').value;
+	    function submitEditIssue() {
+	        const issueId = document.getElementById('editIssueId').value;
+	        const issueTitle = document.getElementById('editIssueTitle').value;
+	        const issueContent = document.getElementById('editIssueContent').value;
+	        const issueStatus = document.getElementById('editStatusSelect').value;
+	        const issueUrgency = document.getElementById('editUrgencySelect').value;
 
-		    const updatedData = {
-		        issueId : issueId,
-		        issueTitle : issueTitle,
-		        issueContent : issueContent,
-		        issueStatus : issueStatus,
-		        issueUrgency : issueUrgency
-		    };
+	        const updatedData = {
+	            issueId : issueId,
+	            issueTitle : issueTitle,
+	            issueContent : issueContent,
+	            issueStatus : issueStatus,
+	            issueUrgency : issueUrgency
+	        };
 
-		    fetch('${pageContext.request.contextPath}/main/issue/update', {
-		        method: 'PUT',
-		        headers: {
-		            'Content-Type': 'application/json'
-		        },
-		        body: JSON.stringify(updatedData)
-		    })
-		    .then(response => response.json())
-		    .then(data => {
-		        if (data.message) {
-		            alert(data.message);
-		            closeEditIssueModal();
-		            window.location.reload();
-		        } else {
-		            alert(data.error || "이슈 수정 중 오류가 발생했습니다.");
-		        }
-		    })
-		    .catch(error => {
-		        console.error('Error:', error);
-		        alert("서버 통신 중 오류가 발생했습니다.");
-		    });
-		}
+	        // [수정] URL에 '/project' 추가
+	        fetch('${pageContext.request.contextPath}/main/project/issue/update', {
+	            method: 'PUT',
+	            headers: { 'Content-Type': 'application/json' },
+	            body: JSON.stringify(updatedData)
+	        })
+	        .then(response => response.json())
+	        .then(data => {
+	            if (data.message) {
+	                alert(data.message);
+	                closeEditIssueModal();
+	                window.location.reload();
+	            } else {
+	                alert(data.error || "이슈 수정 중 오류가 발생했습니다.");
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error:', error);
+	            alert("서버 통신 중 오류가 발생했습니다.");
+	        });
+	    }
 
 		var taskNameLink = document.getElementById('taskNameLink');
 		if (taskNameLink) {
@@ -306,32 +297,31 @@
 							});
 		}
 
-		function confirmIssueDeletion() {
-		    var isConfirmed = confirm("해당 이슈를 삭제하시겠습니까?");
+	    function confirmIssueDeletion() {
+	        if (confirm("해당 이슈를 삭제하시겠습니까?")) {
+	            const issueId = "${issue.issueId}";
+	            const projectId = "${issue.projectId}"; // projectId 가져오기
 
-		    if (isConfirmed) {
-		        const issueId = "${issue.issueId}";
-
-		        fetch('${pageContext.request.contextPath}/main/issue/' + issueId, {
-		            method: 'DELETE'
-		        })
-		        .then(response => response.json())
-		        .then(data => {
-		            if (data.message) {
-		                alert(data.message);
-		                window.location.href = "${pageContext.request.contextPath}/main/issuelist";
-		            } else {
-		                alert(data.error || "이슈 삭제 중 오류가 발생했습니다.");
-		            }
-		        })
-		        .catch(error => {
-		            console.error('Error:', error);
-		            alert("서버 통신 중 오류가 발생했습니다.");
-		        });
-		    } else {
-		        alert("이슈 삭제가 취소되었습니다.");
-		    }
-		}
+	            // [수정] URL에 '/project' 추가
+	            fetch('${pageContext.request.contextPath}/main/project/issue/' + issueId, {
+	                method: 'DELETE'
+	            })
+	            .then(response => response.json())
+	            .then(data => {
+	                if (data.message) {
+	                    alert(data.message);
+	                    // [수정] 삭제 후 올바른 이슈 목록 페이지로 이동
+	                    window.location.href = "${pageContext.request.contextPath}/main/project/" + projectId + "/issuelist";
+	                } else {
+	                    alert(data.error || "이슈 삭제 중 오류가 발생했습니다.");
+	                }
+	            })
+	            .catch(error => {
+	                console.error('Error:', error);
+	                alert("서버 통신 중 오류가 발생했습니다.");
+	            });
+	        }
+	    }
 	</script>
 </body>
 </html>

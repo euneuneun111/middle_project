@@ -127,6 +127,8 @@
                     right: ''
                 },
                 
+                nextDayThreshold: '00:00:00',
+                
                 events: function(fetchInfo, successCallback, failureCallback) {
                     fetch('${pageContext.request.contextPath}/main/calendar/all')
                     .then(response => {
