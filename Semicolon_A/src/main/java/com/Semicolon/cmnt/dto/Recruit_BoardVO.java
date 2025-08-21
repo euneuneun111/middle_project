@@ -1,6 +1,7 @@
 package com.Semicolon.cmnt.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class Recruit_BoardVO {
 	private int rno;          // 게시판번호
@@ -12,6 +13,17 @@ public class Recruit_BoardVO {
 	private String schedule="";
 	
 	private int replycnt; // 댓글 개수
+	
+	private List<Recruit_ApplicationVO> applyList;
+
+    // getter/setter
+    public List<Recruit_ApplicationVO> getApplyList() {
+        return applyList;
+    }
+
+    public void setApplyList(List<Recruit_ApplicationVO> applyList) {
+        this.applyList = applyList;
+    }
 
 
 	public int getRno() {

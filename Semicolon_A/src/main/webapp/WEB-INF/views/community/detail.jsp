@@ -2,13 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
 <!-- jQuery -->
 <script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
 <script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
 <script>
 function modify(){
@@ -18,6 +18,16 @@ function remove(){
 	location.href="remove?fno=${board.fno}";
 }
 </script>
+
+<script>
+// 서버에서 로그인 유저 ID를 JS 변수로 전달
+var loginUserId = "${sessionScope.loginUser != null ? sessionScope.loginUser.user_id : ''}";
+// Handlebars 헬퍼 등록
+Handlebars.registerHelper("VisibleByLoginCheck", function(user_id) {
+    return (user_id === loginUserId) ? "inline" : "none"; // inline이면 보임, none이면 숨김
+});
+</script>
+
 </head>
 
 <body>
@@ -52,8 +62,12 @@ function remove(){
 					<div class="card-header">
 						<h3 class="card-title">상세보기</h3>
 						<div class="card-tools">
-							<button type="button" id="modifyBtn" class="btn btn-warning" onclick="modify();">MODIFY</button>						
-						    <button type="button" id="removeBtn" class="btn btn-danger" onclick="remove();">REMOVE</button>
+							<button type="button" id="modifyBtn" class="btn btn-warning"
+							    style="display: ${sessionScope.loginUser != null && sessionScope.loginUser.user_id == board.eng_id ? 'inline' : 'none'};"
+							    onclick="modify();">   MODIFY	</button>
+						    <button type="button" id="removeBtn" class="btn btn-danger" 
+						    	style="display: ${sessionScope.loginUser != null && sessionScope.loginUser.user_id == board.eng_id ? 'inline' : 'none'};"
+						    	onclick="remove();">REMOVE</button>
 						    <button type="button" id="listBtn" class="btn btn-primary" onclick="CloseWindow();">CLOSE</button>
 					    </div>
 					</div>
@@ -129,6 +143,7 @@ function remove(){
   <!-- /.content -->
 
 <%@ include file="./reply_js.jsp" %>
+
 
 
 

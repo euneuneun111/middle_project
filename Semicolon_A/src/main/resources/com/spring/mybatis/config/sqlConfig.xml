@@ -24,6 +24,8 @@
 		<typeAlias type="com.Semicolon.org.dto.Member1DTO"
 			alias="Member1" />
 
+		<typeAlias type="com.Semicolon.cmnt.dto.Recruit_ApplicationVO"
+			alias="recruit_application" />
 		<typeAlias type="com.Semicolon.cmnt.dto.MemberVO"
 			alias="member" />
 		<typeAlias type="com.Semicolon.cmnt.dto.BoardVO"

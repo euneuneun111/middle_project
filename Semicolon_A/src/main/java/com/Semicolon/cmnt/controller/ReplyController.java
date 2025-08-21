@@ -78,10 +78,10 @@ public class ReplyController {
 		return entity;		
 	}
 	@DeleteMapping(value = "/remove")
-	public ResponseEntity<String> remove(int rno, int fno, int page)throws Exception {
+	public ResponseEntity<String> remove(int reply_number, int fno, int page)throws Exception {
 		ResponseEntity<String> entity = null;
 		
-		replyService.remove(rno);
+		replyService.remove(reply_number);
 		
 		int totalCount = replyDAO.countReply(fno);
 		int perPageNum = new PageMaker().getPerPageNum();

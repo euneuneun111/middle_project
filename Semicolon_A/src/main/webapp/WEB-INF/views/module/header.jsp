@@ -123,7 +123,7 @@
 		</div>
 
 		<div class="menu">
-			<a href="/project/community/main"><strong><em>COMMUNITY</em></strong></a>
+			<a href="/project/community/Board_recruit"><strong><em>COMMUNITY</em></strong></a>
 			<a href="/project/org/main"><strong><em>ORGANIZATION</em></strong></a>
 			<a href="/project/funding/list"><strong><em>CROWD
 						FUNDING</em></strong></a>

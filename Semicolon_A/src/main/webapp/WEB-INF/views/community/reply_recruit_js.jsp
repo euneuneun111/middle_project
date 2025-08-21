@@ -32,10 +32,10 @@
           <i class="fa fa-clock"></i>{{prettifyDate reg_date}}
           <a class="btn btn-primary btn-xs {{reply_number}}-a" id="modifyReplyBtn" data-reply_number={{reply_number}} onclick="replyModifyModal_go('{{reply_number}}');"            
             style="display:{{VisibleByLoginCheck user_id}};"
-             data-user_id={{user_id}} data-toggle="modal" data-target="#modifyModal">Modify</a>
+             data-or_id={{or_id}} data-toggle="modal" data-target="#modifyModal">Modify</a>
         </span>
    
-        <h3 class="timeline-header"><strong style="display:none;">{{reply_number}}</strong>{{user_id}}</h3>
+        <h3 class="timeline-header"><strong style="display:none;">{{reply_number}}</strong>{{or_id}}</h3>
         <div class="timeline-body" id="{{reply_number}}-reply_content">{{reply_content}} </div>
    </div>
 </div>
@@ -80,7 +80,7 @@ Handlebars.registerHelper({
          var date=dateObj.getDate();
          return year+"/"+month+"/"+date;
 	 },
-	 "VisibleByLoginCheck":function(user_id){
+	 "VisibleByLoginCheck":function(or_id){
          var result="none";      
          if(user_id == "${sessionScope.loginUser.user_id}") result="visible";      
          return result;                    
@@ -107,7 +107,7 @@ var currentPage = 1;
 function getPage(page){
 	
 	$.ajax({
-		url:"<%=request.getContextPath()%>/reply/list?page="+page+"&fno=${board.fno}",
+		url:"<%=request.getContextPath()%>/reply/list?page="+page+"&rno=${recuirt_board.rno}",
 		method:"get",
 		success:function(data){
 			//console.log(data);
@@ -140,7 +140,7 @@ function replyRegist_go(){
 	let reply_content=$('#newReplyContent').val();
 	
 	 var data={
-         "fno":"${board.fno}",
+         "rno":"${recruit_board.rno}",
          "user_id":"${sessionScope.loginUser.user_id}",
          "reply_content":reply_content         
    		 }
@@ -208,7 +208,7 @@ function replyRemove_go(){
 	let reply_number=$('h4.modal-title').text();
 	
 	$.ajax({
-	      url:"<%=request.getContextPath()%>/reply/remove?reply_number="+reply_number+"&page="+currentPage+"&fno=${board.fno}",
+	      url:"<%=request.getContextPath()%>/reply/remove?reply_number="+reply_number+"&page="+currentPage+"&rno=${recruit_board.rno}",
 	      type:"delete",
 	      headers:{"X-HTTP-Method-Override":"DELETE"},
 	      success:function(page){

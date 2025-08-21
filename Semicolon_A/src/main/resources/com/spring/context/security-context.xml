@@ -13,7 +13,7 @@
 	 			/>
 	<beans:bean id="loginSuccessHandler"
 		 	 	class="com.Semicolon.security.LoginSuccessHandler"
-		 	 	p:defaultTargetUrl="/main"
+		 	 	p:defaultTargetUrl="/community/Board_recruit"
 		 	 	c:logSavedPath-ref="logSavedPath"
 		 	 	c:logFileName="login_user_log.csv"
 		 	 	/>

@@ -4,16 +4,18 @@ import java.util.Date;
 
 public class ReplyVO {
 
-	private int rno; 			//고유번호
+	private int reply_number; 			//고유번호
 	private int fno;			//게시글번호
 	private String reply_content;		//댓글내용
 	private String user_id;		//작성자
 	private Date reg_date;		//등록일
-	public int getRno() {
-		return rno;
+
+
+	public int getReply_number() {
+		return reply_number;
 	}
-	public void setRno(int rno) {
-		this.rno = rno;
+	public void setReply_number(int reply_number) {
+		this.reply_number = reply_number;
 	}
 	public int getFno() {
 		return fno;

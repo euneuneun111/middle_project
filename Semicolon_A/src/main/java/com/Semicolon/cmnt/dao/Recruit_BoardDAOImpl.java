@@ -7,7 +7,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.Semicolon.cmnt.command.PageMaker;
-import com.Semicolon.cmnt.dto.BoardVO;
 import com.Semicolon.cmnt.dto.Recruit_BoardVO;
 
 public class Recruit_BoardDAOImpl implements Recruit_BoardDAO{
@@ -37,7 +36,7 @@ private SqlSession session;
 
 	@Override
 	public Recruit_BoardVO selectBoardByRno(int rno) throws SQLException {
-		Recruit_BoardVO board = session.selectOne("Recruit_Board-Mapper.selectBoardByFno",rno);
+		Recruit_BoardVO board = session.selectOne("Recruit_Board-Mapper.selectBoardByRno",rno);
 		return board;
 	}
 
@@ -66,4 +65,5 @@ private SqlSession session;
 		int rno = session.selectOne("Recruit_Board-Mapper.selectBoardSeqNext");
 		return rno;
 	}
+
 }

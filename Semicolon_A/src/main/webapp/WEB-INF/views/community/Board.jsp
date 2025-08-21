@@ -53,7 +53,7 @@ table td>span {
 							<div class="card-body overflow-hidden">
 								<ul class="nav flex-column ">
 									<li class="fa-solid "><a class="nav-link"
-										href="/project/community/Recruit">recruit</a></li>
+										href="/project/community/Board_recruit">recruit</a></li>
 									<li class="fa-solid "><a class="nav-link"
 										href="/project/community/Board">Free Board</a></li>
 								</ul>
