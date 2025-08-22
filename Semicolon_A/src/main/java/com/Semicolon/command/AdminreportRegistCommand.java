@@ -14,7 +14,6 @@ public class AdminreportRegistCommand {
 	private String content; // 상세 내용
 	private String reportDate;
 	private MultipartFile pictureFile; // 업로드 객체
-	private String picture; // DB에 저장할 파일명 복구 성공
 	
 	private String writer;
 
@@ -76,18 +75,6 @@ public class AdminreportRegistCommand {
 		this.pictureFile = pictureFile;
 	}
 
-
-
-	public String getPicture() {
-		return picture;
-	}
-
-
-
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
-	
 	
 	public String getWriter() {
 		return writer;
@@ -112,7 +99,7 @@ public class AdminreportRegistCommand {
 
 	    // 파일 객체와 DB용 파일명 세팅
 	    report.setPictureFile(this.pictureFile); 
-	    report.setPicture(this.picture);
+
 
 	    return report;
 	}

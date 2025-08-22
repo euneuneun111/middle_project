@@ -1,27 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-
-<title>회의록 상세보기</title>
-
+<meta charset="UTF-8">
+<title>회의록 등록</title>
 <head>
+<!-- Font Awesome Icons -->
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
 <!-- Theme style -->
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/resources/bootstrap/dist/css/adminlte.min.css">
-
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 </head>
 
 <body>
-
 	<section class="content-header">
 		<div class="container-fluid">
 			<div class="row md-2">
 				<div class="col-sm-6">
-					<h1>상세보기</h1>
+					<h1>등록하기</h1>
 				</div>
 				<div class="col-sm-6">
 					<ol class="breadcrumb float-sm-right">
@@ -34,18 +33,15 @@
 			</div>
 		</div>
 	</section>
-	
-	<div class="card-header"></div>
-					<!--end card-header  -->
-					<div class="card-body">
+
 
 	<div class="form-section" style="padding: 30px 100px">
 		<form name="registForm" role="form" enctype="multipart/form-data">
 			<table class="table table-bordered" style="width: 100%; background: #fff;">
 				<tr>
 					<th style="width: 120px; background: #e0e0e0; text-align: center; padding: 20px 16px;">회의일자</th>
-					<td style="width: 200px; font-size: 18px; vertical-align: middle; padding: 10px 8px;">
-						<fmt:formatDate value="${meeting.meetingDate}" pattern="yyyy-MM-dd"/>
+					<td style="width: 200px; heigh: 10px;">
+						<input type="date" class="form-control" name="meetingDate" value="${meeting.meetingDate}">
 					</td>
 					<th style="width: 80px; background: #e0e0e0; text-align: center; padding: 20px 16px;">주관자</th>
 					<td>
@@ -53,89 +49,55 @@
 					</td>
 				</tr>
 				<tr>
-					<th style="background: #e0e0e0; text-align: center; padding: 20px 16px;">참석자</th>
+					<th style="background: #e0e0e0; text-align: center;">참석자</th>
 					<td colspan="3">
-						<input type="text" class="form-control" name="attend" placeholder="참석자 명단" value="${meeting.attend}" >
+						<input type="text" class="form-control" name="attend" placeholder="참석자 명단" value="${loginUser.name}">
 					</td>
 				</tr>
 				<tr>
-					<th style="background: #e0e0e0; text-align: center; padding: 20px 16px;">회의명</th>
+					<th style="background: #e0e0e0; text-align: center;">회의명</th>
 					<td colspan="3">
-						<input type="text" class="form-control notNull" name="title" title="회의 명" value="${meeting.title}" readonly>
+						<input type="text" class="form-control notNull" name="title" title="회의 명" placeholder="내용을 입력하세요.">
 					</td>
 				</tr>
 				<tr>
-					<th style="background: #e0e0e0; text-align: center; vertical-align:middle;" >회의개요</th>
+					<th style="background: #e0e0e0; text-align: center;">회의개요</th>
 					<td colspan="3">
-						<textarea class="form-control notNull" name="overview" rows="5" title="회의 개요"  readonly>${meeting.overview}</textarea>
+						<textarea class="form-control notNull" name="overview" rows="5" title="회의 개요" placeholder="내용을 입력하세요."></textarea>
 					</td>
 				</tr>
 				<tr>
-					<th style="background: #e0e0e0; text-align: center; vertical-align:middle;">회의내용</th>
+					<th style="background: #e0e0e0; text-align: center;">회의내용</th>
 					<td colspan="3">
-						<textarea class="form-control notNull" name="content" rows="8" title="회의 내용" readonly>${meeting.content}</textarea>
+						<textarea class="form-control notNull" name="content" rows="8" title="회의 내용" placeholder="내용을 입력하세요."></textarea>
 					</td>
 				</tr>
 			</table>
 
-			<div class="card-tools" style="width: 99%; text-align: right;">
-				<div class="float-right">
-					<button type="button" class="btn btn-danger" id="removeBtn"
-						onclick="remove();">삭 제</button>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<button type="button" class="btn btn-submit" id="modifyBtn"
-						onclick="modify();" style="background: #9b99ff; color: #fff">수
-						정</button>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<button type="button" class="btn btn-default " id="cancelBtn"
-						onclick="CloseWindow();" style="color: #9b99ff">취 소</button>
-				</div>
+		<div class="d-flex justify-content-end mt-3">
+				<button type="button" class="btn mr-2"
+					style="background: #9b99ff; color: #fff" onclick="regist_go();">저장</button>
+				<button type="button" class="btn btn-default" onclick="CloseWindow();" style="color: #9b99ff">취소</button>
 			</div>
 		</form>
 	</div>
 
 	<script>
-		function modify() {
-			location.href = "modify?id=${meeting.id}";
-		}
+	function regist_go() {
+		var form = document.forms.registForm;
+		var inputNotNull = document.querySelectorAll(".notNull");
 
-		function remove() {
-			let answer = confirm("정말 삭제하시겠습니까?");
-			if (!answer)
+		for (var input of inputNotNull) {
+			if (!input.value.trim()) {
+				alert(input.getAttribute("title") + "은(는) 필수입니다.");
+				input.focus();
 				return;
-
-			location.href = "remove?id=${meeting.id}";
+			}
 		}
-	</script>
 
-	<script>
-	function toggleApproval(meetingId) {
-    fetch('updateApprovalStatus', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id: meetingId })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            let btn = document.getElementById('approvalBtn');
-            if (data.newStatus === 'Y') {
-                btn.textContent = '승인';
-                btn.classList.remove('btn-danger');
-                btn.classList.add('btn-success');
-            } else {
-                btn.textContent = '미승인';
-                btn.classList.remove('btn-success');
-                btn.classList.add('btn-danger');
-            }
-        } else {
-            alert('변경 실패');
-        }
-    })
-    .catch(err => console.error(err));
-}
+		form.action = "regist.do";
+		form.method = "post";
+		form.submit();
+	}
 	</script>
-
 </body>

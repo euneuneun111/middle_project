@@ -16,7 +16,6 @@ public class AdminReportVO {
 	private String writer;
 
 	private MultipartFile pictureFile; // 업로드 객체, 서버 저장용
-	private String picture;            // DB에 저장할 파일명
 	public int getReportId() {
 		return reportId;
 	}
@@ -53,12 +52,7 @@ public class AdminReportVO {
 	public void setPictureFile(MultipartFile pictureFile) {
 		this.pictureFile = pictureFile;
 	}
-	public String getPicture() {
-		return picture;
-	}
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
+
 	public String getWriter() {
 		return writer;
 	}

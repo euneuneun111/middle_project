@@ -355,8 +355,7 @@ public class FundingController {
 	        File saveFile = new File(reportfileUploadPath, fileName);
 	        pictureFile.transferTo(saveFile); // 서버에 저장
 
-	        // VO에 DB 저장용 파일명 세팅
-	        report.setPicture(fileName);
+	     
 	    }
 
 	    // 3. Service 호출해서 DB에 저장

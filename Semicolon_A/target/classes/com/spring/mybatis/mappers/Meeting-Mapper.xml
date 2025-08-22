@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Meeting-Mapper">
+
+	<select id="selectMeetingListCount" resultType="int"
+		parameterType="pageMaker">
+		SELECT COUNT(*) FROM meeting
+	</select>
+
+	<select id="selectMeetingList" resultType="meeting"
+		parameterType="pageMaker">
+		SELECT *
+		FROM meeting
+		ORDER BY ID DESC
+	</select>
+
+	<select id="selectMeetingById" resultType="meeting"
+		parameterType="int">
+		SELECT *
+		FROM meeting
+		WHERE id = #{id}
+	</select>
+
+	<insert id="insertMeeting" parameterType="meeting">
+		INSERT INTO meeting (
+		id, meetingdate, organizer, attend, title, overview, content
+		) VALUES
+		(
+		#{id}, #{meetingDate}, #{organizer}, #{attend}, #{title},
+		#{overview},
+		#{content}
+		)
+	</insert>
+
+
+	<update id="updateMeeting" parameterType="meeting">
+		UPDATE meeting
+		SET
+		meetingdate = #{meetingDate},
+		organizer = #{organizer},
+	   
+		attend = #{attend},
+		title = #{title},
+		overview = #{overview},
+		content = #{content}
+		WHERE id = #{id}
+	</update>
+	<delete id="deleteMeeting" parameterType="int">
+		DELETE FROM meeting
+		WHERE id = #{id}
+	</delete>
+
+	<select id="selectMeetingSequenceNextValue" resultType="int">
+		SELECT
+		MEETING_SEQ.NEXTVAL FROM DUAL
+
+	</select>
+
+</mapper>
