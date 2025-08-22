@@ -13,23 +13,22 @@
 	href="${pageContext.request.contextPath}/resources/css/member.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	
-	<style>
-		.Mbutton {
-		height: 38px;
-    background-color: #6A3CD7;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex
-    align-items: center;
-    transition: background-color 0.2s;
+
+<style>
+.Mbutton {
+	height: 38px;
+	background-color: #6A3CD7;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 15px;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	display: flex align-items: center;
+	transition: background-color 0.2s;
 }
-	</style>
+</style>
 
 </head>
 <body>
@@ -85,8 +84,7 @@
 										<option value="PM">PM</option>
 										<option value="DEVELOPER">개발자</option>
 										<option value="DESIGNER">디자이너</option>
-								</select> 
-									<c:if test="${loginUser.user_id != member.userId}">
+								</select> <c:if test="${loginUser.user_id != member.userId}">
 										<button data-user-id="${member.userId}"
 											onclick="kickMember(this)">추방</button>
 									</c:if></td>
@@ -99,7 +97,7 @@
 							<td>김개발</td>
 							<td>DEVELOPER</td>
 							<td>컴퓨터공학</td>
-							<td><span class="status-badge status-active">활동중</span></td>
+							<td><span class="status-badge status-away">휴식</span></td>
 							<td class="member-actions"><select data-user-id="dev_master"
 								onchange="changeMemberRole(this)">
 									<option value="" disabled selected>역할 변경</option>
@@ -131,7 +129,7 @@
 							<td>박기획</td>
 							<td>PM</td>
 							<td>경영학</td>
-							<td><span class="status-badge status-active">활동중</span></td>
+							<td><span class="status-badge status-away">휴식</span></td>
 							<td class="member-actions"><select
 								data-user-id="manager_park" onchange="changeMemberRole(this)">
 									<option value="" disabled selected>역할 변경</option>
@@ -140,6 +138,54 @@
 									<option value="DESIGNER">디자이너</option>
 							</select>
 								<button data-user-id="manager_park" onclick="kickMember(this)">추방</button>
+							</td>
+						</tr>
+						<tr>
+							<td>dev_choi</td>
+							<td>최서버</td>
+							<td>DEVELOPER</td>
+							<td>소프트웨어공학</td>
+							<td><span class="status-badge status-away">휴식</span></td>
+							<td class="member-actions"><select data-user-id="dev_choi"
+								onchange="changeMemberRole(this)">
+									<option value="" disabled>역할 변경</option>
+									<option value="PM">PM</option>
+									<option value="DEVELOPER" selected>개발자</option>
+									<option value="DESIGNER">디자이너</option>
+							</select>
+								<button data-user-id="dev_choi" onclick="kickMember(this)">추방</button>
+							</td>
+						</tr>
+						<tr>
+							<td>pm_jung</td>
+							<td>정기획</td>
+							<td>DEVELOPER</td>
+							<td>산업공학</td>
+							<td><span class="status-badge status-away">휴식</span></td>
+							<td class="member-actions"><select data-user-id="pm_jung"
+								onchange="changeMemberRole(this)">
+									<option value="" disabled>역할 변경</option>
+									<option value="PM" >PM</option>
+									<option value="DEVELOPER" selected>개발자</option>
+									<option value="DESIGNER">디자이너</option>
+							</select>
+								<button data-user-id="pm_jung" onclick="kickMember(this)">추방</button>
+							</td>
+						</tr>
+						<tr>
+							<td>design_kang</td>
+							<td>강미술</td>
+							<td>DESIGNER</td>
+							<td>UX디자인</td>
+							<td><span class="status-badge status-away">휴식</span></td>
+							<td class="member-actions"><select
+								data-user-id="design_kang" onchange="changeMemberRole(this)">
+									<option value="" disabled>역할 변경</option>
+									<option value="PM">PM</option>
+									<option value="DEVELOPER">개발자</option>
+									<option value="DESIGNER" selected>디자이너</option>
+							</select>
+								<button data-user-id="design_kang" onclick="kickMember(this)">추방</button>
 							</td>
 						</tr>
 					</tbody>

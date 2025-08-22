@@ -48,15 +48,30 @@
 
         sidebarLinks.forEach(function(li) {
             var link = li.querySelector('a');
-            if (link) {
+            if (link && link.getAttribute('href')) {
                 var href = link.getAttribute('href');
-                if (href) {
-                    
-                    if (currentPath.endsWith(href)) {
-                        li.classList.add('active');
-                    } else {
-                        li.classList.remove('active');
+                var isActive = false; 
+
+                if (href.includes('/org/my-org')) {
+                    if (currentPath.includes('/org/my-org') || currentPath.includes('/org/detail')) {
+                        isActive = true;
                     }
+                } 
+                else if (href.includes('/org/members')) {
+                    if (currentPath.includes('/org/members')) {
+                        isActive = true;
+                    }
+                }
+                else {
+                    if (currentPath.endsWith(href)) {
+                        isActive = true;
+                    }
+                }
+
+                if (isActive) {
+                    li.classList.add('active');
+                } else {
+                    li.classList.remove('active');
                 }
             }
         });

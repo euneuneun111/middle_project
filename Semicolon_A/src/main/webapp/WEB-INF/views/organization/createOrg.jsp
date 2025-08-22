@@ -7,7 +7,13 @@
     <title>LINKED - 조직 생성</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/createOrg.css">
-
+	<style>
+		.custom-confirm-btn {
+			color: #fff;
+    		background-color: #007bff;
+		}
+	</style>
+	
 </head>
 <body>
 	<script>
@@ -46,9 +52,9 @@
                         <label for="orCreateDate">활동 시작일</label>
                         <input type="date" id="orCreateDate" name="orCreateDate" required>
                     </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="confirm-btn">생성하기</button>
-                        <button type="button" class="cancel-btn" onclick="history.back();">취소</button>
+                    <div class="custom-modal-buttons">
+                        <button type="submit" class="custom-confirm-btn">생성하기</button>
+                        <button type="button" class="custom-cancel-btn" onclick="history.back();">취소</button>
                     </div>
                 </form>
             </div>
