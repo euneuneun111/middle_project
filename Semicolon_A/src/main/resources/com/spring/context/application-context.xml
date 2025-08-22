@@ -39,6 +39,16 @@
 	<bean id="memberService"
 		class="com.Semicolon.cmnt.service.MemberServiceImpl"
 		c:memberDAO-ref="memberDAO" />
+	<bean id="recruit_applicationDAO"
+		class="com.Semicolon.cmnt.dao.Recruit_ApplicationDAOImpl">
+		<constructor-arg ref="sqlSession" />
+	</bean>
+	<bean id="recruit_ApplicationService"
+		class="com.Semicolon.cmnt.service.Recruit_ApplicationService">
+		<constructor-arg ref="recruit_applicationDAO" />
+	</bean>
+
+
 
 	<bean id="createOrgDAO"
 		class="com.Semicolon.org.dao.CreateOrgDAOImpl"
@@ -108,8 +118,9 @@
 		<property name="taskReplyDAO" ref="taskReplyDAO" />
 	</bean>
 
-	<bean id="issueReplyDAO" class="com.Semicolon.pms.dao.IssueReplyDAOImpl">
-    	<constructor-arg ref="sqlSession" />
+	<bean id="issueReplyDAO"
+		class="com.Semicolon.pms.dao.IssueReplyDAOImpl">
+		<constructor-arg ref="sqlSession" />
 	</bean>
 
 	<bean id="issueReplyService"

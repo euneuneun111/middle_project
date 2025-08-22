@@ -61,22 +61,7 @@
 		</div>
 
 
-		<!-- 중앙 검색바 -->
-		<form class="form-inline w-100" style="max-width: 400px;" method="get"
-			action="list">
-			<div class="input-group input-group-sm w-100">
-				<!-- 검색어를 받을 name 필수 -->
-				<input name="keyword" class="form-control form-control-navbar"
-					type="search" placeholder="Search" aria-label="Search"
-					value="${param.keyword}">
-				<div class="input-group-append">
-					<button class="btn btn-navbar" type="submit"
-						style="border: 1px solid #ced4da">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			</div>
-		</form>
+	
 		<!-- 오른쪽 버튼 -->
 		<div class="col-md-2 mb-2">
 			<button type="button" class="btn btn-block btn-secondary btn-lg"

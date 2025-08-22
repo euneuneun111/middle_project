@@ -11,8 +11,8 @@
 		<typeAlias type="com.Semicolon.pms.dto.TaskDto" alias="task" />
 		<typeAlias type="com.Semicolon.pms.dto.IssueDto"
 			alias="issue" />
-		<typeAlias type="com.Semicolon.pms.dto.IssueReplyDTO" 
-			alias="issuereply"/>
+		<typeAlias type="com.Semicolon.pms.dto.IssueReplyDTO"
+			alias="issuereply" />
 		<typeAlias type="com.Semicolon.pms.dto.CalendarDto"
 			alias="Calendar" />
 		<typeAlias type="com.Semicolon.pms.dto.GanttDto"
@@ -38,6 +38,9 @@
 			alias="recruit_board" />
 		<typeAlias type="com.Semicolon.cmnt.command.PageMaker"
 			alias="pageMaker" />
+		<typeAlias
+			type="com.Semicolon.cmnt.dto.Recruit_ApplicationVO"
+			alias="recruit_application" />
 
 
 

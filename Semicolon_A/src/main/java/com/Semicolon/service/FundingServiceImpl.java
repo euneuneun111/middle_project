@@ -162,10 +162,10 @@ public class FundingServiceImpl implements FundingService {
 	}
 
 	@Override
-	public boolean isHeartedByUser(int fno, String id) {
+	public boolean isHeartedByUser(int fno, String user_id) {
 		HeartVO heartVO = new HeartVO();
 		heartVO.setFno(fno);
-		heartVO.setUser_id(id);
+		heartVO.setUser_id(user_id);
 		return heartDAO.existsHeart(heartVO);
 	}
 

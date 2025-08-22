@@ -107,6 +107,8 @@ public class FundingController {
 	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
 	public ModelAndView regist(FundingRegistCommand regCommand, ModelAndView mnv) throws Exception {
 
+		System.out.println(regCommand.getStartDate());
+		
 		String url = "/funding/regist_success";
 
 		// 파일저장
@@ -114,7 +116,7 @@ public class FundingController {
 		String uploadPath = fileUploadPath;
 
 		List<AttachVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
-
+		
 		// DB
 		FundingVO funding = regCommand.toFundingVO();
 		funding.setTitle(HTMLInputFilter.htmlSpecialChars(funding.getTitle()));

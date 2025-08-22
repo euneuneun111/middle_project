@@ -2,6 +2,32 @@
 	pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <title>신고</title>
+
+<head>
+
+
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/dist/css/adminlte.min.css">
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/dist/js/adminlte.min.js"></script>
+
+<!-- jQuery -->
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/dist/js/adminlte.min.js"></script>
+</head>
+
 <body>
 	<div>
 
@@ -9,7 +35,7 @@
 			<div class="register-box">
 				<form role="form" class="form-horizontal" method="post"
 					action="report" name="report" onsubmit="return false;">
-					<input type="hidden" name="writer" value="${loginUser.id}"> 
+					<input type="hidden" name="writer" value="${loginUser.user_id}"> 
 					<input type="hidden" name="reportDate"
 						value="<%=new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>" />
 					<div class="register-card-header"
@@ -46,17 +72,6 @@
 
 						<div class="form-group">
 							<label for="content">상세 내용</label>
-
-							<div class="input-group input-group-sm">
-								<label for="inputFile"
-									class="btn btn-warning btn-sm btn-flat input-group-addon"
-									style="color: #fff; background-color: #9B99FF; border: none;">파일선택</label>
-								<input id="inputFileName" class="form-control" type="text"
-									name="tempPicture" disabled /> <input type="file"
-									id="inputFile" name="picture" style="display: none;"
-									onchange="picture_go();" />
-							</div>
-
 
 							<textarea class="textarea notNull" name="content" id="content"
 								rows="10" title="상세내용" cols="40" placeholder="상세내용을 작성하세요."></textarea>

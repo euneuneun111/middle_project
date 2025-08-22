@@ -34,7 +34,7 @@ public interface FundingService {
 	
 	boolean toggleHeart(HeartVO heartVO);
     int getHeartCount(int fno);
-    boolean isHeartedByUser(int fno, String id);
+    boolean isHeartedByUser(int fno, String user_id);
     
     int getHeartCountByFunding(int fno) throws SQLException;
 }

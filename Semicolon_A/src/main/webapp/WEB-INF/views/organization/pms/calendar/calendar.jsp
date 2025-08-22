@@ -138,18 +138,32 @@
                         return response.json();
                     })
                     .then(events => {
-                        const coloredEvents = events.map(event => {
-                            const randomIndex = Math.floor(Math.random() * eventColors.length);
-                            const randomColor = eventColors[randomIndex];
-                            
-                            return {
-                                ...event,
-                                backgroundColor: randomColor,
-                                borderColor: randomColor
-                            };
-                        });
-                        successCallback(coloredEvents);
-                    })
+    const processedEvents = events.map(event => {
+
+        // (FullCalendar는 DB의 calendarEndDate를 'end' 속성으로 인식합니다)
+        let endDate = new Date(event.end);
+
+
+        endDate.setDate(endDate.getDate() + 1);
+
+
+        let inclusiveEndDate = endDate.toISOString().split('T')[0];
+
+
+        const randomIndex = Math.floor(Math.random() * eventColors.length);
+        const randomColor = eventColors[randomIndex];
+        
+
+        return {
+            ...event,
+            end: inclusiveEndDate,
+            backgroundColor: randomColor,
+            borderColor: randomColor
+        };
+    });
+
+    successCallback(processedEvents); 
+})
                     .catch(error => {
                         console.error('Error fetching events:', error);
                         failureCallback(error);

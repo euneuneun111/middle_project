@@ -33,7 +33,11 @@
 }
 </style>
 
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+
+</head>
 
 
 <body>
@@ -178,7 +182,7 @@
 										<form action="<%=request.getContextPath()%>/funding/heart"
 											method="post" style="margin: 0;">
 											<input type="hidden" name="fno" value="${funding.fno}">
-											<input type="hidden" name="id" value="${loginUser.user_id}">
+											<input type="hidden" name="user_id" value="${loginUser.user_id}">
 											<button type="submit"
 												style="border: none; background-color: #fff; cursor: pointer; padding: 5px; display: inline-flex; align-items: center;">
 												<i class="${hearted ? 'fa-solid' : 'fa-regular'} fa-heart"
@@ -327,6 +331,17 @@ document.getElementById("shareBtn").addEventListener("click", function () {
             console.error("클립보드 복사 실패:", err);
         });
 });
+</script>
+
+<script>
+function OpenWindow(UrlStr, WinTitle, WinWidth, WinHeight) {
+	winleft = (screen.width - WinWidth) / 2;
+	wintop = (screen.height - WinHeight) / 2;
+	var win = window.open(UrlStr , WinTitle , "scrollbars=yes,width="+ WinWidth
+							+",height="+ WinHeight +", top="+ wintop +", left=" 
+							+ winleft +", resizable=yes, status=yes"  );
+	win.focus() ; 
+} 
 </script>
 
 
