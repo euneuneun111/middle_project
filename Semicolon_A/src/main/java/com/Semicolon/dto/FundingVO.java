@@ -12,7 +12,6 @@ public class FundingVO {
 	private String writer;
 	private int viewcnt;
 	private Date regDate = new Date();
-
 	private Date startDate = new Date();
 	private Date endDate = new Date();
 

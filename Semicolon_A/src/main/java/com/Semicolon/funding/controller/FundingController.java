@@ -105,30 +105,36 @@ public class FundingController {
 	private String fileUploadPath;
 
 	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
-	public ModelAndView regist(FundingRegistCommand regCommand, ModelAndView mnv) throws Exception {
+	public ModelAndView regist(FundingRegistCommand regCommand, ModelAndView mnv, HttpSession session) throws Exception {
 
-		System.out.println(regCommand.getStartDate());
-		
-		String url = "/funding/regist_success";
+	    String url = "/funding/regist_success";
 
-		// 파일저장
-		List<MultipartFile> uploadFiles = regCommand.getUploadFile();
-		String uploadPath = fileUploadPath;
+	    // 파일저장
+	    List<MultipartFile> uploadFiles = regCommand.getUploadFile();
+	    String uploadPath = fileUploadPath;
+	    List<AttachVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
+	    
+	    // DB
+	    FundingVO funding = regCommand.toFundingVO();
+	    funding.setTitle(HTMLInputFilter.htmlSpecialChars(funding.getTitle()));
+	    funding.setAttachList(attaches);
 
-		List<AttachVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
-		
-		// DB
-		FundingVO funding = regCommand.toFundingVO();
-		funding.setTitle(HTMLInputFilter.htmlSpecialChars(funding.getTitle()));
-		funding.setAttachList(attaches);
+	    // 👇 writer 세팅 (로그인 유저에서 가져오기)
+	    MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        funding.setWriter(loginUser.getUser_id());
+	    } else {
+	        throw new RuntimeException("로그인 정보가 없습니다.");
+	    }
 
-		int fno = fundingService.regist(funding);
+	    int fno = fundingService.regist(funding);
 
-		mnv.setViewName(url);
-		mnv.addObject("fno", fno);
+	    mnv.setViewName(url);
+	    mnv.addObject("fno", fno);
 
-		return mnv;
+	    return mnv;
 	}
+
 
 	private List<AttachVO> saveFileToAttaches(List<MultipartFile> multiFiles, String savePath) throws Exception {
 		if (multiFiles == null)
