@@ -15,7 +15,7 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     public void addCalendar(CalendarDto calendarDto) throws SQLException {
-        calendarDAO.insertCalendar(calendarDto);
+        calendarDAO.addCalendar(calendarDto);
     }
 
     @Override

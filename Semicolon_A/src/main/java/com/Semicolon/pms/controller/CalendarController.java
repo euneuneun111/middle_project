@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller; // ✅ import 변경
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.Semicolon.pms.dto.CalendarDto;
 import com.Semicolon.pms.service.CalendarService;
 
+// ✅ @RestController 대신 @Controller를 사용합니다.
 @Controller
 @RequestMapping("/main/calendar")
 public class CalendarController {
@@ -32,13 +33,15 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
+    // @Controller를 사용하면 이 메서드는 기본적으로 페이지(View)를 반환합니다.
     @GetMapping
     public ModelAndView calendarPage() {
         return new ModelAndView("organization/pms/calendar/calendar");
     }
 
+    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @GetMapping("/all")
-    @ResponseBody
+    @ResponseBody 
     public List<Map<String, Object>> getAllCalendarsForFullCalendar() {
         try {
             List<CalendarDto> calendars = calendarService.getAllCalendars();
@@ -50,6 +53,7 @@ public class CalendarController {
                 event.put("title", c.getCalendarTitle());
                 event.put("start", c.getCalendarStartDate());
                 event.put("end", c.getCalendarEndDate());
+                event.put("calendarContent", c.getCalendarContent());
                 event.put("allDay", true);
                 
                 events.add(event);
@@ -60,6 +64,7 @@ public class CalendarController {
         }
     }
 
+    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @PostMapping
     @ResponseBody
     public ResponseEntity<Map<String, String>> addCalendar(@RequestBody CalendarDto calendarDto) {
@@ -73,6 +78,7 @@ public class CalendarController {
         }
     }
     
+    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @GetMapping("/{calendarId}")
     @ResponseBody
     public ResponseEntity<CalendarDto> getCalendar(@PathVariable("calendarId") String calendarId) {
@@ -88,6 +94,7 @@ public class CalendarController {
         }
     }
 
+    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @PutMapping("/update")
     @ResponseBody
     public ResponseEntity<Map<String, String>> updateCalendar(@RequestBody CalendarDto calendarDto) {
@@ -101,6 +108,7 @@ public class CalendarController {
         }
     }
 
+    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @DeleteMapping("/{calendarId}")
     @ResponseBody
     public ResponseEntity<Map<String, String>> deleteCalendar(@PathVariable("calendarId") String calendarId) {

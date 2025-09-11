@@ -6,7 +6,7 @@ import java.util.List;
 import com.Semicolon.pms.dto.CalendarDto;
 
 public interface CalendarDAO {
-    void insertCalendar(CalendarDto calendarDto) throws SQLException;
+    void addCalendar(CalendarDto calendarDto) throws SQLException;
     List<CalendarDto> getAllCalendars() throws SQLException;
     CalendarDto getCalendarById(String calendarId) throws SQLException;
     void updateCalendar(CalendarDto calendarDto) throws SQLException;

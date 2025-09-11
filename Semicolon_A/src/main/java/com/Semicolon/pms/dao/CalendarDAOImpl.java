@@ -16,8 +16,8 @@ public class CalendarDAOImpl implements CalendarDAO {
     }
 
     @Override
-    public void insertCalendar(CalendarDto calendarDto) throws SQLException {
-        sqlSession.insert("com.Semicolon.pms.dao.CalendarDAO.insertCalendar", calendarDto);
+    public void addCalendar(CalendarDto calendarDto) throws SQLException {
+        sqlSession.insert("com.Semicolon.pms.dao.CalendarDAO.addCalendar", calendarDto);
     }
 
     @Override

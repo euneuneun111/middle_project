@@ -13,9 +13,9 @@
         <result property="calendarModifyDate" column="CALENDAR_MODIFY_DATE" />
     </resultMap>
 
-    <insert id="insertCalendar" parameterType="com.Semicolon.pms.dto.CalendarDto">
+    <insert id="addCalendar" parameterType="com.Semicolon.pms.dto.CalendarDto">
         <selectKey keyProperty="calendarId" resultType="string" order="BEFORE">
-             SELECT CALENDAR_SEQ.NEXTVAL FROM DUAL
+             SELECT 'CAL' || LPAD(CALENDAR_SEQ.NEXTVAL, 4, '0') FROM DUAL
         </selectKey>
         INSERT INTO CALENDAR (
             CALENDAR_ID,
