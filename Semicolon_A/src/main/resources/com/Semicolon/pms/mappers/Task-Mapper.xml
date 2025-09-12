@@ -17,9 +17,29 @@
 		<result property="taskModifyDate" column="TASK_MODIFY_DATE" />
 	</resultMap>
 
-	<select id="getTaskList" resultMap="taskMap">
-		SELECT * FROM TASK
-		ORDER BY TASK_REG_DATE DESC
+	<select id="getTaskListByProjectId" parameterType="com.Semicolon.command.PageMaker" resultMap="taskMap">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS rnum, a.*
+			FROM (
+				SELECT * FROM TASK
+				WHERE PROJECT_ID = #{projectId}
+				<if test="searchQuery != null and searchQuery != ''">
+					AND TASK_TITLE LIKE '%' || #{searchQuery} || '%'
+				</if>
+				ORDER BY TASK_REG_DATE DESC
+			) a
+		)
+		WHERE rnum BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<select id="getTotalCountByProjectId" parameterType="com.Semicolon.command.PageMaker" resultType="int">
+		SELECT COUNT(*)
+		FROM TASK
+		WHERE PROJECT_ID = #{projectId}
+		<if test="searchQuery != null and searchQuery != ''">
+			AND TASK_TITLE LIKE '%' || #{searchQuery} || '%'
+		</if>
 	</select>
 
 	<select id="getTaskListBySearch" parameterType="String"
@@ -34,62 +54,66 @@
 		parameterType="com.Semicolon.pms.dto.TaskDto">
 		INSERT INTO TASK
 		(
-		TASK_ID,
-		PROJECT_ID,
-		TASK_TITLE,
-		TASK_MANAGER_ID,
-		TASK_STATUS,
-		TASK_START_DATE,
-		TASK_END_DATE,
-		TASK_DESCRIPTION,
-		TASK_REG_DATE,
-		TASK_URGENCY,
-		TASK_MODIFY_DATE
+			TASK_ID,
+			PROJECT_ID,
+			TASK_TITLE,
+			TASK_MANAGER_ID,
+			TASK_STATUS,
+			TASK_START_DATE,
+			TASK_END_DATE,
+			TASK_DESCRIPTION,
+			TASK_REG_DATE,
+			TASK_URGENCY,
+			TASK_MODIFY_DATE
 		)
 		VALUES
 		(
-		'TASK-' || LPAD(TASK_SEQ.NEXTVAL, 3, '0'), #{projectId}, #{taskTitle},
-		#{taskManagerId},
-		#{taskStatus}, #{taskStartDate},
-		#{taskEndDate},
-		#{taskDescription},
-		SYSDATE,
-		#{taskUrgency}, SYSDATE
+			'TASK-' || LPAD(TASK_SEQ.NEXTVAL, 3, '0'),
+			#{projectId},
+			#{taskTitle, jdbcType=VARCHAR},
+			#{taskManagerId, jdbcType=VARCHAR},
+			#{taskStatus, jdbcType=VARCHAR},
+			#{taskStartDate, jdbcType=DATE},
+			#{taskEndDate, jdbcType=DATE},
+			#{taskDescription, jdbcType=VARCHAR},
+			SYSDATE,
+			#{taskUrgency, jdbcType=VARCHAR},
+			SYSDATE
 		)
 	</insert>
 
 	<select id="getTaskById" parameterType="String"
 		resultMap="taskMap">
 		SELECT
-		TASK_ID,
-		PROJECT_ID,
-		TASK_TITLE,
-		TASK_MANAGER_ID,
-		TASK_STATUS,
-		TASK_START_DATE,
-		TASK_END_DATE,
-		TASK_DESCRIPTION,
-		TASK_REG_DATE,
-		TASK_URGENCY,
-		TASK_MODIFY_DATE
+			TASK_ID,
+			PROJECT_ID,
+			TASK_TITLE,
+			TASK_MANAGER_ID,
+			TASK_STATUS,
+			TASK_START_DATE,
+			TASK_END_DATE,
+			TASK_DESCRIPTION,
+			TASK_REG_DATE,
+			TASK_URGENCY,
+			TASK_MODIFY_DATE
 		FROM
-		TASK
+			TASK
 		WHERE
-		TASK_ID = #{taskId}
+			TASK_ID = #{taskId}
 	</select>
 
 	<update id="updateTask"
 		parameterType="com.Semicolon.pms.dto.TaskDto">
 		UPDATE TASK
 		SET
-		TASK_TITLE = #{taskTitle},
-		TASK_DESCRIPTION = #{taskDescription},
-		TASK_MANAGER_ID = #{taskManagerId},
-		TASK_START_DATE = #{taskStartDate},
-		TASK_END_DATE = #{taskEndDate},
-		TASK_STATUS = #{taskStatus},
-		TASK_URGENCY = #{taskUrgency},
-		TASK_MODIFY_DATE = SYSDATE
+			TASK_TITLE = #{taskTitle, jdbcType=VARCHAR},
+			TASK_DESCRIPTION = #{taskDescription, jdbcType=VARCHAR},
+			TASK_MANAGER_ID = #{taskManagerId, jdbcType=VARCHAR},
+			TASK_START_DATE = #{taskStartDate, jdbcType=DATE},
+			TASK_END_DATE = #{taskEndDate, jdbcType=DATE},
+			TASK_STATUS = #{taskStatus, jdbcType=VARCHAR},
+			TASK_URGENCY = #{taskUrgency, jdbcType=VARCHAR},
+			TASK_MODIFY_DATE = SYSDATE
 		WHERE TASK_ID = #{taskId}
 	</update>
 
@@ -97,16 +121,5 @@
 		DELETE FROM TASK
 		WHERE TASK_ID = #{taskId}
 	</delete>
-	
-	<select id="getTaskListByProjectId" parameterType="string" resultType="com.Semicolon.pms.dto.TaskDto">
-        SELECT
-            TASK_ID     AS taskId,
-            TASK_TITLE  AS taskTitle
-        FROM
-            TASK
-        WHERE
-            PROJECT_ID = #{projectId}
-        ORDER BY
-            TASK_REG_DATE ASC
-    </select>
+
 </mapper>

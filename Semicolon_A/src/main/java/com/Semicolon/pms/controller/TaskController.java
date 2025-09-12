@@ -1,48 +1,61 @@
-// com.Semicolon.pms.controller.TaskController.java
-
 package com.Semicolon.pms.controller;
-
-import com.Semicolon.command.PageMaker;
-import com.Semicolon.pms.dto.TaskDto;
-import com.Semicolon.pms.service.TaskService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.Semicolon.command.PageMaker;
+import com.Semicolon.pms.dto.TaskDto;
+import com.Semicolon.pms.service.TaskService;
+
 @Controller
-@RequestMapping("/main/project") // URL 경로를 프로젝트 하위로 변경
+@RequestMapping("/main/project")
 public class TaskController {
 
     private final TaskService taskService;
 
-    // 생성자 주입 방식으로 변경
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    // 1. 일감 목록 조회 (페이지네이션 및 검색 추가)
+    @GetMapping("/task")
+    public String redirectToTaskList() {
+        return "redirect:/main/project/PJ-001/tasklist";
+    }
+
     @GetMapping("/{projectId}/tasklist")
     public String getTaskList(@PathVariable("projectId") String projectId,
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               @RequestParam(value = "perPageNum", defaultValue = "10") int perPageNum,
+                              // 1. 받는 파라미터 이름을 'searchQuery'로 변경
                               @RequestParam(value = "searchQuery", required = false) String searchQuery,
                               Model model) {
         try {
+        	projectId = "PJ-001";
             PageMaker pageMaker = new PageMaker();
             pageMaker.setProjectId(projectId);
             pageMaker.setPage(page);
             pageMaker.setPerPageNum(perPageNum);
-            pageMaker.setSearchQuery(searchQuery);
+            // 2. setSearchQuery를 호출하도록 통일
+            pageMaker.setSearchQuery(searchQuery); 
 
-            pageMaker.setTotalCount(taskService.getTotalCount(pageMaker));
-            List<TaskDto> taskList = taskService.getTaskList(pageMaker);
+            pageMaker.setTotalCount(taskService.getTotalCountByProjectId(pageMaker));
+            List<TaskDto> taskList = taskService.getTaskListByProjectId(pageMaker);
 
             model.addAttribute("taskList", taskList);
             model.addAttribute("pageMaker", pageMaker);
@@ -50,12 +63,11 @@ public class TaskController {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // 에러 처리 로직 (예: 에러 페이지로 리디렉션)
         }
-        return "organization/pms/task/tasklist"; // 뷰 경로
+        return "organization/pms/task/tasklist";
     }
-
-    // 2. 새 일감 등록
+    
+    // 새 일감 등록
     @PostMapping("/{projectId}/tasklist")
     @ResponseBody
     public ResponseEntity<Map<String, String>> createTask(@PathVariable String projectId, @RequestBody TaskDto task) {
@@ -64,13 +76,14 @@ public class TaskController {
             task.setProjectId(projectId);
             taskService.createNewTask(task);
             response.put("message", "일감이 성공적으로 등록되었습니다.");
-            return new ResponseEntity<>(response, HttpStatus.CREATED); // 상태 코드 201 CREATED
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (SQLException e) {
             e.printStackTrace();
             response.put("message", "일감 등록 중 오류가 발생했습니다.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // 3. 일감 상세 조회
     @GetMapping("/{projectId}/tasklist/{taskId}")

@@ -17,8 +17,7 @@
             </a>
         </li>
         <li><a href="${pageContext.request.contextPath}/organization/meeting/list"><i class="fas fa-handshake"></i> MEETING</a></li>
-        <li><a href="${pageContext.request.contextPath}/main/budget">
-                <i class="fas fa-chart-line"></i> BUDGET & PROGRESS</a></li>
+        
         <li><a href="${pageContext.request.contextPath}/organization/report/list"><i class="fas fa-file-alt"></i> REPORT</a></li>
         </ul>
 </div>

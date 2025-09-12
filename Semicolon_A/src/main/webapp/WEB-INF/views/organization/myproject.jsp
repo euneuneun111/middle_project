@@ -235,7 +235,7 @@
                                             <td><i class="status-icon fas fa-circle ${statusClass}"></i></td>
                                             <td>
                                                 <%-- URL CORRECTION #1: 컨트롤러 매핑에 맞게 /org/project로 수정 --%>
-                                                <a href="${pageContext.request.contextPath}/org/project/${project.projectId}" class="issue-title-link">
+                                                <a href="${pageContext.request.contextPath}/main/project/PJ-001/tasklist" class="issue-title-link">
                                                     ${project.projectName}
                                                 </a>
                                             </td>
@@ -335,7 +335,7 @@
             formData.append('projectEndDate', projectEndDate);
             formData.append('role', projectRole);
             // URL CORRECTION #3: 컨트롤러 매핑에 맞게 /org/project로 수정
-            fetch('${pageContext.request.contextPath}/org/project', {
+            fetch('${pageContext.request.contextPath}/project/main/project/PJ-001/tasklist', {
                 method: 'POST',
                 body: formData
             })

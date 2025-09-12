@@ -5,7 +5,7 @@ import java.util.Date;
 public class TaskReplyDTO {
 
     private String replyNumber;  // 댓글 번호 (PK, VARCHAR2)
-    private String TaskId;      // 원본 이슈 ID (FK)
+    private String taskId;      // 원본 이슈 ID (FK)
     private String userId;       // 작성자 ID
     private String replyContent; // 댓글 내용
     private Date regDate;        // 작성일
@@ -20,10 +20,10 @@ public class TaskReplyDTO {
 		this.replyNumber = replyNumber;
 	}
 	public String getTaskId() {
-		return TaskId;
+		return taskId;
 	}
 	public void setTaskId(String taskId) {
-		TaskId = taskId;
+		this.taskId = taskId;
 	}
 	public String getUserId() {
 		return userId;

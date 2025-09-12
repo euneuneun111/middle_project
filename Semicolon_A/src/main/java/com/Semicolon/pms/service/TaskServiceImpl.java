@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 import com.Semicolon.command.PageMaker;
 import com.Semicolon.pms.dao.TaskDAO;
-import com.Semicolon.pms.dao.TaskReplyDAO; // Task에 맞는 ReplyDAO로 가정
+import com.Semicolon.pms.dao.TaskReplyDAO;
 import com.Semicolon.pms.dto.TaskDto;
-import com.Semicolon.pms.dto.TaskReplyDTO; // Task에 맞는 ReplyDto로 가정
+import com.Semicolon.pms.dto.TaskReplyDTO;
 
 public class TaskServiceImpl implements TaskService {
 
@@ -20,12 +20,12 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Override
-    public List<TaskDto> getTaskList(PageMaker pageMaker) throws SQLException {
-        return taskDAO.getTaskList(pageMaker);
+    public List<TaskDto> getTaskListByProjectId(PageMaker pageMaker) throws SQLException {
+        return taskDAO.getTaskListByProjectId(pageMaker);
     }
 
     @Override
-    public int getTotalCount(PageMaker pageMaker) throws SQLException {
+    public int getTotalCountByProjectId(PageMaker pageMaker) throws SQLException {
         return taskDAO.getTotalCountByProjectId(pageMaker);
     }
 
@@ -53,12 +53,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(String taskId) throws SQLException {
         // 일감을 삭제하기 전, 해당 일감에 달린 모든 댓글을 먼저 삭제합니다.
-        taskReplyDAO.deleteRepliesByTaskId(taskId); // 메서드명은 ReplyDAO의 스펙에 따라 변경될 수 있습니다.
+        taskReplyDAO.deleteRepliesByTaskId(taskId);
         taskDAO.deleteTask(taskId);
-    }
-    
-    @Override
-    public List<TaskDto> getTaskListByProjectId(String projectId) throws SQLException {
-        return taskDAO.getTaskListByProjectId(projectId);
     }
 }

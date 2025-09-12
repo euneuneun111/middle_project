@@ -99,9 +99,10 @@
 	</div>
 
 	<%-- 일감 수정 모달 --%>
-	<div id="editTaskModal" class="modal">
-		<div class="modal-content">
+	<div id="editTaskModal" class="custom-modal">
+		<div class="custom-modal-content">
 			<h2>일감 수정</h2>
+			<div class="custom-modal-form-group">
 			<form id="editTaskForm">
 				<input type="hidden" id="editTaskId" value="${task.taskId}">
 
@@ -136,163 +137,216 @@
 					<option value="Minor" <c:if test="${task.taskUrgency eq 'Minor'}">selected</c:if>>Minor</option>
 				</select>
 			</form>
-			<div class="modal-buttons">
-				<button class="confirm-btn" onclick="submitEditTask()">확인</button>
-				<button class="cancel-btn" onclick="closeEditTaskModal()">취소</button>
+			</div>
+			<div class="custom-modal-buttons">
+				<button class="custom-confirm-btn" onclick="submitEditTask()">확인</button>
+				<button class="custom-cancel-btn" onclick="closeEditTaskModal()">취소</button>
 			</div>
 		</div>
 	</div>
-	<div id="modalOverlayEdit" class="modal-overlay"></div>
+	<div id="modalOverlayEdit" class="custom-modal-overlay"></div>
 
 	<%@ include file="/WEB-INF/views/module/footer.jsp"%>
 
 	<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-            // ▼▼▼▼▼ 추가된 부분 ▼▼▼▼▼
-            // 사이드바 활성화
-            const currentPath = window.location.pathname;
-            const sidebarLinks = document.querySelectorAll('.sidebar-menu li a');
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarLinks = document.querySelectorAll('.sidebar-menu li a');
+    const currentPath = window.location.pathname;
 
-            sidebarLinks.forEach(function(link) {
-                const linkPath = link.getAttribute('href');
-                if (linkPath && currentPath.includes('/main/task')) {
-                    if (linkPath.includes('task')) {
-                        link.parentElement.classList.add('active');
-                    }
+    sidebarLinks.forEach(function(link) {
+        const linkPath = link.getAttribute('href');
+        if (linkPath && currentPath.includes('/main/project')) {
+            if (linkPath.includes('tasklist')) {
+                link.parentElement.classList.add('active');
+            }
+        }
+    });
+
+    // 댓글 추가 기능
+    const addReplyBtn = document.getElementById('addReplyBtn');
+    if (addReplyBtn) {
+        addReplyBtn.addEventListener('click', function() {
+            const replyContent = document.getElementById('replyContentInput').value.trim();
+            const taskId = "${task.taskId}";
+            const userId = "loggedInUser"; // TODO: 실제 로그인된 사용자 ID로 변경
+
+            if (!replyContent) {
+                alert("댓글 내용을 입력해주세요.");
+                return;
+            }
+
+            // ✅ [수정 3] 서버 DTO에 맞게 키 이름을 'taskId'로 변경
+            const newReplyData = {
+                taskId: taskId,
+                userId: userId,
+                replyContent: replyContent
+            };
+
+            // ✅ [수정 3] Task 댓글 API 주소로 변경
+            fetch('${pageContext.request.contextPath}/task-replies', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newReplyData)
+            })
+            .then(response => response.text()) // 컨트롤러가 "SUCCESS" 문자열을 반환하므로 .text() 사용
+            .then(result => {
+                if (result === "SUCCESS") {
+                    alert("댓글이 등록되었습니다.");
+                    window.location.reload();
+                } else {
+                    alert(result || "댓글 추가 중 오류 발생");
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("댓글 추가 중 통신 오류 발생");
             });
-            // ▲▲▲▲▲ 추가된 부분 ▲▲▲▲▲
+        });
+    }
+});
 
-			// 댓글 추가 기능
-			const addReplyBtn = document.getElementById('addReplyBtn');
-			if(addReplyBtn) {
-				addReplyBtn.addEventListener('click', function() {
-					const replyContent = document.getElementById('replyContentInput').value.trim();
-					const taskId = "${task.taskId}";
-					const userId = "loggedInUser"; // TODO: 실제 로그인된 사용자 ID로 변경
+// 댓글 삭제 함수 (전역 스코프로 이동)
+function deleteReply(replyNumber) {
+    if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+        // Task 댓글 삭제 API 주소 (예시: /task-replies/댓글번호)
+        fetch('${pageContext.request.contextPath}/task-replies/' + replyNumber, {
+            method: 'DELETE'
+        })
+        .then(response => response.text())
+        .then(result => {
+            if (result === "SUCCESS") {
+                alert("댓글이 삭제되었습니다.");
+                window.location.reload();
+            } else {
+                alert(result || '댓글 삭제 실패');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('댓글 삭제 중 오류가 발생했습니다.');
+        });
+    }
+}
 
-					if (!replyContent) {
-						alert("댓글 내용을 입력해주세요.");
-						return;
-					}
-					
-					const newReplyData = {
-						bno: taskId,
-						userId: userId,
-						replyContent: replyContent
-					};
+// 수정 모달 열기/닫기
+function openEditTaskModal() {
+    document.getElementById('editTaskModal').style.display = 'block';
+    document.getElementById('modalOverlayEdit').style.display = 'block';
+}
 
-					fetch('${pageContext.request.contextPath}/main/reply', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(newReplyData)
-					})
-					.then(response => response.json())
-					.then(data => {
-						if (data.message) {
-							alert(data.message);
-							window.location.reload();
-						} else {
-							alert(data.error || "댓글 추가 중 오류 발생");
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						alert("댓글 추가 중 오류 발생");
-					});
-				});
-			}
-		});
+function closeEditTaskModal() {
+    document.getElementById('editTaskModal').style.display = 'none';
+    document.getElementById('modalOverlayEdit').style.display = 'none';
+}
 
-		// 댓글 삭제 함수
-		function deleteReply(replyNumber) {
-			if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
-                // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
-				fetch('${pageContext.request.contextPath}/main/task/reply/' + replyNumber, { // API URL 변경
-                // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
-					method: 'DELETE'
-				})
-				.then(response => response.ok ? response.json() : Promise.reject('댓글 삭제 실패'))
-				.then(data => {
-					alert(data.message);
-					window.location.reload();
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert('댓글 삭제 중 오류가 발생했습니다.');
-				});
-			}
-		}
+document.getElementById('modalOverlayEdit').addEventListener('click', closeEditTaskModal);
 
-		// 수정 모달 열기/닫기
-		function openEditTaskModal() {
-			document.getElementById('editTaskModal').style.display = 'block';
-			document.getElementById('modalOverlayEdit').style.display = 'block';
-		}
+// 일감 수정 제출
+function submitEditTask() {
+	const taskStartDate = document.getElementById('editTaskStartDate').value;
+    const taskEndDate = document.getElementById('editTaskEndDate').value;
+    const taskTitle = document.getElementById('editTaskTitle').value;
 
-		function closeEditTaskModal() {
-			document.getElementById('editTaskModal').style.display = 'none';
-			document.getElementById('modalOverlayEdit').style.display = 'none';
-		}
+    // ✅ [추가] 필수 값(제목, 시작일, 종료일)이 비어있는지 확인합니다.
+    if (!taskTitle) {
+        alert("일감 제목은 필수 입력 항목입니다.");
+        return; // 함수 실행 중단
+    }
+    if (!taskStartDate || !taskEndDate) {
+        alert("시작일과 종료일은 필수 입력 항목입니다.");
+        return; // 함수 실행 중단
+    }
+	
+    // ✅ [수정 1] 올바른 객체 정의
+    const updatedData = {
+        taskId: document.getElementById('editTaskId').value,
+        taskTitle: document.getElementById('editTaskTitle').value,
+        taskManagerId: document.getElementById('editTaskManagerId').value,
+        taskDescription: document.getElementById('editTaskDescription').value,
+        taskStartDate: document.getElementById('editTaskStartDate').value,
+        taskEndDate: document.getElementById('editTaskEndDate').value,
+        taskStatus: document.getElementById('editStatusSelect').value,
+        taskUrgency: document.getElementById('editUrgencySelect').value
+    };
 
-		document.getElementById('modalOverlayEdit').addEventListener('click', closeEditTaskModal);
+    // ✅ [수정 2] task 객체에서 projectId를 가져오도록 수정
+    const projectId = "${task.projectId}";
+    const taskId = updatedData.taskId;
 
-		// 일감 수정 제출
-		function submitEditTask() {
-			const updatedData = {
-				taskId: document.getElementById('editTaskId').value,
-				taskTitle: document.getElementById('editTaskTitle').value,
-                taskManagerId: document.getElementById('editTaskManagerId').value,
-				taskDescription: document.getElementById('editTaskDescription').value,
-                taskStartDate: document.getElementById('editTaskStartDate').value,
-                taskEndDate: document.getElementById('editTaskEndDate').value,
-				taskStatus: document.getElementById('editStatusSelect').value,
-				taskUrgency: document.getElementById('editUrgencySelect').value
-			};
-			fetch('${pageContext.request.contextPath}/main/task', {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(updatedData)
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.message) {
-					alert(data.message);
-					closeEditTaskModal();
-					window.location.reload();
-				} else {
-					alert(data.error || "일감 수정 중 오류가 발생했습니다.");
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
-				alert("서버 통신 중 오류가 발생했습니다.");
-			});
-		}
+    if (!projectId) {
+        alert("프로젝트 정보를 찾을 수 없어 수정할 수 없습니다.");
+        return;
+    }
 
-		// 일감 삭제 확인
-		function confirmTaskDeletion() {
-			if (confirm("해당 일감을 삭제하시겠습니까?")) {
-				const taskId = "${task.taskId}";
-				fetch('${pageContext.request.contextPath}/main/task/' + taskId, {
-					method: 'DELETE'
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.message) {
-						alert(data.message);
-						window.location.href = "${pageContext.request.contextPath}/main/tasklist"; // 삭제 후 목록 페이지로 이동
-					} else {
-						alert(data.error || "일감 삭제 중 오류가 발생했습니다.");
-					}
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert("서버 통신 중 오류가 발생했습니다.");
-				});
-			}
-		}
-	</script>
+    fetch(`${pageContext.request.contextPath}/main/project/${projectId}/tasklist/${taskId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData)
+    })
+    // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
+    .then(response => {
+        if (!response.ok) {
+            // 서버 응답이 200번대가 아닐 경우 에러로 처리
+            throw new Error('서버 응답이 올바르지 않습니다.');
+        }
+        return response.text(); // json() -> text() 로 변경
+    })
+    .then(result => { // 변수명을 data -> result 로 변경하여 명확화
+        if (result.includes("SUCCESS")) { // 'SUCCESS' 문자열이 포함되어 있는지 확인
+            alert("일감이 성공적으로 수정되었습니다."); // 성공 메시지를 직접 작성
+            closeEditTaskModal();
+            window.location.reload();
+        } else {
+            alert(result || "일감 수정 중 오류가 발생했습니다.");
+        }
+    })
+    // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
+    .catch(error => {
+        console.error('Error:', error);
+        alert("서버 통신 중 오류가 발생했습니다.");
+    });
+}
+
+// 일감 삭제 확인
+function confirmTaskDeletion() {
+    if (confirm("해당 일감을 삭제하시겠습니까?")) {
+        const taskId = "${task.taskId}";
+        const projectId = "${task.projectId}";
+
+        if (!projectId) {
+            alert("프로젝트 정보를 찾을 수 없어 삭제할 수 없습니다.");
+            return;
+        }
+
+        fetch(`${pageContext.request.contextPath}/main/project/${projectId}/tasklist/${taskId}`, {
+            method: 'DELETE'
+        })
+        // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답이 올바르지 않습니다.');
+            }
+            // 서버가 "SUCCESS" 문자열을 반환하므로 .text()로 받습니다.
+            return response.text(); 
+        })
+        .then(result => {
+            // 반환된 텍스트가 "SUCCESS"를 포함하는지 확인합니다.
+            if (result.includes("SUCCESS")) { 
+                alert("일감이 성공적으로 삭제되었습니다.");
+                // 삭제 후 일감 목록 페이지로 이동합니다.
+                window.location.href = `${pageContext.request.contextPath}/main/project/${projectId}/tasklist`;
+            } else {
+                alert(result || "일감 삭제 중 오류가 발생했습니다.");
+            }
+        })
+        // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
+        .catch(error => {
+            console.error('Error:', error);
+            alert("서버 통신 중 오류가 발생했습니다.");
+        });
+    }
+}
+</script>
 </body>
 </html>

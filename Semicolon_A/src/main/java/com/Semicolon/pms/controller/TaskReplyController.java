@@ -3,6 +3,9 @@
 package com.Semicolon.pms.controller;
 
 import com.Semicolon.pms.dto.TaskReplyDTO;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import com.Semicolon.pms.service.TaskReplyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +43,28 @@ public class TaskReplyController {
     public ResponseEntity<String> register(@RequestBody TaskReplyDTO dto) {
         ResponseEntity<String> entity;
         try {
-            // 참고: 실제 구현 시 세션 등에서 작성자 정보를 가져와 dto에 설정해야 합니다.
+            // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentUserId = null;
+
+            // 1. Principal 객체의 타입을 확인
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof UserDetails) {
+                // 2. UserDetails 타입일 경우, 원래 로직대로 username을 가져옴
+                UserDetails userDetails = (UserDetails) principal;
+                currentUserId = userDetails.getUsername();
+            } else {
+                // 3. String 타입일 경우(익명 사용자 등), 해당 문자열 값을 그대로 사용
+                currentUserId = principal.toString();
+            }
+
+            // 4. DTO에 필수 값 설정
+            // 'anonymousUser'와 같은 값이 DB에 저장되는 것을 원치 않는다면 추가적인 처리가 필요합니다.
+            dto.setEngId(currentUserId);
+            dto.setGroupId(currentUserId); 
+            // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
+            
             taskReplyService.registerReply(dto);
             entity = new ResponseEntity<>("SUCCESS", HttpStatus.OK);
         } catch (Exception e) {

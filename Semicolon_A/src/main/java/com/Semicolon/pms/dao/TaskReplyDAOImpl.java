@@ -14,7 +14,7 @@ public class TaskReplyDAOImpl implements TaskReplyDAO {
     }
 
     // 네임스페이스를 IssueReplyMapper -> TaskReplyMapper로 변경
-    private static final String NAMESPACE = "com.Semicolon.pms.mapper.TaskReplyMapper";
+    private static final String NAMESPACE = "com.Semicolon.pms.dao.TaskReplyDAO";
 
     @Override
     public List<TaskReplyDTO> selectReplyList(String taskId) throws SQLException {

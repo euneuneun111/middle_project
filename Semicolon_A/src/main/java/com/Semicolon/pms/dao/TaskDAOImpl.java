@@ -1,12 +1,8 @@
-// com.Semicolon.pms.dao.TaskDAOImpl.java
-
 package com.Semicolon.pms.dao;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import org.mybatis.spring.SqlSessionTemplate;
-
 import com.Semicolon.command.PageMaker;
 import com.Semicolon.pms.dto.TaskDto;
 
@@ -19,8 +15,8 @@ public class TaskDAOImpl implements TaskDAO {
     }
     
     @Override
-    public List<TaskDto> getTaskList(PageMaker pageMaker) throws SQLException {
-        return sqlSession.selectList("com.Semicolon.pms.dao.TaskDAO.getTaskList", pageMaker);
+    public List<TaskDto> getTaskListByProjectId(PageMaker pageMaker) throws SQLException {
+        return sqlSession.selectList("com.Semicolon.pms.dao.TaskDAO.getTaskListByProjectId", pageMaker);
     }
 
     @Override
@@ -46,10 +42,5 @@ public class TaskDAOImpl implements TaskDAO {
     @Override
     public void deleteTask(String taskId) throws SQLException {
         sqlSession.delete("com.Semicolon.pms.dao.TaskDAO.deleteTask", taskId);
-    }
-    
-    @Override
-    public List<TaskDto> getTaskListByProjectId(String projectId) throws SQLException {
-        return sqlSession.selectList("com.Semicolon.pms.dao.TaskDAO.getTaskListByProjectId", projectId);
     }
 }
