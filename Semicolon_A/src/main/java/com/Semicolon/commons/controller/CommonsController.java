@@ -1,78 +1,52 @@
 package com.Semicolon.commons.controller;
 
+import java.sql.SQLException;
+
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.Semicolon.cmnt.dto.MemberVO;
 import com.Semicolon.cmnt.service.MemberService;
 
-@Controller
-@RequestMapping("/commons")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/commons") // React baseURL과 일치
 public class CommonsController {
 
-	
-	private MemberService memberService;
-	
-	@Autowired
-	public CommonsController(MemberService memberService) {
-		this.memberService = memberService;
-	}
-	
-	@GetMapping("/login")
-	public String loginGet() {		
-		String url = "/commons/loginForm";
-		return url;
-	}
-	
-	@GetMapping("/accessDenied")
-	public void addcessDenied() {}
-	
-	@GetMapping("/loginTimeOut")
-	public String loginTimeOut(Model model) throws Exception {
-		String url = "/commons/sessionOut";
-		model.addAttribute("message", "세션이 만료되었습니다.\\n다시 로그인 하세요!");
-		return url;
-	}
-	
-	@GetMapping("/loginExpired")
-	public String loginExpired(Model model) throws Exception {
-		String url = "/commons/sessionOut";
-		model.addAttribute("message", "다른 장치에서 중복 로그인이 확인되었습니다."
-						 + "\\n다시 로그인 하세요!");
-		return url;
-	}
-	
-	
-//	@PostMapping("/login")
-//	public String loginPost(String id, String pwd,HttpSession session)throws Exception{
-//		String url="redirect:/main";
-//		
-//		MemberVO member=null;
-//		member = memberService.getMember(id);
-//				
-//		if(member!=null && pwd.equals(member.getPwd())) { //로그인 성공.
-//				session.setAttribute("loginUser",member);
-//		}else {  //아이디 불일치
-//			url="redirect:/commons/login";
-//		}	
-//		
-//		return url;
-//	}
-//	
-//	@GetMapping("/logout")
-//	public String logout(HttpSession session) {
-//		String url="redirect:/";
-//		
-//		session.invalidate(); //세션 갱신
-//		
-//		return url;
-//	}
-	
-	
+    private final MemberService memberService;
+
+    @Autowired
+    public CommonsController(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody MemberVO loginUser, HttpSession session) throws SQLException {
+        MemberVO member = memberService.getMember(loginUser.getUser_id());
+        if (member != null && loginUser.getUser_pwd().equals(member.getUser_pwd())) {
+            session.setAttribute("loginUser", member);
+            return Map.of("success", true, "message", "로그인 성공");
+        } else {
+            return Map.of("success", false, "message", "아이디 또는 비밀번호 오류");
+        }
+    }
+
+    @PostMapping("/logout")
+    public Map<String, Object> logout(HttpSession session) {
+        session.invalidate();
+        return Map.of("success", true, "message", "로그아웃 완료");
+    }
+
+    @GetMapping("/check-session")
+    public Map<String, Object> checkSession(HttpSession session) {
+        Object user = session.getAttribute("loginUser");
+        if (user != null) {
+            return Map.of("authenticated", true);
+        } else {
+            return Map.of("authenticated", false);
+        }
+    }
 }
