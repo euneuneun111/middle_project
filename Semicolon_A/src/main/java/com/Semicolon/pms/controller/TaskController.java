@@ -125,4 +125,54 @@ public class TaskController {
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/api/{projectId}/tasks")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getTaskListForReact(
+            @PathVariable("projectId") String projectId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "perPageNum", defaultValue = "10") int perPageNum,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            PageMaker pageMaker = new PageMaker();
+            pageMaker.setProjectId(projectId);
+            pageMaker.setPage(page);
+            pageMaker.setPerPageNum(perPageNum);
+            pageMaker.setKeyword(keyword);
+
+            pageMaker.setTotalCount(taskService.getTotalCountByProjectId(pageMaker));
+            List<TaskDto> taskList = taskService.getTaskListByProjectId(pageMaker);
+
+            response.put("taskList", taskList);
+            response.put("pageMaker", pageMaker);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.put("error", "일감 목록을 불러오는 데 실패했습니다.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * [API] 특정 일감의 상세 정보를 JSON으로 반환 (React용)
+     */
+    @GetMapping("/api/task/{taskId}")
+    @ResponseBody
+    public ResponseEntity<?> getTaskDetailForReact(@PathVariable String taskId) {
+        try {
+            TaskDto task = taskService.getTaskById(taskId);
+            if (task != null) {
+                return new ResponseEntity<>(task, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Task not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error fetching task details", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

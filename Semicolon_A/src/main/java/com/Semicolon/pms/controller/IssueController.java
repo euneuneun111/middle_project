@@ -81,14 +81,31 @@ public class IssueController {
 
     @PostMapping("/{projectId}/issuelist")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> createIssue(@PathVariable("projectId") String projectId,
-                                                           @RequestBody IssueDto issue) {
+    public ResponseEntity<Map<String, String>> createIssue(
+            @PathVariable("projectId") String projectId,
+            @RequestBody IssueDto issue,
+            HttpSession session) { // ✅ HttpSession 파라미터 추가
+
         Map<String, String> response = new HashMap<>();
         try {
-            issue.setProjectId("PJ-001");
+            // ✅ 1. 세션에서 로그인 사용자 정보 가져오기
+            MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+            if (loginUser == null) {
+                response.put("message", "로그인이 필요합니다.");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+            
+            // ✅ 2. DTO에 필요한 값 설정
+            issue.setProjectId(projectId);
+            issue.setIssueCreatorId(loginUser.getUser_id()); // 작성자 ID 설정
+            issue.setIssueManagerId(loginUser.getUser_id()); // 담당자 ID를 작성자 ID와 동일하게 설정
+
+            // ✅ 3. 서비스 호출
             issueService.createNewIssue(issue);
+            
             response.put("message", "이슈가 성공적으로 등록되었습니다.");
             return new ResponseEntity<>(response, HttpStatus.OK);
+            
         } catch (SQLException e) {
             e.printStackTrace();
             response.put("message", "이슈 등록 중 오류가 발생했습니다.");
@@ -174,4 +191,54 @@ public class IssueController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/api/{projectId}/issues")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getIssueListForReact(
+            @PathVariable("projectId") String projectId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "perPageNum", defaultValue = "10") int perPageNum,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            PageMaker pageMaker = new PageMaker();
+            pageMaker.setProjectId(projectId);
+            pageMaker.setPage(page);
+            pageMaker.setPerPageNum(perPageNum);
+            pageMaker.setKeyword(keyword);
+
+            pageMaker.setTotalCount(issueService.getTotalCount(pageMaker));
+            List<IssueDto> issueList = issueService.getIssueList(pageMaker);
+
+            response.put("issueList", issueList);
+            response.put("pageMaker", pageMaker); // 페이지 정보도 함께 전달
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.put("error", "이슈 목록을 불러오는 데 실패했습니다.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * [API] 특정 이슈의 상세 정보를 JSON으로 반환 (React용)
+     */
+    @GetMapping("/api/issue/{issueId}")
+    @ResponseBody
+    public ResponseEntity<?> getIssueDetailForReact(@PathVariable String issueId) {
+        try {
+            IssueDto issue = issueService.getIssueById(issueId);
+            if (issue != null) {
+                return new ResponseEntity<>(issue, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Issue not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error fetching issue details", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

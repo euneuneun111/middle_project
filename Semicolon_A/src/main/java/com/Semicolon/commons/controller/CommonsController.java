@@ -24,9 +24,11 @@ public class CommonsController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody MemberVO loginUser, HttpSession session) throws SQLException {
-        MemberVO member = memberService.getMember(loginUser.getUser_id());
-        if (member != null && loginUser.getUser_pwd().equals(member.getUser_pwd())) {
+    public Map<String, Object> login(@RequestParam("user_id") String userId,
+                                     @RequestParam("user_pwd") String userPwd,
+                                     HttpSession session) throws SQLException {
+        MemberVO member = memberService.getMember(userId);
+        if (member != null && userPwd.equals(member.getUser_pwd())) {
             session.setAttribute("loginUser", member);
             return Map.of("success", true, "message", "로그인 성공");
         } else {
