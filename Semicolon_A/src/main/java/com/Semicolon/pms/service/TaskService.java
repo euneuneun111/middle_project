@@ -24,4 +24,6 @@ public interface TaskService {
     
     // 일감 삭제
     void deleteTask(String taskId) throws SQLException;
+    
+    List<TaskDto> getAllTasksByProjectId(String projectId) throws SQLException;
 }

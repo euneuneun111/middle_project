@@ -1,29 +1,19 @@
-<%-- WEB-INF/views/organization/pms/gantt/ganttchart.jsp --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>간트 차트</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ganttchart.css"> <%-- 간트 차트 전용 CSS --%>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ganttchart.css">
     <script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
     <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
-
     <style>
-        /* 간트 차트가 표시될 컨테이너의 크기 정의 */
         #gantt_here {
             width: 100%;
-            height: calc(100vh - 200px); /* 헤더, 푸터, 여백 제외한 높이 */
-            box-sizing: border-box;
+            height: calc(100vh - 200px);
             border: 1px solid #e0e0e0;
             border-radius: 8px;
-            overflow: hidden;
         }
     </style>
 </head>
@@ -35,122 +25,42 @@
 
         <div class="main-content">
             <h2 class="page-title">간트 차트</h2>
-
             <div class="content-area">
-                <div class="gantt-controls">
-                    <button class="add-task-btn" onclick="openCreateGanttTaskModal()">
-                        <i class="fas fa-plus-circle"></i> 간트 항목 추가
-                    </button>
-                </div>
-                
                 <div id="gantt_here"></div>
             </div>
         </div>
     </div>
 
-
-
-<div id="modalOverlayGantt" class="custom-modal-overlay"></div>
-
-<div id="createGanttTaskModal" class="custom-modal">
-    <div class="custom-modal-content">
-        <h2>새 간트 항목 추가</h2>
-
-        <div class="custom-modal-form-group">
-            <label for="ganttTitle">항목 제목</label>
-            <input type="text" id="ganttTitle" required>
-        </div>
-        <div class="custom-modal-form-group">
-            <label for="ganttTaskId">관련 일감 ID (선택)</label>
-            <input type="text" id="ganttTaskId">
-        </div>
-        <div class="custom-modal-form-group">
-            <label for="ganttManagerId">담당자 ID</label>
-            <input type="text" id="ganttManagerId" required>
-        </div>
-        <div class="custom-modal-form-group">
-            <label for="ganttStartDate">시작일</label>
-            <input type="date" id="ganttStartDate" required>
-        </div>
-        <div class="custom-modal-form-group">
-            <label for="ganttEndDate">종료일</label>
-            <input type="date" id="ganttEndDate" required>
-        </div>
-
-        <div class="custom-modal-buttons">
-            <button class="confirm-btn" onclick="addNewGanttTask()">확인</button>
-            <button class="cancel-btn" onclick="closeCreateGanttTaskModal()">취소</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    // ==================== ▼▼▼▼▼ 수정된 JavaScript ▼▼▼▼▼ ====================
+    gantt.config.columns = [
+        {name: "text",       label: "일감 이름",   tree: true, width: 250},
+        {name: "start_date", label: "시작일",     align: "center", width: 100},
+        {name: "end_date",   label: "종료일",     align: "center", width: 100},
+        {name: "manager",    label: "담당자",     align: "center", width: 100}
+    ];
+    gantt.config.readonly = true;
 
-    // 모달 열기 함수
-    function openCreateGanttTaskModal() {
-        document.getElementById('createGanttTaskModal').style.display = 'block';
-        document.getElementById('modalOverlayGantt').style.display = 'block';
-        document.body.classList.add('custom-modal-active'); // 스크롤 방지
-    }
+    gantt.init("gantt_here");
 
-    // 모달 닫기 함수
-    function closeCreateGanttTaskModal() {
-        document.getElementById('createGanttTaskModal').style.display = 'none';
-        document.getElementById('modalOverlayGantt').style.display = 'none';
-        document.body.classList.remove('custom-modal-active'); // 스크롤 방지 해제
-    }
-
-    // 오버레이 클릭 시 모달 닫기 이벤트 추가
-    document.getElementById('modalOverlayGantt').addEventListener('click', closeCreateGanttTaskModal);
-
-    // ==================== ▲▲▲▲▲ 수정된 JavaScript ▲▲▲▲▲ ====================
-
-    // 새 간트 항목 추가 함수 (기존 코드와 동일)
-    function addNewGanttTask() {
-        const title = document.getElementById('ganttTitle').value;
-        const taskId = document.getElementById('ganttTaskId').value;
-        const managerId = document.getElementById('ganttManagerId').value;
-        const startDate = document.getElementById('ganttStartDate').value;
-        const endDate = document.getElementById('ganttEndDate').value;
-
-        // 필수 입력 필드 유효성 검사
-        if (!title || !managerId || !startDate || !endDate) {
-            alert('항목 제목, 담당자, 시작일, 종료일은 필수 항목입니다.');
-            return;
-        }
-
-        const newGanttData = {
-            ganttTitle: title,
-            taskId: taskId,
-            ganttManagerId: managerId,
-            ganttStartDate: startDate,
-            ganttEndDate: endDate,
-            projectId: "PJ-001" // 현재 프로젝트 ID 추가
-        };
-
-        fetch('${pageContext.request.contextPath}/main/gantt/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newGanttData),
-        })
+    const projectId = "${currentProjectId}";
+    fetch('${pageContext.request.contextPath}/project/main/project/api/' + projectId + '/tasks/all')
         .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('새 간트 항목이 성공적으로 추가되었습니다.');
-                closeCreateGanttTaskModal(); // 모달 닫기
-                location.reload(); // 페이지 새로고침
-            } else {
-                alert('간트 항목 추가 실패: ' + (data.error || '알 수 없는 오류'));
-            }
+        .then(taskList => {
+            const formattedTasks = taskList.map(task => {
+                return {
+                    id: task.taskId,
+                    text: task.taskTitle,
+                    start_date: new Date(task.taskStartDate),
+                    end_date: new Date(task.taskEndDate),
+                    manager: task.taskManagerId
+                };
+            });
+            gantt.parse({ data: formattedTasks });
         })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('간트 항목 추가 중 네트워크 오류가 발생했습니다.');
+        .catch(error => {
+            console.error('Error fetching task data for Gantt:', error);
+            alert('간트 차트 데이터를 불러오는 중 오류가 발생했습니다.');
         });
-    }
 </script>
 </body>
 </html>

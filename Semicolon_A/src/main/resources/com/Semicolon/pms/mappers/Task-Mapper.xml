@@ -121,5 +121,26 @@
 		DELETE FROM TASK
 		WHERE TASK_ID = #{taskId}
 	</delete>
-
+	
+	<select id="getAllTasksByProjectId" parameterType="String" resultMap="taskMap">
+    SELECT
+        TASK_ID,
+        PROJECT_ID,
+        TASK_TITLE,
+        TASK_MANAGER_ID,
+        TASK_STATUS,
+        TASK_START_DATE,
+        TASK_END_DATE,
+        TASK_DESCRIPTION,
+        TASK_REG_DATE,
+        TASK_URGENCY,
+        TASK_MODIFY_DATE
+    FROM
+        TASK
+    WHERE
+        PROJECT_ID = #{projectId}
+    ORDER BY 
+        TASK_START_DATE ASC
+</select>
+	
 </mapper>

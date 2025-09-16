@@ -1,17 +1,21 @@
 package com.Semicolon.pms.dto;
 
 import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 public class CalendarDto {
     private String calendarId;
     private String calendarTitle;
     private String projectId;
     private String calendarContent;
-    private Date calendarStartDate;
-    private Date calendarEndDate;
+
     private Date calendarRegDate;
     private Date calendarModifyDate;
-    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
+    private Date calendarStartDate;
+
+    // ✅ 3. @JsonFormat 어노테이션 추가
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
+    private Date calendarEndDate;
     // Getters and Setters
     public String getCalendarId() { return calendarId; }
     public void setCalendarId(String calendarId) { this.calendarId = calendarId; }
