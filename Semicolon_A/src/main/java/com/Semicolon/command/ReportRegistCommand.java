@@ -14,7 +14,8 @@ public class ReportRegistCommand {
 	private String title;
 	private String content;
 	private String writer;
-	private String reportDate;
+//	private String reportDate;
+	private String regDate;
 	
 	private List<MultipartFile> uploadFile;
 
@@ -42,12 +43,20 @@ public class ReportRegistCommand {
 		this.writer = writer;
 	}
 
-	public String getReportDate() {
-		return reportDate;
+//	public String getReportDate() {
+//		return reportDate;
+//	}
+//
+//	public void setReportDate(String reportDate) {
+//		this.reportDate = reportDate;
+//	}
+	
+	public String getRegDate() {
+		return regDate;
 	}
-
-	public void setReportDate(String reportDate) {
-		this.reportDate = reportDate;
+	
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
 	}
 
 	public List<MultipartFile> getUploadFile() {
@@ -64,8 +73,8 @@ public class ReportRegistCommand {
 		report.setContent(this.content);
 		report.setTitle(this.title);
 		report.setWriter(this.writer);
-		report.setRegDate(new Date());
-		report.setReportDate(new SimpleDateFormat("yyyy-MM-dd").parse(this.reportDate));
+		report.setRegDate(new SimpleDateFormat("yyyy-MM-dd").parse(this.regDate));
+//		report.setReportDate(new SimpleDateFormat("yyyy-MM-dd").parse(this.reportDate));
 
 		return report;
 	}
