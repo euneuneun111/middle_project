@@ -71,7 +71,16 @@
 
 	<!-- 시퀀스 조회 -->
 	<select id="getProjectSeq" resultType="int">
-		SELECT PROJECT_SEQ.NEXTVAL FROM dual
+		SELECT PROJECT_SEQ.NEXTVAL
+		FROM dual
+	</select>
+
+	<select id="selectProjectDetail" parameterType="string"
+		resultMap="ProjectResultMap">
+		SELECT PROJECT_ID, PROJECT_NAME, PROJECT_LOGO, PROJECT_DESC,
+		PROJECT_MANAGER, PROJECT_START_DATE
+		FROM PROJECT
+		WHERE PROJECT_ID = #{projectId}
 	</select>
 
 </mapper>

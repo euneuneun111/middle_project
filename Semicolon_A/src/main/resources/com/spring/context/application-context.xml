@@ -53,7 +53,7 @@
 	<bean id="createOrgDAO"
 		class="com.Semicolon.org.dao.CreateOrgDAOImpl"
 		c:sqlSession-ref="sqlSession" />
-		
+
 	<bean id="createOrgService"
 		class="com.Semicolon.org.service.CreateOrgServiceImpl"
 		c:createOrgDAO-ref="createOrgDAO" />
@@ -67,7 +67,7 @@
 	<bean id="projectOrgDAO"
 		class="com.Semicolon.org.dao.ProjectOrgDAOImpl"
 		c:sqlSession-ref="sqlSession" />
-		
+
 	<bean id="projectOrgService"
 		class="com.Semicolon.org.service.ProjectOrgServiceImpl"
 		c:projectOrgDAO-ref="projectOrgDAO" />
@@ -136,6 +136,9 @@
 
 	<bean id="reportSavedFilePath" class="java.lang.String"
 		c:value="${savePath.report.files}" />
+
+	<bean id="projectSavedFilePath" class="java.lang.String"
+		c:value="${savePath.project.files}" />
 
 	<bean id="adminreportSavedFilePath" class="java.lang.String"
 		c:value="${savePath.adminreport.files}" />
