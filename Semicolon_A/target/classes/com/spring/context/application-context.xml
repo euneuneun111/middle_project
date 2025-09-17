@@ -53,6 +53,7 @@
 	<bean id="createOrgDAO"
 		class="com.Semicolon.org.dao.CreateOrgDAOImpl"
 		c:sqlSession-ref="sqlSession" />
+		
 	<bean id="createOrgService"
 		class="com.Semicolon.org.service.CreateOrgServiceImpl"
 		c:createOrgDAO-ref="createOrgDAO" />
@@ -66,6 +67,7 @@
 	<bean id="projectOrgDAO"
 		class="com.Semicolon.org.dao.ProjectOrgDAOImpl"
 		c:sqlSession-ref="sqlSession" />
+		
 	<bean id="projectOrgService"
 		class="com.Semicolon.org.service.ProjectOrgServiceImpl"
 		c:projectOrgDAO-ref="projectOrgDAO" />

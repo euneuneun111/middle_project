@@ -1,57 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Semicolon.project.dao.ProjectOrgDAO">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <insert id="createProjectOrg" parameterType="com.Semicolon.org.dto.ProjectOrgDTO">
-        <selectKey keyProperty="projectId" resultType="int" order="BEFORE">
-            SELECT ORGANIZATION_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO ORGANIZATION (
-            OR_ID,
-            OR_NAME,
-            OR_CREATE_DATE,
-            OR_INTRODUCE,
-            OR_IS_PUBLIC,
-            MEMBER_ID,
-            MEMBER_ROLE,
-            OR_LOGO,
-            OR_END_DATE,
-            OR_CATEGORY
-        ) VALUES (
-            #{projectId},
-            #{projectName},
-            SYSDATE,
-            #{projectIntroduce},
-            #{projectIsPublic},
-            #{memberId},
-            #{memberRole},
-            #{projectLogo},
-            #{projectEndDate},
-            #{projectCategory}
-        )
-    </insert>
-    
-    <insert id="insertInvitedMember" parameterType="map">
-        INSERT INTO ORGANIZATION_INVITATION (
-            OR_ID,
-            MEMBER_ID,
-            INVITE_STATUS
-        ) VALUES (
-            #{projectId},
-            #{memberId},
-            '초대됨'
-        )
-    </insert>
+<mapper namespace="ProjectOrg-Mapper">
 
-    <select id="getProjectOrgsByMemberId" resultType="com.Semicolon.org.dto.ProjectOrgDTO" parameterType="String">
-        SELECT
-            OR_ID           AS projectId,
-            OR_NAME         AS projectName,
-            OR_LOGO         AS projectLogo,
-            OR_CREATE_DATE  AS projectCreateDate,
-            OR_END_DATE     AS projectEndDate
-        FROM ORGANIZATION
-        WHERE MEMBER_ID = #{memberId}
-        ORDER BY OR_ID DESC
-    </select>
+	<!-- 컬럼과 DTO 매핑 -->
+	<resultMap id="ProjectResultMap"
+		type="com.Semicolon.org.dto.ProjectOrgDTO">
+		<id property="projectId" column="PROJECT_ID" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="projectLogo" column="PROJECT_LOGO" />
+		<result property="projectDesc" column="PROJECT_DESC" />
+		<result property="projectStartDate" column="PROJECT_START_DATE" />
+		<result property="projectManager" column="PROJECT_MANAGER" />
+	</resultMap>
+
+	<!-- 프로젝트 등록 -->
+	<insert id="insertProject"
+		parameterType="com.Semicolon.org.dto.ProjectOrgDTO">
+		INSERT INTO PROJECT
+		(PROJECT_ID, PROJECT_NAME,
+		PROJECT_LOGO, PROJECT_DESC, PROJECT_MANAGER,
+		PROJECT_START_DATE)
+		VALUES
+		(#{projectId}, #{projectName}, #{projectLogo}, #{projectDesc},
+		#{projectManager,jdbcType=VARCHAR}, SYSDATE)
+	</insert>
+
+	<!-- 프로젝트 단건 조회 -->
+	<select id="selectProjectById" parameterType="string"
+		resultMap="ProjectResultMap">
+		SELECT PROJECT_ID, PROJECT_NAME, PROJECT_LOGO, PROJECT_DESC,
+		PROJECT_MANAGER, PROJECT_START_DATE
+		FROM PROJECT
+		WHERE PROJECT_ID =
+		#{projectId}
+	</select>
+
+
+
+	<!-- 전체 조회 -->
+	<select id="selectAllProjects" resultMap="ProjectResultMap">
+		SELECT PROJECT_ID,
+		PROJECT_NAME, PROJECT_LOGO, PROJECT_DESC,
+		PROJECT_MANAGER,
+		PROJECT_START_DATE
+		FROM PROJECT
+		ORDER BY PROJECT_START_DATE DESC
+	</select>
+
+	<!-- 프로젝트 수정 -->
+	<update id="updateProject"
+		parameterType="com.Semicolon.org.dto.ProjectOrgDTO">
+		UPDATE PROJECT
+		SET PROJECT_NAME = #{projectName},
+		PROJECT_LOGO = #{projectLogo},
+		PROJECT_DESC = #{projectDesc},
+		PROJECT_MANAGER = #{projectManager,jdbcType=VARCHAR},
+		PROJECT_START_DATE = #{projectStartDate}
+		WHERE PROJECT_ID =
+		#{projectId}
+	</update>
+
+	<!-- 프로젝트 삭제 -->
+	<delete id="deleteProject" parameterType="string">
+		DELETE FROM PROJECT
+		WHERE PROJECT_ID = #{projectId}
+	</delete>
+
+	<!-- 시퀀스 조회 -->
+	<select id="getProjectSeq" resultType="int">
+		SELECT PROJECT_SEQ.NEXTVAL FROM dual
+	</select>
+
 </mapper>
