@@ -45,7 +45,7 @@
 					</td>
 					<th style="width: 80px; background: #e0e0e0; text-align: center; padding: 20px 16px;">주관자</th>
 					<td>
-						<input type="text" class="form-control" name="organizer" value="${loginUser.name}" readonly>
+						<input type="text" class="form-control" name="author" value="${loginUser.name}" readonly>
 					</td>
 				</tr>
 				<tr>

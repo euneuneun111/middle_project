@@ -26,10 +26,10 @@
 
 	<insert id="insertMeeting" parameterType="meeting">
 		INSERT INTO meeting (
-		id, meetingdate, organizer, attend, title, overview, content
+		id, meetingdate, author, attend, title, overview, content
 		) VALUES
 		(
-		#{id}, #{meetingDate}, #{organizer}, #{attend}, #{title},
+		#{id}, #{meetingDate}, #{author}, #{attend}, #{title},
 		#{overview},
 		#{content}
 		)
@@ -40,7 +40,7 @@
 		UPDATE meeting
 		SET
 		meetingdate = #{meetingDate},
-		organizer = #{organizer},
+		author = #{author},
 	   
 		attend = #{attend},
 		title = #{title},

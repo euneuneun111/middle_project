@@ -7,32 +7,30 @@ public class MeetingVO {
 	private int id;
 	
 	private Date meetingDate = new Date(); //회의 일자
-	private String organizer=""; //주관자
-	private String attend=""; //참석자
-	private String title=""; //회의 명
-	private String overview=""; //회의개요
-	private String content=""; // 회의내용
-	
-	
-	
+	 private String author;      // 주관자
+	 private String attend;      // 참석자
+	 private String title;       // 회의 제목
+	 private String overview;    // 회의 개요
+	 private String content;     // 회의 내용
+	 private String status;      // 상태
+	 
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	
 	public Date getMeetingDate() {
 		return meetingDate;
 	}
 	public void setMeetingDate(Date meetingDate) {
 		this.meetingDate = meetingDate;
 	}
-	public String getOrganizer() {
-		return organizer;
+	public String getAuthor() {
+		return author;
 	}
-	public void setOrganizer(String organizer) {
-		this.organizer = organizer;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 	public String getAttend() {
 		return attend;
@@ -58,6 +56,14 @@ public class MeetingVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
 	
 	
 }
