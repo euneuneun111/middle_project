@@ -23,8 +23,9 @@ public interface MemberDAO {
 	List<String> selectAuthoritiesById(String id)throws SQLException;
 	void insertAuthorities(String id, String authority)throws SQLException;
 	void deleteAllAuthorityById(String id)throws SQLException;
+	
+	  // 닉네임 검색 추가
+    List<String> selectNicknamesByKeyword(String keyword) throws SQLException;
 }
-
-
 
 

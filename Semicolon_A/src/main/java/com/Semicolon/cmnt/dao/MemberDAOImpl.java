@@ -78,4 +78,13 @@ public class MemberDAOImpl implements MemberDAO{
 		session.insert("Engineer-Mapper.insertEngineer",engineer);		
 	}
 
+	@Override
+	public List<String> selectNicknamesByKeyword(String keyword) throws SQLException {
+	    // keyword에 %가 포함되어 있으면 그대로 사용, 없으면 붙이기
+	    if (!keyword.contains("%")) {
+	        keyword = "%" + keyword + "%";
+	    }
+	    return session.selectList("Member-Mapper.selectNicknamesByKeyword", keyword);
+	}
+
 }

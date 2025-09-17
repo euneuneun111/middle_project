@@ -56,8 +56,9 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Override
+	public List<String> findNicknamesByKeyword(String keyword) throws SQLException {
+		 return memberDAO.selectNicknamesByKeyword("%" + keyword + "%");
+	}
+
 }
-
-
-
-

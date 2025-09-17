@@ -1,75 +1,87 @@
 package com.Semicolon.org.controller;
 
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.Semicolon.org.service.ProjectOrgService;
+import com.Semicolon.cmnt.service.MemberService;
+import com.Semicolon.org.command.ProjectCreateCommand;
 import com.Semicolon.org.dto.ProjectOrgDTO;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.Semicolon.org.service.ProjectOrgService;
 
 @Controller
-@RequestMapping("/org")
+@RequestMapping("/org/myproject")
 public class ProjectOrgController {
-    
+
     @Autowired
     private ProjectOrgService projectOrgService;
+    
+    @Autowired
+    private MemberService memberService;
 
-    @GetMapping("/myproject")
-    public String myProjectList(@RequestParam(value = "search", required = false) String searchQuery, Model model) {
-        
-        List<Map<String, Object>> projectList = new ArrayList<>();
-        projectList.add(Map.of(
-            "projectId", "PJ-001",
-            "projectName", "사내 그룹웨어 시스템 개발",
-            "projectStatus", "진행 중",
-            "projectManagerId", "김철수",
-            "projectStartDate", new Date(),
-            "projectEndDate", new Date()
-        ));
-        projectList.add(Map.of(
-            "projectId", "PJ-002",
-            "projectName", "모바일 앱 UI/UX 개편",
-            "projectStatus", "완료",
-            "projectManagerId", "이영희",
-            "projectStartDate", new Date(),
-            "projectEndDate", new Date()
-        ));
-        
+    /**
+     * 프로젝트 목록 조회
+     */
+    @GetMapping("/list")
+    public String projectList(Model model) {
+        List<ProjectOrgDTO> projectList = projectOrgService.getProjectList();
         model.addAttribute("projectList", projectList);
-        model.addAttribute("searchQuery", searchQuery);
-        
-        // myproject.jsp의 경로에 맞게 수정
         return "organization/myproject"; 
     }
 
-    @PostMapping("/project")
-    @ResponseBody
-    public ResponseEntity<?> createProject(
-            @RequestParam("projectName") String projectName,
-            @RequestParam("projectLogo") MultipartFile projectLogo,
-            @RequestParam("projectManager") String projectManager,
-            @RequestParam("projectStartDate") String projectStartDate,
-            @RequestParam("projectEndDate") String projectEndDate,
-            @RequestParam("role") String role) {
-        
-        System.out.println("New Project Received: " + projectName);
-        System.out.println("Logo file name: " + projectLogo.getOriginalFilename());
+    /**
+     * 프로젝트 생성 페이지 이동
+     */
+    @GetMapping("/create")
+    public String createProjectForm() {
+        return "organization/projectcreate"; 
+    }
 
-        return ResponseEntity.ok(Map.of("message", "프로젝트가 성공적으로 등록되었습니다."));
+    /**
+     * 프로젝트 생성 처리
+     */
+    @PostMapping("/create")
+    @ResponseBody
+    public String createProject(@ModelAttribute ProjectCreateCommand command) throws Exception {
+        ProjectOrgDTO project = command.toProjectOrgDTO();
+        
+        // 시퀀스 조회
+        int seq = projectOrgService.getProjectSeq(); // Mapper의 getProjectSeq 호출
+        String projectId = String.format("PRJ-%03d", seq); // PRJ-001, PRJ-002 ...
+        project.setProjectId(projectId);
+
+        projectOrgService.insertProject(project);
+
+        return "<script>alert('프로젝트가 생성되었습니다.'); opener.location.reload(); window.close();</script>";
+    }
+
+    /**
+     * 프로젝트 상세
+     */
+    @GetMapping("/{projectId}")
+    public String projectDetail(@PathVariable("projectId") String projectId, Model model) {
+    	ProjectOrgDTO project = projectOrgService.getProjectDetail(projectId);
+        model.addAttribute("project", project);
+        return "project/projectDetail"; 
     }
     
-    @GetMapping("/project/{projectId}")
-    public String projectDetail(@PathVariable("projectId") String projectId, Model model) {
-        System.out.println("Viewing details for project: " + projectId);
-        return "organization/pms/task/tasklist";
+    @GetMapping("/search")
+    @ResponseBody
+    public List<String> searchNicknames(@RequestParam String keyword) throws SQLException {
+        System.out.println("keyword = " + keyword);
+        List<String> list = memberService.findNicknamesByKeyword(keyword);
+        System.out.println("result = " + list);
+        return list; // JSON 배열로 반환됨
     }
-
 }

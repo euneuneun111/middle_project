@@ -1,11 +1,18 @@
 package com.Semicolon.org.dao;
 
-import com.Semicolon.org.dto.ProjectOrgDTO;
 import java.util.List;
-import java.util.Map;
+import com.Semicolon.org.dto.ProjectOrgDTO;
 
 public interface ProjectOrgDAO {
-    void createProjectOrg(ProjectOrgDTO projectOrg);
-    void insertInvitedMember(Map<String, Object> params);
-    List<ProjectOrgDTO> getProjectOrgsByMemberId(String memberId);
+
+    /** 프로젝트 목록 조회 */
+    List<ProjectOrgDTO> selectProjectList();
+
+    /** 프로젝트 생성 */
+    void insertProject(ProjectOrgDTO projectOrgDTO);
+
+    /** 프로젝트 상세 조회 */
+    ProjectOrgDTO selectProjectDetail(String projectId);
+    
+    int getProjectSeq();  // 시퀀스 조회
 }
