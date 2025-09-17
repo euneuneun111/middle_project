@@ -3,6 +3,9 @@ package com.Semicolon.pms.service;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import org.mybatis.spring.SqlSessionTemplate;
+
 import com.Semicolon.command.PageMaker;
 import com.Semicolon.pms.dao.TaskDAO;
 import com.Semicolon.pms.dao.TaskReplyDAO;
@@ -13,7 +16,6 @@ public class TaskServiceImpl implements TaskService {
 
     private TaskDAO taskDAO;
     private TaskReplyDAO taskReplyDAO;
-    
     public TaskServiceImpl(TaskDAO taskDAO, TaskReplyDAO taskReplyDAO) { 
         this.taskDAO = taskDAO;
         this.taskReplyDAO = taskReplyDAO;
@@ -56,4 +58,11 @@ public class TaskServiceImpl implements TaskService {
         taskReplyDAO.deleteRepliesByTaskId(taskId);
         taskDAO.deleteTask(taskId);
     }
+
+    @Override
+    public List<TaskDto> getAllTasksByProjectId(String projectId) throws SQLException {
+        return taskDAO.getAllTasksByProjectId(projectId);
+    }
+    
+    
 }

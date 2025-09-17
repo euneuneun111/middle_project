@@ -27,12 +27,12 @@
             CALENDAR_REG_DATE,
             CALENDAR_MODIFY_DATE
         ) VALUES (
-            #{calendarId},
-            #{calendarTitle},
+            #{calendarId, jdbcType=VARCHAR},
+            #{calendarTitle, jdbcType=VARCHAR},
             #{projectId},
-            #{calendarContent},
-            #{calendarStartDate},
-            #{calendarEndDate},
+            #{calendarContent, jdbcType=VARCHAR},
+            #{calendarStartDate, jdbcType=DATE},
+            #{calendarEndDate, jdbcType=DATE},
             SYSDATE,
             SYSDATE
         )

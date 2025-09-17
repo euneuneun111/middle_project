@@ -3,12 +3,15 @@ package com.Semicolon.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ReportVO {
 	
 	private int rno;          // 보고 번호
 	private String title="";     // 제목
 	private String writer;	  // 작성자 
 	private String content="";   // 내용
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date regDate= new Date();     // 등록날짜
 	private Date reportDate = new Date(); // 보고 일자
 	
@@ -76,10 +79,13 @@ public class ReportVO {
 	}
 
 
-	public boolean ischeck() {
-		return check;
-	}
+//	public boolean ischeck() {
+//		return check;
+//	}
 
+	public String getcheck() {
+		return String.valueOf(this.check);
+	}
 
 	public void setPmcheck(boolean check) {
 		this.check = check;

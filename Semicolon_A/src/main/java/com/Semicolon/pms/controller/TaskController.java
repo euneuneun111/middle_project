@@ -141,6 +141,7 @@ public class TaskController {
             pageMaker.setPage(page);
             pageMaker.setPerPageNum(perPageNum);
             pageMaker.setKeyword(keyword);
+            pageMaker.setSearchQuery(keyword);
 
             pageMaker.setTotalCount(taskService.getTotalCountByProjectId(pageMaker));
             List<TaskDto> taskList = taskService.getTaskListByProjectId(pageMaker);
@@ -174,5 +175,24 @@ public class TaskController {
             e.printStackTrace();
             return new ResponseEntity<>("Error fetching task details", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    @GetMapping("/api/{projectId}/tasks/all")
+    @ResponseBody
+    public ResponseEntity<List<TaskDto>> getAllTasksByProjectId(@PathVariable String projectId) {
+        try {
+            // TaskService에 projectId로 모든 task 목록을 가져오는 메소드가 필요합니다.
+            List<TaskDto> taskList = taskService.getAllTasksByProjectId(projectId);
+            return new ResponseEntity<>(taskList, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/{projectId}/gantt")
+    public String showGanttChartPage(@PathVariable("projectId") String projectId, Model model) {
+        model.addAttribute("currentProjectId", projectId);
+        return "organization/pms/gantt/ganttchart";
     }
 }

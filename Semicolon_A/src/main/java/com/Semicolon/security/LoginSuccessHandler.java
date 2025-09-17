@@ -39,7 +39,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		// session 저장
 		HttpSession session = request.getSession();	
 		session.setAttribute("loginUser", loginUser);
-		session.setMaxInactiveInterval(10*60);
+		session.setMaxInactiveInterval(100*60);
 		
 		//로그인 정보를 스트링으로 저장.
 		String tag ="[login:user]";
