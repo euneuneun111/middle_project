@@ -2,9 +2,15 @@ package com.Semicolon.cmnt.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.Semicolon.cmnt.command.MemberModifyCommand;
@@ -125,4 +131,23 @@ public class MemberController {
             return Map.of("success", false, "message", "회원가입 실패: " + e.getMessage());
         }
     }
+    
+ // JSON 반환 (React용)
+ 	@PostMapping(value = "/modifyApi", produces = "application/json;charset=utf-8")
+     @ResponseBody
+     public Map<String, Object> modifyApi(@RequestBody MemberModifyCommand modifyCommand, HttpSession session) {
+         try {
+             MemberVO member = modifyCommand.toMemberVO();
+             service.modify(member); //DB수정
+          // DB에서 최신 정보 다시 조회
+             MemberVO updatedMember = service.getMember(member.getUser_id());
+
+             // 세션에 최신 사용자 정보로 덮어쓰기
+             session.setAttribute("loginUser", updatedMember);
+             return Map.of("success", true, "message", "회원정보 수정 완료", "member", updatedMember);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return Map.of("success", false, "message", "회원정보 수정 실패");
+         }
+     }
 }

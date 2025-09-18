@@ -56,9 +56,13 @@ public class CommonsController {
     @GetMapping("/check-session")
     @ResponseBody // ✅ @ResponseBody 추가
     public Map<String, Object> checkSession(HttpSession session) {
-        Object user = session.getAttribute("loginUser");
+    	MemberVO user = (MemberVO) session.getAttribute("loginUser");
         if (user != null) {
-            return Map.of("authenticated", true);
+        	user.setUser_pwd(null);
+            return Map.of(
+            		"authenticated", true,
+            		"user", user
+            	);
         } else {
             return Map.of("authenticated", false);
         }
