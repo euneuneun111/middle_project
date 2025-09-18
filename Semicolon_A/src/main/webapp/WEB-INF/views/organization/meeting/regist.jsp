@@ -75,13 +75,13 @@
 						placeholder="내용을 입력하세요."></td>
 				</tr>
 				<tr>
-					<th style="background: #e0e0e0; text-align: center;">회의개요</th>
+					<th style="background: #e0e0e0; text-align: center;">회의 개요</th>
 					<td colspan="3"><textarea class="form-control notNull"
 							name="overview" rows="5" title="회의 개요" placeholder="내용을 입력하세요."></textarea>
 					</td>
 				</tr>
 				<tr>
-					<th style="background: #e0e0e0; text-align: center;">회의내용</th>
+					<th style="background: #e0e0e0; text-align: center;">회의 내용</th>
 					<td colspan="3"><textarea class="form-control notNull"
 							name="content" rows="8" title="회의 내용" placeholder="내용을 입력하세요."></textarea>
 					</td>
