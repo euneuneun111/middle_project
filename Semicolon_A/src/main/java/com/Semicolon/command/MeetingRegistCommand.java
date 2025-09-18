@@ -9,13 +9,12 @@ public class MeetingRegistCommand {
 
 	private String meetingDate;
 	
-	private String organizer; //주관자
+	private String author; //주관자
 	private String attend; //참석자
 	private String title; //회의 명
 	private String overview; //회의개요
 	private String content; // 회의내용
-
-	
+		
 	
 	public String getMeetingDate() {
 		return meetingDate;
@@ -23,11 +22,12 @@ public class MeetingRegistCommand {
 	public void setMeetingDate(String meetingDate) {
 		this.meetingDate = meetingDate;
 	}
-	public String getOrganizer() {
-		return organizer;
+
+	public String getAuthor() {
+		return author;
 	}
-	public void setOrganizer(String organizer) {
-		this.organizer = organizer;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 	public String getAttend() {
 		return attend;
@@ -62,7 +62,7 @@ public class MeetingRegistCommand {
 		meeting.setAttend(this.attend);
 		meeting.setContent(this.content);
 		meeting.setOverview(this.overview);
-		meeting.setOrganizer(this.organizer);
+		meeting.setAuthor(this.author);
 		meeting.setMeetingDate(new SimpleDateFormat("yyyy-MM-dd").parse(this.meetingDate));
 		
 		return meeting;

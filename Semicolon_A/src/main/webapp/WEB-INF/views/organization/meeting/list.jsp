@@ -62,31 +62,32 @@
 					<table class="table table-striped table-valign-middle">
 						<thead>
 							<tr>
-								<th class="text-center" style="width: 10%">number</th>
-								<th class="text-center" style="width: 40%">Title</th>
-								<th class="text-center" style="width: 20%">writer</th>
-								<th class="text-center" style="width: 30%">Date</th>
+								<th class="text-center" style="width: 10%">작성 날짜</th>
+								<th class="text-center" style="width: 40%">회의 제목</th>
+								<th class="text-center" style="width: 20%">작성자</th>
+								<th class="text-center" style="width: 30%">상태</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:if test="${empty meetingList}">
 								<tr>
-									<td colspan="5" class="text-center">해당내용이 없습니다.</td>
+									<td colspan="4" class="text-center">해당 내용이 없습니다.</td>
 								</tr>
 							</c:if>
 							<c:if test="${not empty meetingList}">
 								<c:forEach items="${meetingList}" var="meeting">
 									<tr style="cursor: pointer;"
 										onclick="OpenWindow('detail?id=${meeting.id}')">
-										<td class="text-center">${meeting.id}</td>
-										<td class="text-center">${meeting.title}</td>
-										<td class="text-center">${meeting.organizer}</td>
 										<td class="text-center"><fmt:formatDate
 												value="${meeting.meetingDate}" pattern="yyyy-MM-dd" /></td>
+										<td class="text-center">${meeting.title}</td>
+										<td class="text-center">${meeting.author}</td>
+										<td class="text-center">${meeting.status}</td>
 									</tr>
 								</c:forEach>
 							</c:if>
 						</tbody>
+
 					</table>
 
 					<br>

@@ -38,9 +38,9 @@
 	<!-- 회의 등록 -->
 	<insert id="insertMeeting"
 		parameterType="com.Semicolon.dto.MeetingVO">
-		INSERT INTO MEETING (ID, PROJECT_ID, MEETINGDATE, TITLE, ORGANIZER, ATTEND,
+		INSERT INTO MEETING (ID, PROJECT_ID, MEETINGDATE, TITLE, AUTHOR, ATTEND,
 		OVERVIEW, CONTENT)
-		VALUES (#{id}, #{projectId}, #{meetingDate}, #{title}, #{organizer},
+		VALUES (#{id}, #{projectId}, #{meetingDate}, #{title}, #{author},
 		#{attend}, #{overview}, #{content})
 	</insert>
 
@@ -50,7 +50,7 @@
 		UPDATE MEETING
 		SET MEETINGDATE = #{meetingDate},
 		TITLE = #{title},
-		ORGANIZER = #{organizer},
+		AUTHOR = #{author},
 		ATTEND = #{attend},
 		OVERVIEW = #{overview},
 		CONTENT = #{content}

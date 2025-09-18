@@ -37,50 +37,47 @@
 
 	<div class="form-section" style="padding: 30px 100px">
 		<form name="registForm" role="form" enctype="multipart/form-data">
-			<table class="table table-bordered"
-				style="width: 100%; background: #fff;">
+			<table class="table table-bordered" style="width: 100%; background: #fff;">
 				<tr>
-					<th
-						style="width: 120px; background: #e0e0e0; text-align: center; padding: 20px 16px;">회의일자</th>
-					<td style="width: 200px; heigh: 10px;"><input type="date"
-						class="form-control" name="meetingDate"
-						value="${meeting.meetingDate}"></td>
-					<th
-						style="width: 80px; background: #e0e0e0; text-align: center; padding: 20px 16px;">주관자</th>
-					<td><input type="text" class="form-control" name="organizer"
-						value="${loginUser.name}" readonly></td>
+					<th style="width: 120px; background: #e0e0e0; text-align: center; padding: 20px 16px;">회의일자</th>
+					<td style="width: 200px; heigh: 10px;">
+						<input type="date" class="form-control" name="meetingDate" value="${meeting.meetingDate}">
+					</td>
+					<th style="width: 80px; background: #e0e0e0; text-align: center; padding: 20px 16px;">주관자</th>
+					<td>
+						<input type="text" class="form-control" name="author" value="${loginUser.name}" readonly>
+					</td>
 				</tr>
 				<tr>
 					<th style="background: #e0e0e0; text-align: center;">참석자</th>
-					<td colspan="3"><input type="text" class="form-control"
-						name="attend" placeholder="참석자 명단" value="${loginUser.name}">
+					<td colspan="3">
+						<input type="text" class="form-control" name="attend" placeholder="참석자 명단" value="${loginUser.name}">
 					</td>
 				</tr>
 				<tr>
 					<th style="background: #e0e0e0; text-align: center;">회의명</th>
-					<td colspan="3"><input type="text"
-						class="form-control notNull" name="title" title="회의 명"
-						placeholder="내용을 입력하세요."></td>
+					<td colspan="3">
+						<input type="text" class="form-control notNull" name="title" title="회의 명" placeholder="내용을 입력하세요.">
+					</td>
 				</tr>
 				<tr>
 					<th style="background: #e0e0e0; text-align: center;">회의개요</th>
-					<td colspan="3"><textarea class="form-control notNull"
-							name="overview" rows="5" title="회의 개요" placeholder="내용을 입력하세요."></textarea>
+					<td colspan="3">
+						<textarea class="form-control notNull" name="overview" rows="5" title="회의 개요" placeholder="내용을 입력하세요."></textarea>
 					</td>
 				</tr>
 				<tr>
 					<th style="background: #e0e0e0; text-align: center;">회의내용</th>
-					<td colspan="3"><textarea class="form-control notNull"
-							name="content" rows="8" title="회의 내용" placeholder="내용을 입력하세요."></textarea>
+					<td colspan="3">
+						<textarea class="form-control notNull" name="content" rows="8" title="회의 내용" placeholder="내용을 입력하세요."></textarea>
 					</td>
 				</tr>
 			</table>
 
-			<div class="d-flex justify-content-end mt-3">
+		<div class="d-flex justify-content-end mt-3">
 				<button type="button" class="btn mr-2"
 					style="background: #9b99ff; color: #fff" onclick="regist_go();">저장</button>
-				<button type="button" class="btn btn-default"
-					onclick="CloseWindow();" style="color: #9b99ff">취소</button>
+				<button type="button" class="btn btn-default" onclick="CloseWindow();" style="color: #9b99ff">취소</button>
 			</div>
 		</form>
 	</div>
@@ -103,18 +100,4 @@
 		form.submit();
 	}
 	</script>
-
-	<script>
-function CloseWindow() {
-    // 현재 창이 팝업일 경우 닫기
-    window.close();
-
-    // 만약 window.close()가 동작하지 않을 경우,
-    // 부모 창으로 이동시키고 닫는 방법
-    if (!window.closed) {
-        window.open('', '_self'); 
-        window.close();
-    }
-}
-</script>
 </body>

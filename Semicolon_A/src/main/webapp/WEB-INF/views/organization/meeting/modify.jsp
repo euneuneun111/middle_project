@@ -59,9 +59,9 @@ String today = sdf.format(new java.util.Date());
 								value="${meeting.title }" />
 						</div>
 						<div class="form-group">
-							<label for="organizer">작성자</label> <input type="text"
-								id="organizer" readonly name="organizer" title="작성자"
-								class="form-control" value="${meeting.organizer }" />
+							<label for="author">작성자</label> <input type="text"
+								id="author" readonly name="author" title="작성자"
+								class="form-control" value="${meeting.author }" />
 						</div>
 
 						<div class="form-group col-md-12">
