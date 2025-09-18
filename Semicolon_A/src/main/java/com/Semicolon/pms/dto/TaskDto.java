@@ -15,7 +15,7 @@ public class TaskDto {
     private Date taskRegDate;       // task_reg_date
     private String taskUrgency;     // task_urgency
     private Date taskModifyDate;    // task_modify_date
-
+    private int taskProgress;
     // 일감에 달린 댓글 목록
     private List<TaskReplyDTO> comments;
 
@@ -115,5 +115,12 @@ public class TaskDto {
 
     public void setComments(List<TaskReplyDTO> comments) {
         this.comments = comments;
+    }
+    public int getTaskProgress() {
+        return taskProgress;
+    }
+
+    public void setTaskProgress(int taskProgress) {
+        this.taskProgress = taskProgress;
     }
 }
