@@ -21,4 +21,8 @@ public interface MeetingService {
     List<MeetingVO> getMeetingListByProject(PageMaker pageMaker) throws SQLException;
     int getMeetingListCountByProject(PageMaker pageMaker) throws SQLException;
     
+    List<String> getProjectManagers(String projectId) throws SQLException;
+
+    String toggleApprovalStatus(int meetingId) throws SQLException;
+
 }

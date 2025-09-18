@@ -1,7 +1,9 @@
 package com.Semicolon.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -70,6 +72,22 @@ public class MeetingDAOImpl implements MeetingDAO {
 	    return session.selectOne("Meeting-Mapper.selectMeetingListByProjectCount", pageMaker);
 	}
 
+	@Override
+	public String selectProjectManagers(String projectId) throws SQLException {
+	    return session.selectOne("Meeting-Mapper.selectProjectManagers", projectId);
+	}
+
+	public String selectMeetingStatus(int meetingId) throws SQLException {
+	    return session.selectOne("Meeting-Mapper.selectMeetingStatus", meetingId);
+	}
+
+	@Override
+	public void updateMeetingStatus(int meetingId, String status) throws SQLException {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("id", meetingId);
+	    param.put("status", status);
+	    session.update("Meeting-Mapper.updateMeetingStatus", param);
+	}
 
 	
 }

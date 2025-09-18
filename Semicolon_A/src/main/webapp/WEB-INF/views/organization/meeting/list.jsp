@@ -63,8 +63,9 @@
 						<thead>
 							<tr>
 								<th class="text-center" style="width: 10%">작성 날짜</th>
-								<th class="text-center" style="width: 40%">회의 제목</th>
-								<th class="text-center" style="width: 20%">작성자</th>
+								<th class="text-center" style="width: 20%">회의 제목</th>
+								<th class="text-center" style="width: 20%">회의 개요</th>
+								<th class="text-center" style="width: 20%">주관자</th>
 								<th class="text-center" style="width: 30%">상태</th>
 							</tr>
 						</thead>
@@ -81,6 +82,7 @@
 										<td class="text-center"><fmt:formatDate
 												value="${meeting.meetingDate}" pattern="yyyy-MM-dd" /></td>
 										<td class="text-center">${meeting.title}</td>
+										<td class="text-center">${meeting.overview }</td>
 										<td class="text-center">${meeting.author}</td>
 										<td class="text-center">${meeting.status}</td>
 									</tr>

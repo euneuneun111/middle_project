@@ -1,6 +1,8 @@
 package com.Semicolon.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.Semicolon.command.PageMaker;
@@ -62,5 +64,38 @@ public class MeetingServiceImpl implements MeetingService {
 	public int getMeetingListCountByProject(PageMaker pageMaker) throws SQLException {
 	    return meetingDAO.selectMeetingListByProjectCount(pageMaker);
 	}
+
+	@Override
+	public List<String> getProjectManagers(String projectId) throws SQLException {
+	    // DAO에서 한 문자열 가져오기
+	    String managersStr = meetingDAO.selectProjectManagers(projectId); // "홍길동,김철수"
+
+	    
+	    if (managersStr == null || managersStr.isEmpty()) {
+	        return new ArrayList<>();
+	    }
+
+	    // 콤마 기준으로 분리 후 리스트 반환
+	    return Arrays.asList(managersStr.split("\\s*,\\s*"));
+	}
+
+	@Override
+    public String toggleApprovalStatus(int meetingId) throws SQLException {
+        // 현재 상태 조회
+        String currentStatus = meetingDAO.selectMeetingStatus(meetingId);
+
+        // 상태 변경: SUBMITTED ↔ APPROVED
+        String newStatus;
+        if ("APPROVED".equals(currentStatus)) {
+            newStatus = "SUBMITTED"; 
+        } else {
+            newStatus = "APPROVED";
+        }
+
+        // DB 업데이트
+        meetingDAO.updateMeetingStatus(meetingId, newStatus);
+
+        return newStatus;
+    }
 }
 	

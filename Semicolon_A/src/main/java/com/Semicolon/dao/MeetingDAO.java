@@ -21,6 +21,15 @@ public interface MeetingDAO {
     
     List<MeetingVO> selectMeetingListByProject(PageMaker pageMaker) throws SQLException;
     int selectMeetingListByProjectCount(PageMaker pageMaker) throws SQLException;
+    
+    String selectProjectManagers(String projectId) throws SQLException;
+    
+    String selectMeetingStatus(int meetingId) throws SQLException;
+
+    void updateMeetingStatus(int meetingId, String status) throws SQLException;
+    
+    
+
 }
 
 

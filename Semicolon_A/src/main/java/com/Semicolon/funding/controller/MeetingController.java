@@ -1,7 +1,9 @@
 package com.Semicolon.funding.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -53,8 +56,12 @@ public class MeetingController {
 
     // 회의 등록 폼
     @GetMapping("/regist")
-    public String registForm(@PathVariable("projectId") String projectId, Model model) {
+    public String registForm(@PathVariable("projectId") String projectId, Model model) throws SQLException {
         model.addAttribute("projectId", projectId);
+        List<String> projectManagers = meetingService.getProjectManagers(projectId); 
+
+        model.addAttribute("projectManagers", projectManagers);
+        
         return "/organization/meeting/regist";
     }
 
@@ -66,11 +73,13 @@ public class MeetingController {
 
         String url = "/organization/meeting/regist_success";
 
+
         MeetingVO meeting = regCommand.toMeetingVO();
         meeting.setProjectId(projectId); // ✅ 여기에 반드시 세팅
         meeting.setTitle(HTMLInputFilter.htmlSpecialChars(meeting.getTitle()));
 
         meetingService.registMeeting(meeting);
+
 
         model.addAttribute("projectId", projectId);
         return url;
@@ -93,14 +102,17 @@ public class MeetingController {
     }
 
     @GetMapping("/modify")
-    public String modifyForm(
-            @PathVariable("projectId") String projectId,
-            int id,
-            Model model) throws Exception {
+    public String modifyForm(@PathVariable("projectId") String projectId,
+                             int id,
+                             Model model) throws SQLException {
 
         MeetingVO meeting = meetingService.getMeetingById(id);
+        List<String> projectManagers = meetingService.getProjectManagers(projectId);
+
         model.addAttribute("meeting", meeting);
+        model.addAttribute("projectManagers", projectManagers);
         model.addAttribute("projectId", projectId);
+
         return "/organization/meeting/modify";
     }
 
@@ -135,6 +147,24 @@ public class MeetingController {
 
         model.addAttribute("projectId", projectId);
         return url;
+    }
+    
+    @PostMapping("/updateApprovalStatus")
+    public Map<String, Object> updateApprovalStatus(
+            @PathVariable("projectId") String projectId,
+            @RequestBody Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            int meetingId = (Integer) param.get("id");
+            String newStatus = meetingService.toggleApprovalStatus(meetingId);
+
+            result.put("success", true);
+            result.put("newStatus", newStatus);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        return result;
     }
 }
 

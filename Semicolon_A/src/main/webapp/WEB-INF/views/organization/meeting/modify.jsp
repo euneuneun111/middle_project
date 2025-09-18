@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 
 
 <%
@@ -9,8 +11,34 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 String today = sdf.format(new java.util.Date());
 %>
 
+<head>
+
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/dist/css/adminlte.min.css">
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/dist/js/adminlte.min.js"></script>
+
+<!-- jQuery -->
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script
+	src="<%=request.getContextPath()%>/resources/bootstrap/dist/js/adminlte.min.js"></script>
+<!-- common -->
+<script src="<%=request.getContextPath()%>/resources/js/common.js"></script>
+</head>
+
 <body>
-    <%@ include file="/WEB-INF/views/module/header.jsp" %>
+
 
 	<section class="content-header">
 		<div class="container-fluid">
@@ -18,14 +46,7 @@ String today = sdf.format(new java.util.Date());
 				<div class="col-sm-6">
 					<h1>수정하기</h1>
 				</div>
-				<div class="col-sm-6">
-					<ol class="breadcrumb float-sm-right">
-						<li class="breadcrumb-item"><a href="list.do"> <i
-								class="fa fa-dashboard"></i>회의록
-						</a></li>
 
-					</ol>
-				</div>
 			</div>
 		</div>
 	</section>
@@ -59,14 +80,22 @@ String today = sdf.format(new java.util.Date());
 								value="${meeting.title }" />
 						</div>
 						<div class="form-group">
-							<label for="author">작성자</label> <input type="text"
-								id="author" readonly name="author" title="작성자"
-								class="form-control" value="${meeting.author }" />
+							<label for="author">주관자</label> <input type="text" id="author"
+								readonly name="author" title="작성자" class="form-control"
+								value="${meeting.author }" />
 						</div>
 
 						<div class="form-group col-md-12">
-							<label>참석자</label> <input type="text" class="form-control"
-								name="attend" value="${meeting.attend}">
+							<label>참석자</label>
+							<c:forEach var="manager" items="${projectManagers}"
+								varStatus="status">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" name="attend"
+										value="${manager}" id="manager_${status.index}"
+										<c:if test="${fn:contains(meeting.attend, manager)}">checked</c:if>>
+									<label class="form-check-label" for="manager_${status.index}">${manager}</label>
+								</div>
+							</c:forEach>
 						</div>
 
 						<div class="form-group">
