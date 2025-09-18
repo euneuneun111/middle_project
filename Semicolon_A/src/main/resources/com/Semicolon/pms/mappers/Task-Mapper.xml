@@ -15,6 +15,7 @@
 		<result property="taskRegDate" column="TASK_REG_DATE" />
 		<result property="taskUrgency" column="TASK_URGENCY" />
 		<result property="taskModifyDate" column="TASK_MODIFY_DATE" />
+		<result property="taskProgress" column="TASK_PROGRESS" />
 	</resultMap>
 
 	<select id="getTaskListByProjectId" parameterType="com.Semicolon.command.PageMaker" resultMap="taskMap">
@@ -64,7 +65,8 @@
 			TASK_DESCRIPTION,
 			TASK_REG_DATE,
 			TASK_URGENCY,
-			TASK_MODIFY_DATE
+			TASK_MODIFY_DATE,
+			TASK_PROGRESS
 		)
 		VALUES
 		(
@@ -78,7 +80,8 @@
 			#{taskDescription, jdbcType=VARCHAR},
 			SYSDATE,
 			#{taskUrgency, jdbcType=VARCHAR},
-			SYSDATE
+			SYSDATE,
+			#{taskProgress, jdbcType=INTEGER}
 		)
 	</insert>
 
@@ -95,8 +98,8 @@
 			TASK_DESCRIPTION,
 			TASK_REG_DATE,
 			TASK_URGENCY,
-			TASK_MODIFY_DATE
-		FROM
+			TASK_MODIFY_DATE,
+			TASK_PROGRESS FROM
 			TASK
 		WHERE
 			TASK_ID = #{taskId}
@@ -113,8 +116,8 @@
 			TASK_END_DATE = #{taskEndDate, jdbcType=DATE},
 			TASK_STATUS = #{taskStatus, jdbcType=VARCHAR},
 			TASK_URGENCY = #{taskUrgency, jdbcType=VARCHAR},
-			TASK_MODIFY_DATE = SYSDATE
-		WHERE TASK_ID = #{taskId}
+			TASK_MODIFY_DATE = SYSDATE,
+			TASK_PROGRESS = #{taskProgress, jdbcType=INTEGER} WHERE TASK_ID = #{taskId}
 	</update>
 
 	<delete id="deleteTask" parameterType="String">
@@ -134,8 +137,8 @@
         TASK_DESCRIPTION,
         TASK_REG_DATE,
         TASK_URGENCY,
-        TASK_MODIFY_DATE
-    FROM
+        TASK_MODIFY_DATE,
+        TASK_PROGRESS FROM
         TASK
     WHERE
         PROJECT_ID = #{projectId}
