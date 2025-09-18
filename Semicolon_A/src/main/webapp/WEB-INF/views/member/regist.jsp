@@ -128,7 +128,6 @@ input#user_pwd, #name, #email, #major {
 								</label>
 								<div class="input-group input-group-sm" >
 					                <input name="user_id" onblur="validation(this.name);"
-					                       onkeyup="this.value=this.value.replace(/[\ㄱ-ㅎㅏ-ㅣ가-힣]/g, '');"
 					                       type="text" class="form-control" id="user_id"
 					                       placeholder="13글자 영문자,숫자 조합" >
 					                <div class="input-group-append">
