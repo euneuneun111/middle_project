@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,25 +91,25 @@ public class ReportController {
 		return attachreportList;
 	}
 
-	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
-	public String registPost(ReportRegistCommand regCommand, ModelAndView mnv) throws Exception {
-		String url = "/organization/report/regist_success";
-
-		ReportVO report = regCommand.toReportVO();
-
-		report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
-
-		List<MultipartFile> uploadFiles = regCommand.getUploadFile();
-		String uploadPath = fileUploadPath;
-
-		List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
-		report.setAttaches(attaches);
-
-		
-		reportService.regist(report);
-
-		return url;
-	}
+//	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
+//	public String registPost(ReportRegistCommand regCommand, ModelAndView mnv) throws Exception {
+//		String url = "/organization/report/regist_success";
+//
+//		ReportVO report = regCommand.toReportVO();
+//
+//		report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
+//
+//		List<MultipartFile> uploadFiles = regCommand.getUploadFile();
+//		String uploadPath = fileUploadPath;
+//
+//		List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
+//		report.setAttaches(attaches);
+//
+//		
+//		reportService.regist(report);
+//
+//		return url;
+//	}
 
 	@GetMapping("/detail")
 	public ModelAndView detail(int rno, ModelAndView mnv) throws Exception {
@@ -203,5 +205,47 @@ public class ReportController {
 		mnv.setViewName(url);
 		return mnv;
 	}
+	
+	
+	// JSON 반환 (React용)
+	@GetMapping(value = "/list", produces = "application/json")
+	@ResponseBody
+	public List<ReportVO> listApi(@ModelAttribute ReportPageMaker reportpage) throws Exception {
+	    return reportService.reportList(reportpage);
+	}
+	
+	// 등록
+	@PostMapping(value = "/regist", produces = "application/json")
+	@ResponseBody
+	public String registApi(@RequestBody ReportRegistCommand regCommand) throws Exception {
+	    ReportVO report = regCommand.toReportVO();
+	    reportService.regist(report);
+	    return "success";
+	}
 
+	// 상세
+	@GetMapping(value = "/detail", produces = "application/json")
+	@ResponseBody
+	public ReportVO detailApi(int rno) throws Exception {
+	    return reportService.getRno(rno);
+	}
+
+	// 수정
+	@PostMapping(value = "/modify", produces = "application/json")
+	@ResponseBody
+	public String modifyApi(@RequestBody ReportModifyCommand modCommand) throws Exception {
+	    ReportVO report = modCommand.toReportVO();
+	    reportService.modify(report);
+	    return "success";
+	}
+
+	// 삭제
+	@PostMapping(value = "/remove", produces = "application/json")
+	@ResponseBody
+	public String removeApi(@RequestBody Map<String, Integer> param) throws Exception {
+	    Integer rno = param.get("rno");
+	    if (rno == null) return "fail";
+	    reportService.remove(rno);
+	    return "success";
+	}
 }
