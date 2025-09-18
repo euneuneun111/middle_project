@@ -4,21 +4,21 @@
 
 <div class="sidebar-container">
     <ul class="sidebar-menu">
-        <li><a href="${pageContext.request.contextPath}/main/project/{projectId}/tasklist"><i class="fas fa-tasks"></i> TASK</a></li>
+        <li><a href="${pageContext.request.contextPath}/main/project/${project.projectId}/tasklist"><i class="fas fa-tasks"></i> TASK</a></li>
         <li>
             <a id="issue-link" href="${pageContext.request.contextPath}/main/project/{projectId}/issuelist">
                 <i class="fas fa-bug"></i> ISSUE
             </a>
         </li>
-        <li><a href="${pageContext.request.contextPath}/main/gantt"><i class="fas fa-chart-bar"></i> GANTT</a></li>
+        <li><a href="${pageContext.request.contextPath}/main/${project.projectId}/gantt"><i class="fas fa-chart-bar"></i> GANTT</a></li>
         <li>
-            <a href="${pageContext.request.contextPath}/main/calendar">
+            <a href="${pageContext.request.contextPath}/main/${project.projectId}/calendar">
                 <i class="fas fa-calendar-alt"></i> CALENDAR
             </a>
         </li>
-        <li><a href="${pageContext.request.contextPath}/organization/meeting/list"><i class="fas fa-handshake"></i> MEETING</a></li>
+        <li><a href="${pageContext.request.contextPath}/organization/${project.projectId}/meeting/list"><i class="fas fa-handshake"></i> MEETING</a></li>
         
-        <li><a href="${pageContext.request.contextPath}/organization/report/list"><i class="fas fa-file-alt"></i> REPORT</a></li>
+        <li><a href="${pageContext.request.contextPath}/organization/${project.projectId}/report/list"><i class="fas fa-file-alt"></i> REPORT</a></li>
         </ul>
 </div>
 
