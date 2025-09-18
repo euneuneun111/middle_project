@@ -1,62 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Meeting-Mapper">
 
-	<select id="selectMeetingListCount" resultType="int"
-		parameterType="pageMaker">
-		SELECT COUNT(*) FROM meeting
+	<select id="selectMeetingSequenceNextValue" resultType="int">
+		SELECT MEETING_SEQ.NEXTVAL FROM DUAL
 	</select>
 
-	<select id="selectMeetingList" resultType="meeting"
-		parameterType="pageMaker">
+	<!-- 프로젝트별 회의 리스트 -->
+	<select id="selectMeetingListByProject"
+		parameterType="com.Semicolon.command.PageMaker"
+		resultType="com.Semicolon.dto.MeetingVO">
 		SELECT *
-		FROM meeting
-		ORDER BY ID DESC
+		FROM MEETING
+		WHERE PROJECT_ID = #{projectId}
+		ORDER BY MEETINGDATE DESC
 	</select>
 
-	<select id="selectMeetingById" resultType="meeting"
-		parameterType="int">
+	<!-- 프로젝트별 회의 수 -->
+	<select id="selectMeetingListByProjectCount"
+		parameterType="com.Semicolon.command.PageMaker" resultType="int">
+		SELECT COUNT(*)
+		FROM MEETING
+		WHERE PROJECT_ID = #{projectId}
+	</select>
+
+	<!-- 단일 회의 조회 -->
+	<select id="selectMeetingById" parameterType="int"
+		resultType="com.Semicolon.dto.MeetingVO">
 		SELECT *
-		FROM meeting
-		WHERE id = #{id}
+		FROM MEETING
+		WHERE ID = #{id}
 	</select>
 
-	<insert id="insertMeeting" parameterType="meeting">
-		INSERT INTO meeting (
-		id, meetingdate, organizer, attend, title, overview, content
-		) VALUES
-		(
-		#{id}, #{meetingDate}, #{organizer}, #{attend}, #{title},
-		#{overview},
-		#{content}
-		)
+	<!-- 회의 등록 -->
+	<insert id="insertMeeting"
+		parameterType="com.Semicolon.dto.MeetingVO">
+		INSERT INTO MEETING (ID, PROJECT_ID, MEETINGDATE, TITLE, ORGANIZER, ATTEND,
+		OVERVIEW, CONTENT)
+		VALUES (#{id}, #{projectId}, #{meetingDate}, #{title}, #{organizer},
+		#{attend}, #{overview}, #{content})
 	</insert>
 
-
-	<update id="updateMeeting" parameterType="meeting">
-		UPDATE meeting
-		SET
-		meetingdate = #{meetingDate},
-		organizer = #{organizer},
-	   
-		attend = #{attend},
-		title = #{title},
-		overview = #{overview},
-		content = #{content}
-		WHERE id = #{id}
+	<!-- 회의 수정 -->
+	<update id="updateMeeting"
+		parameterType="com.Semicolon.dto.MeetingVO">
+		UPDATE MEETING
+		SET MEETINGDATE = #{meetingDate},
+		TITLE = #{title},
+		ORGANIZER = #{organizer},
+		ATTEND = #{attend},
+		OVERVIEW = #{overview},
+		CONTENT = #{content}
+		WHERE ID = #{id}
 	</update>
+
+	<!-- 회의 삭제 -->
 	<delete id="deleteMeeting" parameterType="int">
-		DELETE FROM meeting
-		WHERE id = #{id}
+		DELETE FROM MEETING WHERE ID = #{id}
 	</delete>
-
-	<select id="selectMeetingSequenceNextValue" resultType="int">
-		SELECT
-		MEETING_SEQ.NEXTVAL FROM DUAL
-
-	</select>
 
 </mapper>

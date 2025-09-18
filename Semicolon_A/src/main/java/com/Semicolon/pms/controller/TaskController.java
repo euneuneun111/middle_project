@@ -46,7 +46,6 @@ public class TaskController {
                               @RequestParam(value = "searchQuery", required = false) String searchQuery,
                               Model model) {
         try {
-        	projectId = "PJ-001";
             PageMaker pageMaker = new PageMaker();
             pageMaker.setProjectId(projectId);
             pageMaker.setPage(page);

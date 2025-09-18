@@ -37,14 +37,16 @@ public class MeetingController {
             @ModelAttribute PageMaker pageMaker,
             ModelAndView mnv) throws SQLException {
 
-        String url = "organization/meeting/list";
+        pageMaker.setProjectId(projectId); // ✅ 반드시 projectId 세팅
 
-        List<MeetingVO> meetingList = meetingService.getMeetingList(pageMaker);
+        List<MeetingVO> meetingList = meetingService.getMeetingListByProject(pageMaker);
+        int totalCount = meetingService.getMeetingListCountByProject(pageMaker);
 
         mnv.addObject("meetingList", meetingList);
+        mnv.addObject("totalCount", totalCount);
         mnv.addObject("pageMaker", pageMaker);
-        mnv.addObject("projectId", projectId); // ✅ JSP에서 쓸 수 있도록 전달
-        mnv.setViewName(url);
+        mnv.addObject("projectId", projectId);
+        mnv.setViewName("organization/meeting/list");
 
         return mnv;
     }
@@ -65,6 +67,7 @@ public class MeetingController {
         String url = "/organization/meeting/regist_success";
 
         MeetingVO meeting = regCommand.toMeetingVO();
+        meeting.setProjectId(projectId); // ✅ 여기에 반드시 세팅
         meeting.setTitle(HTMLInputFilter.htmlSpecialChars(meeting.getTitle()));
 
         meetingService.registMeeting(meeting);
@@ -72,7 +75,7 @@ public class MeetingController {
         model.addAttribute("projectId", projectId);
         return url;
     }
-
+    
     @GetMapping("/detail")
     public ModelAndView detail(
             @PathVariable("projectId") String projectId,

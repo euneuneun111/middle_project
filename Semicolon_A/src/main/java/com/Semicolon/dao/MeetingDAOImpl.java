@@ -56,5 +56,20 @@ public class MeetingDAOImpl implements MeetingDAO {
 		return session.selectOne("Meeting-Mapper.selectMeetingSequenceNextValue");
 	}
 
+	@Override
+	public List<MeetingVO> selectMeetingListByProject(PageMaker pageMaker) throws SQLException {
+	    int offset = pageMaker.getStartRow() - 1;
+	    int limit = pageMaker.getPerPageNum();
+	    RowBounds rows = new RowBounds(offset, limit);
+
+	    return session.selectList("Meeting-Mapper.selectMeetingListByProject", pageMaker, rows);
+	}
+
+	@Override
+	public int selectMeetingListByProjectCount(PageMaker pageMaker) throws SQLException {
+	    return session.selectOne("Meeting-Mapper.selectMeetingListByProjectCount", pageMaker);
+	}
+
+
 	
 }
