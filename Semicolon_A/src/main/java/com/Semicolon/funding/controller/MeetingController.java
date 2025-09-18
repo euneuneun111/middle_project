@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,91 +22,119 @@ import com.Semicolon.service.MeetingService;
 import com.josephoconnell.html.HTMLInputFilter;
 
 @Controller
-@RequestMapping("/organization/meeting")
+@RequestMapping("/organization/{projectId}/meeting")
 public class MeetingController {
 
-	@Autowired
-	private MeetingService meetingService;
+    @Autowired
+    private MeetingService meetingService;
 
-	@Autowired
+    @Autowired
     private MeetingDAO meetingDAO;
-    
-    @GetMapping("/list")
-    public ModelAndView meetingList(@ModelAttribute PageMaker pageMaker, ModelAndView mnv) throws SQLException {
-    	String url = "organization/meeting/list";
 
-        List<MeetingVO> meetingList = meetingService.getMeetingList(pageMaker);
+    @GetMapping("/list")
+    public ModelAndView meetingList(
+            @PathVariable("projectId") String projectId,
+            @ModelAttribute PageMaker pageMaker,
+            ModelAndView mnv) throws SQLException {
+
+        pageMaker.setProjectId(projectId); // ✅ 반드시 projectId 세팅
+
+        List<MeetingVO> meetingList = meetingService.getMeetingListByProject(pageMaker);
+        int totalCount = meetingService.getMeetingListCountByProject(pageMaker);
 
         mnv.addObject("meetingList", meetingList);
-        mnv.addObject("pageMaker",pageMaker);
-        mnv.setViewName(url);
-        
+        mnv.addObject("totalCount", totalCount);
+        mnv.addObject("pageMaker", pageMaker);
+        mnv.addObject("projectId", projectId);
+        mnv.setViewName("organization/meeting/list");
+
         return mnv;
-        
     }
 
-	// 회의 등록 폼
-	@GetMapping("/regist")
-	public void registForm() {
-	}
+    // 회의 등록 폼
+    @GetMapping("/regist")
+    public String registForm(@PathVariable("projectId") String projectId, Model model) {
+        model.addAttribute("projectId", projectId);
+        return "/organization/meeting/regist";
+    }
 
-	@PostMapping("/regist")
-	public String registPost(MeetingRegistCommand regCommand, ModelAndView mnv) throws Exception {
-		String url = "/organization/meeting/regist_success";
+    @PostMapping("/regist")
+    public String registPost(
+            @PathVariable("projectId") String projectId,
+            MeetingRegistCommand regCommand,
+            Model model) throws Exception {
 
-		MeetingVO meeting = regCommand.toMeetingVO();
+        String url = "/organization/meeting/regist_success";
 
-		meeting.setTitle(HTMLInputFilter.htmlSpecialChars(meeting.getTitle()));
+        MeetingVO meeting = regCommand.toMeetingVO();
+        meeting.setProjectId(projectId); // ✅ 여기에 반드시 세팅
+        meeting.setTitle(HTMLInputFilter.htmlSpecialChars(meeting.getTitle()));
 
-		meetingService.registMeeting(meeting);
-		return url;
-	}
+        meetingService.registMeeting(meeting);
 
-	@GetMapping("/detail")
-	public ModelAndView detail(int id, ModelAndView mnv) throws Exception {
-		String url = "/organization/meeting/detail";
+        model.addAttribute("projectId", projectId);
+        return url;
+    }
+    
+    @GetMapping("/detail")
+    public ModelAndView detail(
+            @PathVariable("projectId") String projectId,
+            int id,
+            ModelAndView mnv) throws Exception {
 
-		MeetingVO meeting = meetingService.getMeetingById(id);
+        String url = "/organization/meeting/detail";
 
-		mnv.addObject("meeting", meeting);
-		mnv.setViewName(url);
-		return mnv;
+        MeetingVO meeting = meetingService.getMeetingById(id);
 
-	}
+        mnv.addObject("meeting", meeting);
+        mnv.addObject("projectId", projectId);
+        mnv.setViewName(url);
+        return mnv;
+    }
 
-	@GetMapping("/modify")
-	public void modifyForm(int id, Model model) throws Exception {
-		MeetingVO meeting = meetingService.getMeetingById(id);
+    @GetMapping("/modify")
+    public String modifyForm(
+            @PathVariable("projectId") String projectId,
+            int id,
+            Model model) throws Exception {
 
-		model.addAttribute("meeting", meeting);
-	}
+        MeetingVO meeting = meetingService.getMeetingById(id);
+        model.addAttribute("meeting", meeting);
+        model.addAttribute("projectId", projectId);
+        return "/organization/meeting/modify";
+    }
 
-	@PostMapping("/modify")
+    @PostMapping("/modify")
+    public ModelAndView modifyPost(
+            @PathVariable("projectId") String projectId,
+            MeetingModifyCommand modifyCommand,
+            ModelAndView mnv) throws Exception {
 
-	public ModelAndView modifyPost(MeetingModifyCommand modifyCommand, ModelAndView mnv) throws Exception {
+        String url = "/organization/meeting/modify_success";
 
-		String url = "/organization/meeting/modify_success";
+        MeetingVO meeting = modifyCommand.toMeetingVO();
+        meeting.setTitle(HTMLInputFilter.htmlSpecialChars(meeting.getTitle()));
 
-		MeetingVO meeting = modifyCommand.toMeetingVO();
-		meeting.setTitle(HTMLInputFilter.htmlSpecialChars(meeting.getTitle()));
+        meetingService.modifyMeeting(meeting);
 
-		meetingService.modifyMeeting(meeting);
+        mnv.addObject("id", meeting.getId());
+        mnv.addObject("projectId", projectId);
+        mnv.setViewName(url);
 
-		mnv.addObject("id", meeting.getId());
-		mnv.setViewName(url);
-		
-		return mnv;
-	}
-	
-	
-	@GetMapping("/remove")
-	public String remove(int id)throws Exception{
-		String url="/organization/meeting/remove_success";		
-		
-		meetingService.removeMeeting(id);
-		
-		return url;
-	}
-	
+        return mnv;
+    }
 
+    @GetMapping("/remove")
+    public String remove(
+            @PathVariable("projectId") String projectId,
+            int id,
+            Model model) throws Exception {
+
+        String url = "/organization/meeting/remove_success";
+        meetingService.removeMeeting(id);
+
+        model.addAttribute("projectId", projectId);
+        return url;
+    }
 }
+

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ import com.Semicolon.service.ReportService;
 import com.josephoconnell.html.HTMLInputFilter;
 
 @Controller
-@RequestMapping("/organization/report")
+@RequestMapping("/organization/{projectId}/report")
 public class ReportController {
 
 	@Autowired
@@ -44,12 +45,13 @@ public class ReportController {
 	private AttachReportDAO attachreportDAO;
 
 	@GetMapping("/list")
-	public ModelAndView list(@ModelAttribute ReportPageMaker reportpage, ModelAndView mnv) throws Exception {
+	public ModelAndView list( @PathVariable("projectId") String projectId,@ModelAttribute ReportPageMaker reportpage, ModelAndView mnv) throws Exception {
 
 		List<ReportVO> reportList = reportService.reportList(reportpage);
 
 		mnv.addObject("reportList", reportList);
 		mnv.addObject("pageMaker", reportpage);
+        mnv.addObject("projectId", projectId); // ✅ JSP에서 쓸 수 있도록 전달
 		mnv.setViewName("organization/report/list"); // 뷰 이름
 
 		return mnv;
@@ -91,25 +93,25 @@ public class ReportController {
 		return attachreportList;
 	}
 
-//	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
-//	public String registPost(ReportRegistCommand regCommand, ModelAndView mnv) throws Exception {
-//		String url = "/organization/report/regist_success";
-//
-//		ReportVO report = regCommand.toReportVO();
-//
-//		report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
-//
-//		List<MultipartFile> uploadFiles = regCommand.getUploadFile();
-//		String uploadPath = fileUploadPath;
-//
-//		List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
-//		report.setAttaches(attaches);
-//
-//		
-//		reportService.regist(report);
-//
-//		return url;
-//	}
+	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
+	public String registPost(ReportRegistCommand regCommand, ModelAndView mnv) throws Exception {
+		String url = "/organization/report/regist_success";
+
+		ReportVO report = regCommand.toReportVO();
+
+		report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
+
+		List<MultipartFile> uploadFiles = regCommand.getUploadFile();
+	String uploadPath = fileUploadPath;
+
+	List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
+		report.setAttaches(attaches);
+
+		
+		reportService.regist(report);
+
+		return url;
+	}
 
 	@GetMapping("/detail")
 	public ModelAndView detail(int rno, ModelAndView mnv) throws Exception {

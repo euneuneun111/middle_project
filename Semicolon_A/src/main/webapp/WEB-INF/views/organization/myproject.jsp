@@ -119,16 +119,16 @@
 					<tbody>
 						<c:if test="${not empty projectList}">
 							<c:set var="hasProject" value="false" />
-							<c:forEach var="project" items="${projectList}">
+							<c:forEach var="project" items="${projectList}"  >
 								<c:if
 									test="${not empty project.projectManager and project.projectManager.contains(sessionScope.loginUser.name)}">
 									<c:set var="hasProject" value="true" />
-									<tr>
+									<tr   >   
 										<td><i class="status-icon fas fa-circle ${statusClass}"></i></td>
 										<td>${project.projectId}</td>
-										<td><a
-											href="${pageContext.request.contextPath}/org/myproject/${project.projectId}"
-											class="issue-title-link">${project.projectName}</a></td>
+										<td  ><a  href="${pageContext.request.contextPath}/org/myproject/${project.projectId}"
+											
+											class="issue-title-link">${project.projectName} </a></td>
 										<td class="description-cell"><c:out
 												value="${fn:length(project.projectDesc) > 50 ? fn:substring(project.projectDesc,0,50) + '...' : project.projectDesc}" />
 										</td>

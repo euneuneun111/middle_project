@@ -18,6 +18,9 @@ public interface MeetingDAO {
     void insertMeeting(MeetingVO meeting) throws SQLException;
     void updateMeeting(MeetingVO meeting) throws SQLException;
     void deleteMeeting(int id) throws SQLException;
+    
+    List<MeetingVO> selectMeetingListByProject(PageMaker pageMaker) throws SQLException;
+    int selectMeetingListByProjectCount(PageMaker pageMaker) throws SQLException;
 }
 
 

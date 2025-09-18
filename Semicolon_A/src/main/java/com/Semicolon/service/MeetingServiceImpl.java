@@ -52,5 +52,15 @@ public class MeetingServiceImpl implements MeetingService {
 
 		meetingDAO.deleteMeeting(id);
 	}
+
+	@Override
+	public List<MeetingVO> getMeetingListByProject(PageMaker pageMaker) throws SQLException {
+	    return meetingDAO.selectMeetingListByProject(pageMaker);
+	}
+
+	@Override
+	public int getMeetingListCountByProject(PageMaker pageMaker) throws SQLException {
+	    return meetingDAO.selectMeetingListByProjectCount(pageMaker);
+	}
 }
 	

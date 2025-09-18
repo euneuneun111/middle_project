@@ -17,4 +17,8 @@ public interface MeetingService {
     void modifyMeeting(MeetingVO meeting) throws SQLException;
 
     void removeMeeting(int id) throws SQLException;
+    
+    List<MeetingVO> getMeetingListByProject(PageMaker pageMaker) throws SQLException;
+    int getMeetingListCountByProject(PageMaker pageMaker) throws SQLException;
+    
 }
