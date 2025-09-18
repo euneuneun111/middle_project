@@ -23,9 +23,10 @@ import com.Semicolon.pms.service.TaskService;
 import com.Semicolon.command.PageMaker;
 
 @Controller
-@RequestMapping("/main/project")
+@RequestMapping("/main/project") 
 public class IssueController {
 
+	// 확인
     private final IssueService issueService;
     private final TaskService taskService;
     private final IssueReplyService issueReplyService;
