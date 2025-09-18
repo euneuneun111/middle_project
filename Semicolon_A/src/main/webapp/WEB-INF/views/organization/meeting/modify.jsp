@@ -70,13 +70,13 @@ String today = sdf.format(new java.util.Date());
 						</div>
 
 						<div class="form-group">
-							<label for="overview">회의개요</label>
+							<label for="overview">회의 개요</label>
 							<textarea class="form-control" name="overview" id="overview"
 								rows="3" placeholder="500자 내외로 작성하세요.">${fn:escapeXml(meeting.overview) }</textarea>
 						</div>
 
 						<div class="form-group">
-							<label for="content">회의내용</label>
+							<label for="content">회의 내용</label>
 							<textarea class="form-control" name="content" id="content"
 								rows="3" placeholder="500자 내외로 작성하세요.">${fn:escapeXml(meeting.content) }</textarea>
 						</div>
