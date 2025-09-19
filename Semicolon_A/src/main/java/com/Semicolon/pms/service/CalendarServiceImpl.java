@@ -19,13 +19,13 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public List<CalendarDto> getAllCalendars() throws SQLException {
-        return calendarDAO.getAllCalendars();
+    public List<CalendarDto> getAllCalendars(String projectId) throws SQLException {
+        return calendarDAO.getAllCalendars(projectId);
     }
 
     @Override
-    public CalendarDto getCalendarById(String calendarId) throws SQLException {
-        return calendarDAO.getCalendarById(calendarId);
+    public CalendarDto getCalendarById(String projectId, String calendarId) throws SQLException {
+        return calendarDAO.getCalendarById(projectId, calendarId);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public void deleteCalendar(String calendarId) throws SQLException {
-        calendarDAO.deleteCalendar(calendarId);
+    public void deleteCalendar(String projectId, String calendarId) throws SQLException {
+        calendarDAO.deleteCalendar(projectId, calendarId);
     }
 }

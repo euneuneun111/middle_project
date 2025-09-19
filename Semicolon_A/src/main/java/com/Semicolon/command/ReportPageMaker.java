@@ -6,6 +6,8 @@ public class ReportPageMaker {
     private int perPageNum = 8; // 한 페이지당 보여줄 리스트 개수
     private int totalCount; // 전체 행 개수
     private int displayPageNum = 5; // 화면에 보여줄 페이지 번호 개수
+    
+    private String projectId; // 조회할 프로젝트 아이디
 
     private int startPage = 1; // 시작 페이지 번호
     private int endPage = 1; // 끝 페이지 번호
@@ -25,8 +27,17 @@ public class ReportPageMaker {
             this.page = page;
         }
     }
+    
 
-    public int getPerPageNum() {
+    public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public int getPerPageNum() {
         return perPageNum;
     }
 

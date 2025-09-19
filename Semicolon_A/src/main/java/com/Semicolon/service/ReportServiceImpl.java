@@ -68,22 +68,28 @@ public class ReportServiceImpl implements ReportService {
 		return report;
 	}
 
+	
 	@Override
-	public List<ReportVO> reportList(ReportPageMaker reportpage) throws SQLException {
-		int listTotalCount = reportDAO.selectReportCount(reportpage);
-		reportpage.setTotalCount(listTotalCount);
-		List<ReportVO> reportlist = reportDAO.selectReportList(reportpage);
+	public List<ReportVO> reportList(String projectId, ReportPageMaker reportpage) throws SQLException {
+	    // 1. ReportPageMaker에 projectId 설정
+	    reportpage.setProjectId(projectId);
 
-		if (reportlist != null) {
-			for (ReportVO report : reportlist) {
-				int rno = report.getRno();
-				List<AttachReportVO> attachreport = attachreportDAO.selectAttachReportByRno(rno);
-				report.setAttaches(attachreport);
-			}
-		}
+	    // 2. 전체 리포트 개수 조회 (페이징용)
+	    int listTotalCount = reportDAO.selectReportCount(reportpage);
+	    reportpage.setTotalCount(listTotalCount);
 
-		return reportlist;
+	    // 3. 프로젝트별 리포트 리스트 조회
+	    List<ReportVO> reportList = reportDAO.selectReportList(reportpage);
 
+	    // 4. 각 리포트에 첨부파일 설정
+	    if (reportList != null) {
+	        for (ReportVO report : reportList) {
+	            int rno = report.getRno();
+	            List<AttachReportVO> attachList = attachreportDAO.selectAttachReportByRno(rno);
+	            report.setAttaches(attachList);
+	        }
+	    }
+
+	    return reportList;
 	}
-
 }

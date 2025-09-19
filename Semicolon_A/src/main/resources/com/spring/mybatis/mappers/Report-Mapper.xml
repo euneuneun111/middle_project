@@ -5,20 +5,29 @@
 
 <mapper namespace="Report-Mapper">
 
-	<select id="selectReportCount" resultType="int">
-		SELECT COUNT(*) FROM REPORT
+	<!-- 프로젝트별 전체 리포트 개수 조회 (페이징용) -->
+	<select id="selectReportCount" resultType="int"
+		parameterType="ReportPageMaker">
+		SELECT COUNT(*)
+		FROM REPORT
+		<where>
+			<if test="projectId != null and projectId != ''">
+				PROJECT_ID = #{projectId}
+			</if>
+		</where>
 	</select>
 
+	<!-- 프로젝트별 리포트 리스트 조회 (페이징 적용) -->
 	<select id="selectReportList" resultType="report"
-		parameterType="reportpageMaker">
+		parameterType="reportPageMaker">
 		SELECT * FROM REPORT
-		ORDER BY rno DESC
+		WHERE PROJECT_ID = #{projectId}
+		ORDER BY RNO DESC
 	</select>
 
 	<!-- 시퀀스 조회 -->
 	<select id="selectReportSequenceNextValue" resultType="int">
-		SELECT
-		REPORT_SEQ.NEXTVAL FROM DUAL
+		SELECT REPORT_SEQ.NEXTVAL FROM DUAL
 	</select>
 
 	<!-- 특정 보고서 조회 -->
@@ -26,28 +35,29 @@
 		resultType="report">
 		SELECT
 		RNO,
+		PROJECT_ID,
 		TITLE,
 		WRITER,
 		CONTENT,
 		REGDATE,
 		REPORTDATE,
 		PMCHECK
-		FROM
-		REPORT
-		WHERE
-		RNO = #{rno}
+		FROM REPORT
+		WHERE RNO = #{rno}
 	</select>
 
-	<!-- 보고서 등록 -->
+	<!-- 보고서 등록 (프로젝트별) -->
 	<insert id="insertReport" parameterType="report">
 		INSERT INTO REPORT (
 		RNO,
+		PROJECT_ID,
 		TITLE,
 		WRITER,
 		CONTENT,
 		REPORTDATE
 		) VALUES (
 		#{rno},
+		#{projectId},
 		#{title},
 		#{writer},
 		#{content},
@@ -59,22 +69,16 @@
 	<update id="updateReport" parameterType="report">
 		UPDATE REPORT
 		SET
-		TITLE =
-		#{title},
+		TITLE = #{title},
 		CONTENT = #{content},
 		REPORTDATE = #{reportDate}
-		WHERE
-		RNO =
-		#{rno}
+		WHERE RNO = #{rno}
 	</update>
 
 	<!-- 보고서 삭제 -->
 	<delete id="deleteReport" parameterType="int">
 		DELETE FROM REPORT
-		WHERE
-		RNO = #{rno}
+		WHERE RNO = #{rno}
 	</delete>
-
-
 
 </mapper>

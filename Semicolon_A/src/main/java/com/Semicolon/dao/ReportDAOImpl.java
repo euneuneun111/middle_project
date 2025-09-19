@@ -34,7 +34,7 @@ public class ReportDAOImpl implements ReportDAO {
 	}
 
 	@Override
-	public void updatetReport(ReportVO report) throws SQLException {
+	public void updateReport(ReportVO report) throws SQLException {
 		session.update("Report-Mapper.updateReport", report);
 	}
 

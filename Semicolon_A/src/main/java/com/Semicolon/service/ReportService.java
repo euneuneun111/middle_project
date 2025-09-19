@@ -17,7 +17,7 @@ public interface ReportService {
 	
 	void remove(int rno) throws SQLException;
 	
-	List<ReportVO> reportList(ReportPageMaker reportpage) throws SQLException;
+    List<ReportVO> reportList(String projectId, ReportPageMaker reportpage) throws SQLException;
 	
 	
 }

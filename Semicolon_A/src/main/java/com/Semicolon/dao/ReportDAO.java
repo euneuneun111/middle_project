@@ -14,7 +14,7 @@ public interface ReportDAO {
 
 	void insertReport(ReportVO report) throws SQLException;
 
-	void updatetReport(ReportVO report) throws SQLException;
+    void updateReport(ReportVO report) throws SQLException; // ✅ 오타 수정
 
 	void deleteReport(int rno) throws SQLException;
 

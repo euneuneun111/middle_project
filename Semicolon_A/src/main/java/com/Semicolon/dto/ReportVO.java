@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ReportVO {
 	
+	private String projectId; // 프로젝트 ID
+
+	
 	private int rno;          // 보고 번호
 	private String title="";     // 제목
 	private String writer;	  // 작성자 
@@ -18,6 +21,18 @@ public class ReportVO {
 	private boolean check; // 관리자 확인
 
 	List<AttachReportVO> attaches;
+	
+	
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
 
 	public int getRno() {
 		return rno;

@@ -2,6 +2,7 @@ package com.Semicolon.funding.controller;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,216 +39,232 @@ import com.josephoconnell.html.HTMLInputFilter;
 @RequestMapping("/organization/{projectId}/report")
 public class ReportController {
 
-	@Autowired
-	private ReportService reportService;
+    @Autowired
+    private ReportService reportService;
 
-	@Autowired
-	private AttachReportDAO attachreportDAO;
+    @Autowired
+    private AttachReportDAO attachreportDAO;
 
-	@GetMapping("/list")
-	public ModelAndView list( @PathVariable("projectId") String projectId,@ModelAttribute ReportPageMaker reportpage, ModelAndView mnv) throws Exception {
+    @javax.annotation.Resource(name = "reportSavedFilePath")
+    private String fileUploadPath;
 
-		List<ReportVO> reportList = reportService.reportList(reportpage);
+    // -------------------------------
+    // 파일 저장
+    // -------------------------------
+    private List<AttachReportVO> saveFileToAttaches(List<MultipartFile> multiFiles, String savePath) throws Exception {
+        if (multiFiles == null || multiFiles.isEmpty())
+            return null;
 
-		mnv.addObject("reportList", reportList);
-		mnv.addObject("pageMaker", reportpage);
-        mnv.addObject("projectId", projectId); // ✅ JSP에서 쓸 수 있도록 전달
-		mnv.setViewName("organization/report/list"); // 뷰 이름
+        List<AttachReportVO> attachreportList = new ArrayList<>();
 
-		return mnv;
-	}
+        for (MultipartFile multi : multiFiles) {
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String fileName = uuid + "$$" + multi.getOriginalFilename();
 
-	@GetMapping("/regist")
-	public void regist() {
-	}
+            File target = new File(savePath, fileName);
+            target.mkdirs();
+            multi.transferTo(target);
 
-	@javax.annotation.Resource(name = "reportSavedFilePath")
-	private String fileUploadPath;
+            AttachReportVO attach = new AttachReportVO();
+            attach.setUploadPath(savePath);
+            attach.setFileName(fileName);
+            attach.setFileType(fileName.substring(fileName.lastIndexOf('.') + 1).toUpperCase());
 
-	private List<AttachReportVO> saveFileToAttaches(List<MultipartFile> multiFiles, String savePath) throws Exception {
+            attachreportList.add(attach);
+        }
 
-		if (multiFiles == null || multiFiles.isEmpty())
-			return null;
+        return attachreportList;
+    }
 
-		List<AttachReportVO> attachreportList = new ArrayList<AttachReportVO>();
+    // -------------------------------
+    // 리스트 페이지
+    // -------------------------------
+    @GetMapping("/list")
+    public ModelAndView list(@PathVariable("projectId") String projectId,
+                             @ModelAttribute ReportPageMaker reportpage, ModelAndView mnv) throws Exception {
 
-		for (MultipartFile multi : multiFiles) {
-			String uuid = UUID.randomUUID().toString().replace("-", "");
-			String fileName = uuid + "$$" + multi.getOriginalFilename();
+        List<ReportVO> reportList = reportService.reportList(projectId, reportpage); // projectId 전달
 
-			File target = new File(savePath, fileName);
+        mnv.addObject("reportList", reportList);
+        mnv.addObject("pageMaker", reportpage);
+        mnv.addObject("projectId", projectId);
+        mnv.setViewName("organization/report/list");
 
-			target.mkdirs();
-			multi.transferTo(target);
+        return mnv;
+    }
 
-			AttachReportVO attach = new AttachReportVO();
+    // -------------------------------
+    // 등록 폼
+    // -------------------------------
+    @GetMapping("/regist")
+    public String registForm(@PathVariable("projectId") String projectId, Model model) throws SQLException {
+        // projectId JSP로 전달
+        model.addAttribute("projectId", projectId);
 
-			attach.setUploadPath(savePath);
-			attach.setFileName(fileName);
-			attach.setFileType(fileName.substring(fileName.lastIndexOf('.') + 1).toUpperCase());
+ 
+        // 등록 JSP 경로
+        return "/organization/meeting/regist";
+    }
 
-			attachreportList.add(attach);
+    // -------------------------------
+    // 등록 처리
+    // -------------------------------
+    @PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
+    public String registPost(@PathVariable("projectId") String projectId,
+                             ReportRegistCommand regCommand, ModelAndView mnv) throws Exception {
+        String url = "/organization/report/regist_success";
 
-		}
+        ReportVO report = regCommand.toReportVO();
+        report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
+        report.setProjectId(projectId); // ✅ PROJECT_ID 설정
 
-		return attachreportList;
-	}
+        List<MultipartFile> uploadFiles = regCommand.getUploadFile();
+        List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, fileUploadPath);
+        report.setAttaches(attaches);
 
-	@PostMapping(value = "/regist", produces = "text/plain;charset=utf-8")
-	public String registPost(ReportRegistCommand regCommand, ModelAndView mnv) throws Exception {
-		String url = "/organization/report/regist_success";
+        reportService.regist(report);
 
-		ReportVO report = regCommand.toReportVO();
+        return url;
+    }
 
-		report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
+    // -------------------------------
+    // 상세 페이지
+    // -------------------------------
+    @GetMapping("/detail")
+    public ModelAndView detail(int rno, ModelAndView mnv) throws Exception {
+        String url = "/organization/report/detail";
+        ReportVO report = reportService.getRno(rno);
+        mnv.addObject("report", report);
+        mnv.setViewName(url);
+        return mnv;
+    }
 
-		List<MultipartFile> uploadFiles = regCommand.getUploadFile();
-	String uploadPath = fileUploadPath;
+    // -------------------------------
+    // 파일 다운로드
+    // -------------------------------
+    @GetMapping("/getFile")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(int arno) throws Exception {
+        AttachReportVO attachreport = attachreportDAO.selectAttachReportByArno(arno);
+        String filePath = attachreport.getUploadPath() + File.separator + attachreport.getFileName();
+        Resource resource = new UrlResource(Paths.get(filePath).toUri());
 
-	List<AttachReportVO> attaches = saveFileToAttaches(uploadFiles, uploadPath);
-		report.setAttaches(attaches);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + UriUtils.encode(attachreport.getFileName().split("\\$\\$")[1], "UTF-8") + "\"")
+                .body(resource);
+    }
 
-		
-		reportService.regist(report);
+    // -------------------------------
+    // 수정 폼
+    // -------------------------------
+    @GetMapping("/modify")
+    public void modifyForm(int rno, Model model) throws Exception {
+        ReportVO report = reportService.getRno(rno);
+        model.addAttribute("report", report);
+    }
 
-		return url;
-	}
+    // -------------------------------
+    // 수정 처리
+    // -------------------------------
+    @PostMapping("/modify")
+    public ModelAndView modify(@PathVariable("projectId") String projectId,
+                               ReportModifyCommand modCommand, ModelAndView mnv) throws Exception {
+        String url = "/organization/report/modify_success";
 
-	@GetMapping("/detail")
-	public ModelAndView detail(int rno, ModelAndView mnv) throws Exception {
-		String url = "/organization/report/detail";
+        // 삭제 파일 처리
+        if (modCommand.getDeleteFile() != null && modCommand.getDeleteFile().length > 0) {
+            for (int arno : modCommand.getDeleteFile()) {
+                AttachReportVO attachreport = attachreportDAO.selectAttachReportByArno(arno);
+                File deleteFile = new File(attachreport.getUploadPath(), attachreport.getFileName());
+                if (deleteFile.exists()) deleteFile.delete();
+                attachreportDAO.deletAttach(arno);
+            }
+        }
 
-		ReportVO report = reportService.getRno(rno);
+        List<AttachReportVO> attachList = saveFileToAttaches(modCommand.getUploadFile(), fileUploadPath);
 
-		mnv.addObject("report", report);
+        ReportVO report = modCommand.toReportVO();
+        report.setAttaches(attachList);
+        report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
+        report.setProjectId(projectId); // ✅ PROJECT_ID 유지
 
-		mnv.setViewName(url);
+        reportService.modify(report);
 
-		return mnv;
-	}
+        mnv.addObject("rno", report.getRno());
+        mnv.setViewName(url);
 
-	@GetMapping("/getFile")
-	@ResponseBody
-	public ResponseEntity<Resource> getFile(int arno) throws Exception {
+        return mnv;
+    }
 
-		AttachReportVO attachreport = attachreportDAO.selectAttachReportByArno(arno);
+    // -------------------------------
+    // 삭제 처리
+    // -------------------------------
+    @GetMapping("/remove")
+    public ModelAndView remove(int rno, ModelAndView mnv) throws Exception {
+        String url = "/organization/report/remove_success";
 
-		String filePath = attachreport.getUploadPath() + File.separator + attachreport.getFileName();
+        // 첨부파일 삭제
+        List<AttachReportVO> attachList = reportService.getRno(rno).getAttaches();
+        if (attachList != null) {
+            for (AttachReportVO attach : attachList) {
+                File target = new File(attach.getUploadPath(), attach.getFileName());
+                if (target.exists()) target.delete();
+            }
+        }
 
-		Resource resource = new UrlResource(Paths.get(filePath).toUri());
+        reportService.remove(rno);
+        mnv.setViewName(url);
+        return mnv;
+    }
 
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\""
-								+ UriUtils.encode(attachreport.getFileName().split("\\$\\$")[1], "UTF-8") + "\"")
-				.body(resource);
-	}
+    // -------------------------------
+    // REST API
+    // -------------------------------
 
-	@GetMapping("/modify")
-	public void modifyForm(int rno, Model model) throws Exception {
-		ReportVO report = reportService.getRno(rno);
+    // 리스트
+    @GetMapping(value = "/list", produces = "application/json")
+    @ResponseBody
+    public List<ReportVO> listApi(@ModelAttribute ReportPageMaker reportpage) throws Exception {
+        return reportService.reportList(reportpage);
+    }
 
-		model.addAttribute("report", report);
+    // 등록
+    @PostMapping(value = "/regist", produces = "application/json")
+    @ResponseBody
+    public String registApi(@PathVariable("projectId") String projectId,
+                            @RequestBody ReportRegistCommand regCommand) throws Exception {
+        ReportVO report = regCommand.toReportVO();
+        report.setProjectId(projectId); // ✅ PROJECT_ID 설정
+        reportService.regist(report);
+        return "success";
+    }
 
-	}
+    // 상세
+    @GetMapping(value = "/detail", produces = "application/json")
+    @ResponseBody
+    public ReportVO detailApi(int rno) throws Exception {
+        return reportService.getRno(rno);
+    }
 
-	@PostMapping("/modify")
-	public ModelAndView modify(ReportModifyCommand modCommand, ModelAndView mnv) throws Exception {
-		String url = "/organization/report/modify_success";
+    // 수정
+    @PostMapping(value = "/modify", produces = "application/json")
+    @ResponseBody
+    public String modifyApi(@PathVariable("projectId") String projectId,
+                            @RequestBody ReportModifyCommand modCommand) throws Exception {
+        ReportVO report = modCommand.toReportVO();
+        report.setProjectId(projectId); // ✅ PROJECT_ID 유지
+        reportService.modify(report);
+        return "success";
+    }
 
-		if (modCommand.getDeleteFile() != null && modCommand.getDeleteFile().length > 0) {
-			for (int arno : modCommand.getDeleteFile()) {
-				AttachReportVO attachreport = attachreportDAO.selectAttachReportByArno(arno);
-
-				File deleteFile = new File(attachreport.getUploadPath(), attachreport.getFileName());
-
-				if (deleteFile.exists()) {
-					deleteFile.delete();
-				}
-				attachreportDAO.deletAttach(arno);
-
-			}
-		}
-
-		List<AttachReportVO> attachList = saveFileToAttaches(modCommand.getUploadFile(), fileUploadPath);
-
-		ReportVO report = modCommand.toReportVO();
-		report.setAttaches(attachList);
-
-		report.setTitle(HTMLInputFilter.htmlSpecialChars(report.getTitle()));
-
-		reportService.modify(report);
-
-		mnv.addObject("rno", report.getRno());
-
-		mnv.setViewName(url);
-
-		return mnv;
-
-	}
-
-	@GetMapping("/remove")
-	public ModelAndView remove(int rno, ModelAndView mnv) throws Exception {
-		String url = "/organization/report/remove_success";
-
-		// 첨부파일 삭제
-		List<AttachReportVO> attachList = reportService.getRno(rno).getAttaches();
-		if (attachList != null) {
-			for (AttachReportVO attach : attachList) {
-				File target = new File(attach.getUploadPath(), attach.getFileName());
-				if (target.exists()) {
-					target.delete();
-				}
-			}
-		}
-
-		// DB 삭제
-		reportService.remove(rno);
-
-		mnv.setViewName(url);
-		return mnv;
-	}
-	
-	
-	// JSON 반환 (React용)
-	@GetMapping(value = "/list", produces = "application/json")
-	@ResponseBody
-	public List<ReportVO> listApi(@ModelAttribute ReportPageMaker reportpage) throws Exception {
-	    return reportService.reportList(reportpage);
-	}
-	
-	// 등록
-	@PostMapping(value = "/regist", produces = "application/json")
-	@ResponseBody
-	public String registApi(@RequestBody ReportRegistCommand regCommand) throws Exception {
-	    ReportVO report = regCommand.toReportVO();
-	    reportService.regist(report);
-	    return "success";
-	}
-
-	// 상세
-	@GetMapping(value = "/detail", produces = "application/json")
-	@ResponseBody
-	public ReportVO detailApi(int rno) throws Exception {
-	    return reportService.getRno(rno);
-	}
-
-	// 수정
-	@PostMapping(value = "/modify", produces = "application/json")
-	@ResponseBody
-	public String modifyApi(@RequestBody ReportModifyCommand modCommand) throws Exception {
-	    ReportVO report = modCommand.toReportVO();
-	    reportService.modify(report);
-	    return "success";
-	}
-
-	// 삭제
-	@PostMapping(value = "/remove", produces = "application/json")
-	@ResponseBody
-	public String removeApi(@RequestBody Map<String, Integer> param) throws Exception {
-	    Integer rno = param.get("rno");
-	    if (rno == null) return "fail";
-	    reportService.remove(rno);
-	    return "success";
-	}
+    // 삭제
+    @PostMapping(value = "/remove", produces = "application/json")
+    @ResponseBody
+    public String removeApi(@RequestBody Map<String, Integer> param) throws Exception {
+        Integer rno = param.get("rno");
+        if (rno == null) return "fail";
+        reportService.remove(rno);
+        return "success";
+    }
 }

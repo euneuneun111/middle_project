@@ -28,7 +28,7 @@ import com.Semicolon.pms.service.CalendarService;
 
 // ✅ @RestController 대신 @Controller를 사용합니다.
 @Controller
-@RequestMapping("/main/calendar")
+@RequestMapping("/main/{projectId}/calendar")
 public class CalendarController {
 
     private CalendarService calendarService;
@@ -37,18 +37,18 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    // @Controller를 사용하면 이 메서드는 기본적으로 페이지(View)를 반환합니다.
     @GetMapping
-    public ModelAndView calendarPage() {
-        return new ModelAndView("organization/pms/calendar/calendar");
+    public ModelAndView calendarPage(@PathVariable("projectId") String projectId) {
+        ModelAndView mv = new ModelAndView("organization/pms/calendar/calendar");
+        mv.addObject("projectId", projectId); // 뷰에서 사용 가능
+        return mv;
     }
-
-    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
+    
     @GetMapping("/all")
     @ResponseBody 
-    public List<Map<String, Object>> getAllCalendarsForFullCalendar() {
+    public List<Map<String, Object>> getAllCalendarsForFullCalendar(@PathVariable("projectId") String projectId) {
         try {
-            List<CalendarDto> calendars = calendarService.getAllCalendars();
+            List<CalendarDto> calendars = calendarService.getAllCalendars(projectId);
             
             List<Map<String, Object>> events = new ArrayList<>();
             for (CalendarDto c : calendars) {
@@ -68,15 +68,15 @@ public class CalendarController {
         }
     }
 
-    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @PostMapping("/add")
     @ResponseBody
-    // ✅ 4. HttpSession 파라미터를 받고, 로그인 세션을 확인하는 로직 추가
-    public ResponseEntity<Map<String, String>> addCalendar(@RequestBody CalendarDto calendarDto, HttpSession session) {
-        // 세션에서 로그인 사용자 정보 가져오기
+    public ResponseEntity<Map<String, String>> addCalendar(
+            @PathVariable("projectId") String projectId,
+            @RequestBody CalendarDto calendarDto, 
+            HttpSession session) {
+
         MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
         if (loginUser == null) {
-            // 로그인되어 있지 않으면 401 Unauthorized 에러 반환
             return new ResponseEntity<>(
                 Collections.singletonMap("message", "로그인이 필요합니다."),
                 HttpStatus.UNAUTHORIZED
@@ -84,7 +84,7 @@ public class CalendarController {
         }
 
         try {
-            calendarDto.setProjectId("PJ-001");
+            calendarDto.setProjectId(projectId); // 하드코딩 제거
             calendarService.addCalendar(calendarDto);
             return ResponseEntity.ok(Collections.singletonMap("message", "일정이 성공적으로 추가되었습니다."));
         } catch (SQLException e) {
@@ -92,12 +92,13 @@ public class CalendarController {
         }
     }
     
-    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @GetMapping("/{calendarId}")
     @ResponseBody
-    public ResponseEntity<CalendarDto> getCalendar(@PathVariable("calendarId") String calendarId) {
+    public ResponseEntity<CalendarDto> getCalendar(
+            @PathVariable("projectId") String projectId,
+            @PathVariable("calendarId") String calendarId) {
         try {
-            CalendarDto calendar = calendarService.getCalendarById(calendarId);
+            CalendarDto calendar = calendarService.getCalendarById(projectId, calendarId);
             if (calendar != null) {
                 return ResponseEntity.ok(calendar);
             } else {
@@ -108,13 +109,13 @@ public class CalendarController {
         }
     }
 
-    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @PutMapping("/update")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> updateCalendar(@RequestBody CalendarDto calendarDto) {
+    public ResponseEntity<Map<String, String>> updateCalendar(
+            @PathVariable("projectId") String projectId,
+            @RequestBody CalendarDto calendarDto) {
         try {
-            // 프로젝트 ID를 임시로 하드코딩
-            calendarDto.setProjectId("PJ-001");
+            calendarDto.setProjectId(projectId); // 하드코딩 제거
             calendarService.updateCalendar(calendarDto);
             return ResponseEntity.ok(Collections.singletonMap("message", "일정이 성공적으로 수정되었습니다."));
         } catch (SQLException e) {
@@ -122,12 +123,13 @@ public class CalendarController {
         }
     }
 
-    // ✅ 데이터를 반환하는 API 메서드에는 @ResponseBody를 직접 붙여줍니다.
     @DeleteMapping("/{calendarId}")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> deleteCalendar(@PathVariable("calendarId") String calendarId) {
+    public ResponseEntity<Map<String, String>> deleteCalendar(
+            @PathVariable("projectId") String projectId,
+            @PathVariable("calendarId") String calendarId) {
         try {
-            calendarService.deleteCalendar(calendarId);
+            calendarService.deleteCalendar(projectId,calendarId);
             return ResponseEntity.ok(Collections.singletonMap("message", "일정이 성공적으로 삭제되었습니다."));
         } catch (SQLException e) {
             return ResponseEntity.status(500).body(Collections.singletonMap("message", "일정 삭제 중 오류가 발생했습니다."));

@@ -1,7 +1,9 @@
 package com.Semicolon.pms.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 
@@ -21,13 +23,16 @@ public class CalendarDAOImpl implements CalendarDAO {
     }
 
     @Override
-    public List<CalendarDto> getAllCalendars() throws SQLException {
-        return sqlSession.selectList("com.Semicolon.pms.dao.CalendarDAO.getAllCalendars");
+    public List<CalendarDto> getAllCalendars(String projectId) throws SQLException {
+        return sqlSession.selectList("com.Semicolon.pms.dao.CalendarDAO.getAllCalendars", projectId);
     }
 
     @Override
-    public CalendarDto getCalendarById(String calendarId) throws SQLException {
-        return sqlSession.selectOne("com.Semicolon.pms.dao.CalendarDAO.getCalendarById", calendarId);
+    public CalendarDto getCalendarById(String projectId, String calendarId) throws SQLException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("projectId", projectId);
+        param.put("calendarId", calendarId);
+        return sqlSession.selectOne("com.Semicolon.pms.dao.CalendarDAO.getCalendarById", param);
     }
 
     @Override
@@ -36,7 +41,10 @@ public class CalendarDAOImpl implements CalendarDAO {
     }
 
     @Override
-    public void deleteCalendar(String calendarId) throws SQLException {
-        sqlSession.delete("com.Semicolon.pms.dao.CalendarDAO.deleteCalendar", calendarId);
+    public void deleteCalendar(String projectId, String calendarId) throws SQLException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("projectId", projectId);
+        param.put("calendarId", calendarId);
+        sqlSession.delete("com.Semicolon.pms.dao.CalendarDAO.deleteCalendar", param);
     }
 }
