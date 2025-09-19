@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="target/classes" path="src/main/java">
@@ -68,4 +68,3 @@
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
->>>>>>> branch '09/17_브렌치' of https://github.com/euneuneun111/middle_project.git
